@@ -7,6 +7,8 @@ Antes de iniciar o desenvolvimento de uma nova feature, siga **rigorosamente** o
 ### 1. Analisar o projeto existente
 
 - Leia este documento inteiro.
+- Leia `.agents/rules/.instructions.md` para as regras gerais de desenvolvimento.
+- Leia as skills disponíveis em `.agents/skills/` — cada skill contém instruções especializadas (testes, routing, JSON, etc). Use `skill` tool para carregá-las quando necessário.
 - Leia `skills/layout/project-strucutre.md` para entender a arquitetura.
 - Leia `lib/features/auth/` (implementação de referência) para entender o padrão usado em **todas as camadas**.
 - Confira o arquivo de rota em `lib/routes/app_routes.dart` e `app_pages.dart`.
@@ -81,11 +83,13 @@ Consulte a documentação atualizada da API via OpenAPI/Swagger sempre que for i
 ## Workflow para Nova Feature
 
 1. Leia este `AGENT.md` completamente.
-2. Leia `skills/layout/project-strucutre.md`.
-3. Leia a feature de referência `lib/features/auth/` (todas as camadas).
-4. **Faça uma requisição HTTP para a URL da OpenAPI acima** para obter os endpoints e schemas atualizados da API antes de implementar.
-5. Crie a estrutura de diretórios seguindo o padrão Clean Architecture.
-6. Implemente na ordem: **domain** (entities → repository interface → use cases) → **data** (datasource → models → repository impl) → **presentation** (controller → pages/widgets) → **DI** → **routes**.
-7. Após criar, verifique se registrou todas as dependências no `injector.dart`.
-8. Verifique se adicionou a rota em `app_routes.dart` e `app_pages.dart`.
-9. Use `AppColors.*` para todas as cores — nunca hardcode.
+2. Leia `.agents/rules/.instructions.md` para regras gerais de desenvolvimento Flutter/Dart.
+3. Identifique qual skill em `.agents/skills/` se aplica à tarefa (ex: `flutter-use-http-package`, `flutter-setup-declarative-routing`, `dart-add-unit-test`) e carregue-a.
+4. Leia `skills/layout/project-strucutre.md`.
+5. Leia a feature de referência `lib/features/auth/` (todas as camadas).
+6. **Faça uma requisição HTTP para a URL da OpenAPI acima** para obter os endpoints e schemas atualizados da API antes de implementar.
+7. Crie a estrutura de diretórios seguindo o padrão Clean Architecture.
+8. Implemente na ordem: **domain** (entities → repository interface → use cases) → **data** (datasource → models → repository impl) → **presentation** (controller → pages/widgets) → **DI** → **routes**.
+9. Após criar, verifique se registrou todas as dependências no `injector.dart`.
+10. Verifique se adicionou a rota em `app_routes.dart` e `app_pages.dart`.
+11. Use `AppColors.*` para todas as cores — nunca hardcode.
