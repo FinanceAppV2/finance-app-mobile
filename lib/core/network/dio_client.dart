@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DioClient {
@@ -8,7 +9,7 @@ class DioClient {
   DioClient(this._storage) {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'https://dev-nsisj-api-dbcjfvh2ajeuerh2.eastus2-01.azurewebsites.net',
+        baseUrl: dotenv.env['API_URL'] ?? 'http://localhost:3000',
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
         headers: {
@@ -25,7 +26,7 @@ class DioClient {
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
-          options.headers['X-API-Key'] = '';
+          // options.headers['X-API-Key'] = dotenv.env['API_KEY'] ?? '';
           handler.next(options);
         },
         onError: (error, handler) {

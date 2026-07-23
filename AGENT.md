@@ -72,9 +72,9 @@ lib/features/<feature_name>/
 
 Consulte a documentação atualizada da API via OpenAPI/Swagger sempre que for implementar uma nova feature:
 
-**URL:** `https://dev-nsisj-api-dbcjfvh2ajeuerh2.eastus2-01.azurewebsites.net/v3/api-docs`
+**URL:** `http://localhost:3000/api-docs.json`
 
-**Base URL:** `https://dev-nsisj-api-dbcjfvh2ajeuerh2.eastus2-01.azurewebsites.net`
+**Base URL:** `http://localhost:3000`
 
 **Segurança:** ApiKey + BearerAuth (JWT)
 
