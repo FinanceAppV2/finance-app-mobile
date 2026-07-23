@@ -104,6 +104,23 @@ class _HomePageState extends State<HomePage> {
       drawer: const _AppDrawer(),
       body: Stack(
         children: [
+          ClipPath(
+            clipper: _HeaderClipper(),
+            child: Container(
+              height: 280,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.verdeMedio,
+                    AppColors.verdeEscuro,
+                    AppColors.background,
+                  ],
+                ),
+              ),
+            ),
+          ),
           Column(
             children: [
               const SizedBox(height: 20),
@@ -255,4 +272,30 @@ class _DrawerItem extends StatelessWidget {
       onTap: onTap,
     );
   }
+}
+
+class _HeaderClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.lineTo(0, size.height * 0.65);
+    path.quadraticBezierTo(
+      size.width * 0.25,
+      size.height * 0.85,
+      size.width * 0.5,
+      size.height * 0.75,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.75,
+      size.height * 0.65,
+      size.width,
+      size.height * 0.8,
+    );
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
