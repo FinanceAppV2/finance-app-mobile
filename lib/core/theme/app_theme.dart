@@ -3,23 +3,18 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  static const primary = Color(0xFF6C63FF);
-  static const primaryLight = Color(0xFF9D97FF);
-  static const primaryDark = Color(0xFF4A42DB);
-
-  static const background = Color(0xFF1A1A2E);
-  static const surface = Color(0xFF16213E);
-  static const card = Color(0xFF0F3460);
-
-  static const textPrimary = Color(0xFFFFFFFF);
-  static const textSecondary = Color(0xFFB0B0B0);
-  static const textHint = Color(0xFF6C6C6C);
+  static const background = Color(0xFF0D0E0D);
+  static const cinzaEscuro = Color(0xFF585B56);
+  static const verdeEscuro = Color(0xFF314A08);
+  static const verdeMedio = Color(0xFF4C6C13);
+  static const verdePrincipal = Color(0xFF5F9213);
+  static const verdeDestaque = Color(0xFFA5F620);
+  static const branco = Color(0xFFF0F1F0);
+  static const cinzaClaro = Color(0xFF7B8767);
 
   static const success = Color(0xFF4CAF50);
   static const error = Color(0xFFE53935);
   static const warning = Color(0xFFFFA726);
-
-  static const divider = Color(0xFF2A2A4A);
 }
 
 class AppTheme {
@@ -29,50 +24,64 @@ class AppTheme {
     return ThemeData(
       brightness: Brightness.dark,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
+        seedColor: AppColors.verdePrincipal,
         brightness: Brightness.dark,
-        primary: AppColors.primary,
-        secondary: AppColors.primaryLight,
-        surface: AppColors.surface,
+        primary: AppColors.verdePrincipal,
+        secondary: AppColors.verdeDestaque,
+        surface: AppColors.verdeEscuro,
         error: AppColors.error,
       ),
       scaffoldBackgroundColor: AppColors.background,
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.surface,
-        foregroundColor: AppColors.textPrimary,
+        backgroundColor: AppColors.background,
+        foregroundColor: AppColors.branco,
         elevation: 0,
         centerTitle: true,
       ),
       cardTheme: const CardThemeData(
-        color: AppColors.card,
+        color: AppColors.verdeEscuro,
         elevation: 4,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: AppColors.verdeEscuro,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: AppColors.verdeMedio, width: 1),
         ),
-        labelStyle: const TextStyle(color: AppColors.textSecondary),
-        hintStyle: const TextStyle(color: AppColors.textHint),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.verdeEscuro, width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.verdeDestaque, width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.error, width: 1),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+        ),
+        labelStyle: TextStyle(color: AppColors.cinzaClaro),
+        hintStyle: TextStyle(color: AppColors.branco.withValues(alpha: 0.5)),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.textPrimary,
+          backgroundColor: AppColors.verdeDestaque,
+          foregroundColor: AppColors.background,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          shape: StadiumBorder(),
         ),
       ),
       textTheme: const TextTheme(
-        headlineLarge: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
-        headlineMedium: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600),
-        bodyLarge: TextStyle(color: AppColors.textPrimary),
-        bodyMedium: TextStyle(color: AppColors.textSecondary),
-        labelLarge: TextStyle(color: AppColors.textPrimary),
+        headlineLarge: TextStyle(color: AppColors.branco, fontWeight: FontWeight.bold),
+        headlineMedium: TextStyle(color: AppColors.branco, fontWeight: FontWeight.w600),
+        bodyLarge: TextStyle(color: AppColors.branco),
+        bodyMedium: TextStyle(color: AppColors.cinzaEscuro),
+        labelLarge: TextStyle(color: AppColors.branco),
       ),
     );
   }
