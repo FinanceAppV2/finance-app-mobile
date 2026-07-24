@@ -1,10 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../routes/app_routes.dart';
+import '../controllers/register_controller.dart';
 
 class _CpfInputFormatter extends TextInputFormatter {
   @override
@@ -65,13 +65,20 @@ class _RegisterPageState extends State<RegisterPage> {
   final _cpfController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _registerController = GetIt.instance<RegisterController>();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  bool _isLoading = false;
   int _currentStep = 0;
 
   @override
+  void initState() {
+    super.initState();
+    _registerController.addListener(_onRegisterStateChanged);
+  }
+
+  @override
   void dispose() {
+    _registerController.removeListener(_onRegisterStateChanged);
     _nameController.dispose();
     _lastNameController.dispose();
     _emailController.dispose();
@@ -80,6 +87,27 @@ class _RegisterPageState extends State<RegisterPage> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  void _onRegisterStateChanged() {
+    if (!mounted) return;
+
+    if (_registerController.status == RegisterStatus.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Conta criada com sucesso!'),
+          backgroundColor: AppColors.success,
+        ),
+      );
+      Navigator.pushReplacementNamed(context, AppRoutes.login);
+    } else if (_registerController.status == RegisterStatus.error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_registerController.errorMessage ?? 'Erro ao criar conta'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+    }
   }
 
   String _cleanCpf(String cpf) => cpf.replaceAll(RegExp(r'[^\d]'), '');
@@ -115,41 +143,14 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> _onRegister() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
-    setState(() => _isLoading = true);
-
-    try {
-      final dio = GetIt.instance<Dio>();
-      await dio.post('/users', data: {
-        'name': _nameController.text.trim(),
-        'lastName': _lastNameController.text.trim(),
-        'email': _emailController.text.trim(),
-        'phone': _cleanPhone(_phoneController.text),
-        'cpf': _cleanCpf(_cpfController.text),
-        'password': _passwordController.text,
-      });
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Conta criada com sucesso!'),
-          backgroundColor: AppColors.success,
-        ),
-      );
-
-      Navigator.pushReplacementNamed(context, AppRoutes.login);
-    } on DioException catch (e) {
-      final message = e.response?.data?['message']?.toString() ?? 'Erro ao criar conta';
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: AppColors.error,
-        ),
-      );
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
+    await _registerController.register(
+      name: _nameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
+      email: _emailController.text.trim(),
+      phone: _cleanPhone(_phoneController.text),
+      cpf: _cleanCpf(_cpfController.text),
+      password: _passwordController.text,
+    );
   }
 
   @override
@@ -455,48 +456,54 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _buildRegisterButton() {
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          height: 54,
-          child: ElevatedButton(
-            onPressed: _isLoading ? null : _onRegister,
-            child: _isLoading
-                ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.5,
-                      color: AppColors.background,
-                    ),
-                  )
-                : const Text(
-                    'Cadastrar',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          width: double.infinity,
-          height: 44,
-          child: TextButton(
-            onPressed: _previousStep,
-            child: const Text(
-              'Voltar',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.cinzaClaro,
+    return ListenableBuilder(
+      listenable: _registerController,
+      builder: (context, _) {
+        final isLoading = _registerController.status == RegisterStatus.loading;
+        return Column(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: 54,
+              child: ElevatedButton(
+                onPressed: isLoading ? null : _onRegister,
+                child: isLoading
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          color: AppColors.background,
+                        ),
+                      )
+                    : const Text(
+                        'Cadastrar',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
               ),
             ),
-          ),
-        ),
-      ],
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              height: 44,
+              child: TextButton(
+                onPressed: _previousStep,
+                child: const Text(
+                  'Voltar',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppColors.cinzaClaro,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

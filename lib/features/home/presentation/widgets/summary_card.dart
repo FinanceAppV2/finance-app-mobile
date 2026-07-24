@@ -1,128 +1,76 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
-import '../../data/models/monthly_summary_model.dart';
+import '../../domain/entities/monthly_summary.dart';
 
 class SummaryCard extends StatelessWidget {
-  final MonthlySummaryModel summary;
+  final MonthlySummary summary;
 
   const SummaryCard({super.key, required this.summary});
 
   @override
   Widget build(BuildContext context) {
-    final spendingProgress = summary.monthlyIncome == 0
+    final availableForSavings = summary.monthlyIncome - summary.totalOutgoing;
+    final savingsProgress = summary.savingsGoalMonthly == 0
         ? 0.0
-        : (summary.totalOutgoing / summary.monthlyIncome).clamp(0.0, 1.0);
-    final percentage = (spendingProgress * 100).round();
+        : (availableForSavings / summary.savingsGoalMonthly).clamp(0.0, 1.0);
+    final percentage = (savingsProgress * 100).round();
 
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [AppColors.verdeEscuro, AppColors.background],
         ),
         border: Border.all(color: AppColors.verdeMedio),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.background,
-            blurRadius: 18,
-            offset: Offset(0, 8),
-          ),
-        ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  _format(summary.remaining),
-                  style: const TextStyle(
-                    color: AppColors.branco,
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
+                Expanded(
+                  child: _MainInfo(
+                    label: 'Renda',
+                    value: summary.monthlyIncome,
+                    color: AppColors.verdeDestaque,
                   ),
                 ),
-                Text(
-                  'JUL 2026',
-                  style: TextStyle(
-                    color: AppColors.cinzaClaro.withValues(alpha: 0.7),
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _MainInfo(
+                    label: 'Balanço',
+                    value: summary.remaining,
+                    color: summary.remaining >= 0
+                        ? AppColors.verdeDestaque
+                        : AppColors.error,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                _Info(
-                  label: 'Receita',
-                  value: summary.monthlyIncome,
-                  color: AppColors.verdeDestaque,
-                ),
-                const SizedBox(width: 16),
-                _Info(
-                  label: 'Gasto',
-                  value: summary.totalOutgoing,
-                  color: AppColors.error,
-                ),
-                const SizedBox(width: 16),
-                _Info(
-                  label: 'Limite',
-                  value: summary.spendingLimitMonthly,
-                  color: AppColors.warning,
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(3),
-              child: LinearProgressIndicator(
-                value: spendingProgress,
-                minHeight: 4,
-                backgroundColor: AppColors.cinzaEscuro,
-                valueColor: const AlwaysStoppedAnimation(AppColors.verdeDestaque),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Text(
-                  '$percentage% do limite usado',
-                  style: TextStyle(
-                    color: AppColors.cinzaClaro.withValues(alpha: 0.7),
-                    fontSize: 11,
-                  ),
-                ),
-              ],
+            _SavingsProgress(
+              goal: summary.savingsGoalMonthly,
+              progress: savingsProgress,
+              percentage: percentage,
+              available: availableForSavings,
             ),
           ],
         ),
       ),
     );
   }
-
-  static void _showMsg(BuildContext context, String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
-  }
-
-  static String _format(double value) {
-    final formatted = value.toStringAsFixed(2).replaceAll('.', ',');
-    return 'R\$ $formatted';
-  }
 }
 
-class _Info extends StatelessWidget {
+class _MainInfo extends StatelessWidget {
   final String label;
   final double value;
   final Color color;
 
-  const _Info({
+  const _MainInfo({
     required this.label,
     required this.value,
     required this.color,
@@ -130,25 +78,34 @@ class _Info extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    final formatted = value.toStringAsFixed(2).replaceAll('.', ',');
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.background.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: color.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: TextStyle(color: AppColors.cinzaClaro.withValues(alpha: 0.7), fontSize: 11),
+            style: TextStyle(
+              color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+              fontSize: 12,
+            ),
           ),
-          const SizedBox(height: 2),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'R\$ ${value.toStringAsFixed(2).replaceAll('.', ',')}',
-              style: const TextStyle(
-                color: AppColors.branco,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
+          const SizedBox(height: 4),
+          Text(
+            'R\$ $formatted',
+            style: TextStyle(
+              color: color,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],
@@ -157,4 +114,95 @@ class _Info extends StatelessWidget {
   }
 }
 
+class _SavingsProgress extends StatelessWidget {
+  final double goal;
+  final double progress;
+  final int percentage;
+  final double available;
 
+  const _SavingsProgress({
+    required this.goal,
+    required this.progress,
+    required this.percentage,
+    required this.available,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final goalFormatted = goal.toStringAsFixed(2).replaceAll('.', ',');
+    final availableFormatted = available.toStringAsFixed(2).replaceAll('.', ',');
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.background.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.savings_rounded,
+                    color: AppColors.verdeMedio,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    'Meta de economia',
+                    style: TextStyle(
+                      color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                '$percentage%',
+                style: TextStyle(
+                  color: AppColors.verdeDestaque,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 6,
+              backgroundColor: AppColors.cinzaEscuro,
+              valueColor: const AlwaysStoppedAnimation(AppColors.verdeDestaque),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Disponível: R\$ $availableFormatted',
+                style: TextStyle(
+                  color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                  fontSize: 11,
+                ),
+              ),
+              Text(
+                'Meta: R\$ $goalFormatted',
+                style: TextStyle(
+                  color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                  fontSize: 11,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

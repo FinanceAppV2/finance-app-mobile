@@ -1,10 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../routes/app_routes.dart';
+import '../controllers/auth_controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,49 +16,46 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _authController = GetIt.instance<AuthController>();
   bool _obscurePassword = true;
   bool _rememberMe = false;
-  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _authController.addListener(_onAuthStateChanged);
+  }
 
   @override
   void dispose() {
+    _authController.removeListener(_onAuthStateChanged);
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
+  void _onAuthStateChanged() {
+    if (!mounted) return;
+
+    if (_authController.status == AuthStatus.success) {
+      Navigator.pushReplacementNamed(context, AppRoutes.home);
+    } else if (_authController.status == AuthStatus.error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_authController.errorMessage ?? 'Erro ao fazer login'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+    }
+  }
+
   Future<void> _onLogin() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
-    setState(() => _isLoading = true);
-
-    try {
-      final dio = GetIt.instance<Dio>();
-      final response = await dio.post('/auth/login', data: {
-        'login': _emailController.text.trim(),
-        'password': _passwordController.text,
-      });
-
-      final token = response.data['token'] as String;
-      final user = response.data['user'] as Map<String, dynamic>;
-
-      final storage = GetIt.instance<FlutterSecureStorage>();
-      await storage.write(key: 'access_token', value: token);
-      await storage.write(key: 'user_id', value: user['id'] as String);
-      await storage.write(key: 'user_name', value: user['name'] as String);
-      await storage.write(key: 'user_email', value: user['email'] as String);
-
-      if (!mounted) return;
-      Navigator.pushReplacementNamed(context, AppRoutes.home);
-    } on DioException catch (e) {
-      final message = e.response?.data?['message']?.toString() ?? 'Erro ao fazer login';
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: AppColors.error),
-      );
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
+    await _authController.login(
+      login: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
   }
 
   @override
@@ -76,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   _buildHeader(),
                   const SizedBox(height: 48),
-                  _buildEmailField(),
+                  _buildLoginField(),
                   const SizedBox(height: 20),
                   _buildPasswordField(),
                   const SizedBox(height: 16),
@@ -128,19 +124,18 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildEmailField() {
+  Widget _buildLoginField() {
     return TextFormField(
       controller: _emailController,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: TextInputType.text,
       style: const TextStyle(color: AppColors.branco),
       decoration: const InputDecoration(
-        labelText: 'E-mail',
-        hintText: 'Digite seu e-mail',
-        prefixIcon: Icon(Icons.email_outlined, color: AppColors.verdeMedio),
+        labelText: 'E-mail, CPF ou telefone',
+        hintText: 'Digite seu e-mail, CPF ou telefone',
+        prefixIcon: Icon(Icons.person_outline, color: AppColors.verdeMedio),
       ),
       validator: (value) {
-        if (value == null || value.isEmpty) return 'E-mail é obrigatório';
-        if (!value.contains('@')) return 'Digite um e-mail válido';
+        if (value == null || value.isEmpty) return 'Campo é obrigatório';
         return null;
       },
     );
@@ -219,29 +214,35 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildLoginButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 54,
-      child: ElevatedButton(
-        onPressed: _isLoading ? null : _onLogin,
-        child: _isLoading
-            ? const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.5,
-                  color: AppColors.background,
-                ),
-              )
-            : const Text(
-                'Entrar',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
-              ),
-      ),
+    return ListenableBuilder(
+      listenable: _authController,
+      builder: (context, _) {
+        final isLoading = _authController.status == AuthStatus.loading;
+        return SizedBox(
+          width: double.infinity,
+          height: 54,
+          child: ElevatedButton(
+            onPressed: isLoading ? null : _onLogin,
+            child: isLoading
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      color: AppColors.background,
+                    ),
+                  )
+                : const Text(
+                    'Entrar',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+          ),
+        );
+      },
     );
   }
 

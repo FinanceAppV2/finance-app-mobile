@@ -22,7 +22,7 @@ class FinanceApp extends StatelessWidget {
       title: 'Finance App',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
-      initialRoute: AppRoutes.home,
+      initialRoute: AppRoutes.splash,
       routes: AppPages.routes,
     );
   }

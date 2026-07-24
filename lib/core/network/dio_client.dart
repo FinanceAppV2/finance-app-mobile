@@ -9,7 +9,7 @@ class DioClient {
   DioClient(this._storage) {
     _dio = Dio(
       BaseOptions(
-        baseUrl: dotenv.env['API_URL'] ?? 'http://localhost:3000',
+        baseUrl: dotenv.env['API_URL'] ?? 'http://localhost:3000/api',
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
         headers: {

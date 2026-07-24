@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../../core/theme/app_theme.dart';
-import '../../data/models/expense_model.dart';
-import '../../data/models/monthly_summary_model.dart';
+import '../controllers/home_controller.dart';
 import '../widgets/expense_tile.dart';
 import '../widgets/expenses_header.dart';
 import '../widgets/floating_bottom_nav.dart';
@@ -18,83 +18,26 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _controller = GetIt.instance<HomeController>();
   int _selectedIndex = 0;
 
-  static final _fictionalSummary = MonthlySummaryModel(
-    monthlyIncome: 5800.00,
-    totalExpenses: 2340.50,
-    totalFixedExpenses: 1250.00,
-    remaining: 2209.50,
-    savingsGoalMonthly: 1000.00,
-    spendingLimitMonthly: 3000.00,
-  );
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_onStateChanged);
+    _controller.loadData();
+  }
 
-  static final _fictionalExpenses = [
-    const ExpenseModel(
-      id: '1',
-      description: 'Supermercado Extra',
-      value: 487.90,
-      category: 'Alimentação',
-      paymentMethod: 'Crédito',
-      date: '2026-07-21',
-    ),
-    const ExpenseModel(
-      id: '2',
-      description: 'Netflix + Spotify',
-      value: 63.80,
-      category: 'Assinatura',
-      paymentMethod: 'Débito',
-      date: '2026-07-18',
-    ),
-    const ExpenseModel(
-      id: '3',
-      description: 'Posto Ipiranga',
-      value: 250.00,
-      category: 'Transporte',
-      paymentMethod: 'Crédito',
-      date: '2026-07-17',
-    ),
-    const ExpenseModel(
-      id: '4',
-      description: 'Farmácia Drogasil',
-      value: 89.90,
-      category: 'Saúde',
-      paymentMethod: 'Pix',
-      date: '2026-07-15',
-    ),
-    const ExpenseModel(
-      id: '5',
-      description: 'iFood - Jantar',
-      value: 62.50,
-      category: 'Alimentação',
-      paymentMethod: 'Pix',
-      date: '2026-07-14',
-    ),
-    const ExpenseModel(
-      id: '6',
-      description: 'Academia SmartFit',
-      value: 129.90,
-      category: 'Saúde',
-      paymentMethod: 'Débito',
-      date: '2026-07-10',
-    ),
-    const ExpenseModel(
-      id: '7',
-      description: 'Conta de Luz',
-      value: 198.50,
-      category: 'Moradia',
-      paymentMethod: 'Pix',
-      date: '2026-07-08',
-    ),
-    const ExpenseModel(
-      id: '8',
-      description: 'Uber',
-      value: 34.20,
-      category: 'Transporte',
-      paymentMethod: 'Crédito',
-      date: '2026-07-06',
-    ),
-  ];
+  @override
+  void dispose() {
+    _controller.removeListener(_onStateChanged);
+    super.dispose();
+  }
+
+  void _onStateChanged() {
+    if (!mounted) return;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.only(left: 26, right: 26, top: 40),
                     child: HomeHeader(
                       greeting: _getGreeting(),
-                      userName: 'Lucas',
+                      userName: _controller.userName ?? '',
                       onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
                     ),
                   ),
@@ -139,32 +82,7 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 24),
               Expanded(
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 560),
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-                      children: [
-                        SummaryCard(summary: _fictionalSummary),
-                        const SizedBox(height: 36),
-                        ExpensesHeader(
-                          title: 'Gastos recentes',
-                          count: _fictionalExpenses.length,
-                          onSeeAll: () => ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Todos os gastos serão exibidos aqui.'),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        ..._fictionalExpenses.map(
-                          (expense) => ExpenseTile(expense: expense),
-                        ),
-                        const SizedBox(height: 120),
-                      ],
-                    ),
-                  ),
-                ),
+                child: _buildBody(),
               ),
             ],
           ),
@@ -178,6 +96,64 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    if (_controller.status == HomeStatus.loading) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.verdeDestaque),
+      );
+    }
+
+    if (_controller.status == HomeStatus.error) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+            const SizedBox(height: 16),
+            Text(
+              _controller.errorMessage ?? 'Erro ao carregar dados',
+              style: const TextStyle(color: AppColors.cinzaClaro),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => _controller.loadData(),
+              child: const Text('Tentar novamente'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 560),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+          children: [
+            if (_controller.summary != null)
+              SummaryCard(summary: _controller.summary!),
+            const SizedBox(height: 36),
+            ExpensesHeader(
+              title: 'Gastos recentes',
+              count: _controller.expenses.length,
+              onSeeAll: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Todos os gastos serão exibidos aqui.'),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            ..._controller.expenses.map(
+              (expense) => ExpenseTile(expense: expense),
+            ),
+            const SizedBox(height: 120),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get_it/get_it.dart';
 
 import '../models/expense_model.dart';
 import '../models/monthly_summary_model.dart';
@@ -9,9 +8,7 @@ class HomeRemoteDatasource {
   final Dio _dio;
   final FlutterSecureStorage _storage;
 
-  HomeRemoteDatasource()
-      : _dio = GetIt.instance<Dio>(),
-        _storage = GetIt.instance<FlutterSecureStorage>();
+  HomeRemoteDatasource(this._dio, this._storage);
 
   Future<String> _getUserId() async {
     final id = await _storage.read(key: 'user_id');

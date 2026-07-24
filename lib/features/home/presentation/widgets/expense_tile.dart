@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
-import '../../data/models/expense_model.dart';
+import '../../domain/entities/expense.dart';
 
 class ExpenseTile extends StatelessWidget {
-  final ExpenseModel expense;
+  final Expense expense;
 
   const ExpenseTile({super.key, required this.expense});
 
