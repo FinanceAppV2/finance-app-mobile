@@ -10,11 +10,10 @@ class SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final availableForSavings = summary.monthlyIncome - summary.totalOutgoing;
-    final savingsProgress = summary.savingsGoalMonthly == 0
-        ? 0.0
-        : (availableForSavings / summary.savingsGoalMonthly).clamp(0.0, 1.0);
-    final percentage = (savingsProgress * 100).round();
+    final used = summary.totalOutgoing;
+    final limit = summary.spendingLimitMonthly;
+    final progress = limit <= 0 ? 0.0 : (used / limit).clamp(0.0, 1.0);
+    final percentage = (progress * 100).round();
 
     return Container(
       decoration: BoxDecoration(
@@ -53,10 +52,10 @@ class SummaryCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             _SavingsProgress(
-              goal: summary.savingsGoalMonthly,
-              progress: savingsProgress,
+              limit: limit,
+              progress: progress,
               percentage: percentage,
-              available: availableForSavings,
+              used: used,
             ),
           ],
         ),
@@ -115,22 +114,24 @@ class _MainInfo extends StatelessWidget {
 }
 
 class _SavingsProgress extends StatelessWidget {
-  final double goal;
+  final double limit;
   final double progress;
   final int percentage;
-  final double available;
+  final double used;
 
   const _SavingsProgress({
-    required this.goal,
+    required this.limit,
     required this.progress,
     required this.percentage,
-    required this.available,
+    required this.used,
   });
 
   @override
   Widget build(BuildContext context) {
-    final goalFormatted = goal.toStringAsFixed(2).replaceAll('.', ',');
-    final availableFormatted = available.toStringAsFixed(2).replaceAll('.', ',');
+    final limitFormatted = limit.toStringAsFixed(2).replaceAll('.', ',');
+    final usedFormatted = used.toStringAsFixed(2).replaceAll('.', ',');
+    final remaining = (limit - used).clamp(0.0, limit);
+    final remainingFormatted = remaining.toStringAsFixed(2).replaceAll('.', ',');
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -147,13 +148,13 @@ class _SavingsProgress extends StatelessWidget {
               Row(
                 children: [
                   const Icon(
-                    Icons.savings_rounded,
+                    Icons.receipt_long_rounded,
                     color: AppColors.verdeMedio,
                     size: 16,
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    'Meta de economia',
+                    'Limite de gastos',
                     style: TextStyle(
                       color: AppColors.cinzaClaro.withValues(alpha: 0.8),
                       fontSize: 12,
@@ -164,7 +165,7 @@ class _SavingsProgress extends StatelessWidget {
               Text(
                 '$percentage%',
                 style: TextStyle(
-                  color: AppColors.verdeDestaque,
+                  color: progress >= 0.8 ? AppColors.warning : AppColors.verdeDestaque,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
@@ -178,7 +179,9 @@ class _SavingsProgress extends StatelessWidget {
               value: progress,
               minHeight: 6,
               backgroundColor: AppColors.cinzaEscuro,
-              valueColor: const AlwaysStoppedAnimation(AppColors.verdeDestaque),
+              valueColor: AlwaysStoppedAnimation(
+                progress >= 0.8 ? AppColors.warning : AppColors.verdeDestaque,
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -186,14 +189,21 @@ class _SavingsProgress extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Disponível: R\$ $availableFormatted',
+                'Gasto: R\$ $usedFormatted',
                 style: TextStyle(
                   color: AppColors.cinzaClaro.withValues(alpha: 0.7),
                   fontSize: 11,
                 ),
               ),
               Text(
-                'Meta: R\$ $goalFormatted',
+                'Restante: R\$ $remainingFormatted',
+                style: TextStyle(
+                  color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                  fontSize: 11,
+                ),
+              ),
+              Text(
+                'Limite: R\$ $limitFormatted',
                 style: TextStyle(
                   color: AppColors.cinzaClaro.withValues(alpha: 0.7),
                   fontSize: 11,

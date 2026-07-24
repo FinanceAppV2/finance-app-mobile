@@ -11,12 +11,24 @@ import 'package:finance_app_mobile/features/auth/domain/usecases/login_usecase.d
 import 'package:finance_app_mobile/features/auth/domain/usecases/register_usecase.dart';
 import 'package:finance_app_mobile/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:finance_app_mobile/features/auth/presentation/controllers/register_controller.dart';
+import 'package:finance_app_mobile/features/cards/data/datasources/card_remote_datasource.dart';
+import 'package:finance_app_mobile/features/cards/data/repositories/card_repository_impl.dart';
+import 'package:finance_app_mobile/features/cards/domain/repositories/card_repository.dart';
+import 'package:finance_app_mobile/features/cards/domain/usecases/create_card_usecase.dart';
+import 'package:finance_app_mobile/features/cards/domain/usecases/get_cards_usecase.dart';
+import 'package:finance_app_mobile/features/cards/presentation/controllers/cards_controller.dart';
 import 'package:finance_app_mobile/features/home/data/datasources/home_remote_datasource.dart';
 import 'package:finance_app_mobile/features/home/data/repositories/home_repository_impl.dart';
 import 'package:finance_app_mobile/features/home/domain/repositories/home_repository.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/get_monthly_summary_usecase.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/get_recent_expenses_usecase.dart';
 import 'package:finance_app_mobile/features/home/presentation/controllers/home_controller.dart';
+import 'package:finance_app_mobile/features/finance_config/data/datasources/finance_config_remote_datasource.dart';
+import 'package:finance_app_mobile/features/finance_config/data/repositories/finance_config_repository_impl.dart';
+import 'package:finance_app_mobile/features/finance_config/domain/repositories/finance_config_repository.dart';
+import 'package:finance_app_mobile/features/finance_config/domain/usecases/get_finance_config_usecase.dart';
+import 'package:finance_app_mobile/features/finance_config/domain/usecases/update_finance_config_usecase.dart';
+import 'package:finance_app_mobile/features/finance_config/presentation/controllers/finance_config_controller.dart';
 
 final injector = GetIt.instance;
 
@@ -96,6 +108,69 @@ Future<void> initializeDependencies() async {
         injector<GetMonthlySummaryUseCase>(),
         injector<GetRecentExpensesUseCase>(),
         injector<FlutterSecureStorage>(),
+      ),
+    );
+  }
+
+  if (!injector.isRegistered<CardRemoteDataSource>()) {
+    injector.registerLazySingleton<CardRemoteDataSource>(
+      () => CardRemoteDataSource(injector<Dio>(), injector<FlutterSecureStorage>()),
+    );
+  }
+  if (!injector.isRegistered<CardRepository>()) {
+    injector.registerLazySingleton<CardRepository>(
+      () => CardRepositoryImpl(injector<CardRemoteDataSource>()),
+    );
+  }
+  if (!injector.isRegistered<GetCardsUseCase>()) {
+    injector.registerLazySingleton<GetCardsUseCase>(
+      () => GetCardsUseCase(injector<CardRepository>()),
+    );
+  }
+  if (!injector.isRegistered<CreateCardUseCase>()) {
+    injector.registerLazySingleton<CreateCardUseCase>(
+      () => CreateCardUseCase(injector<CardRepository>()),
+    );
+  }
+  if (!injector.isRegistered<CardsController>()) {
+    injector.registerLazySingleton<CardsController>(
+      () => CardsController(
+        injector<GetCardsUseCase>(),
+        injector<CreateCardUseCase>(),
+      ),
+    );
+  }
+
+  if (!injector.isRegistered<FinanceConfigRemoteDatasource>()) {
+    injector.registerLazySingleton<FinanceConfigRemoteDatasource>(
+      () => FinanceConfigRemoteDatasource(
+        injector<Dio>(),
+        injector<FlutterSecureStorage>(),
+      ),
+    );
+  }
+  if (!injector.isRegistered<FinanceConfigRepository>()) {
+    injector.registerLazySingleton<FinanceConfigRepository>(
+      () => FinanceConfigRepositoryImpl(
+        injector<FinanceConfigRemoteDatasource>(),
+      ),
+    );
+  }
+  if (!injector.isRegistered<GetFinanceConfigUseCase>()) {
+    injector.registerLazySingleton<GetFinanceConfigUseCase>(
+      () => GetFinanceConfigUseCase(injector<FinanceConfigRepository>()),
+    );
+  }
+  if (!injector.isRegistered<UpdateFinanceConfigUseCase>()) {
+    injector.registerLazySingleton<UpdateFinanceConfigUseCase>(
+      () => UpdateFinanceConfigUseCase(injector<FinanceConfigRepository>()),
+    );
+  }
+  if (!injector.isRegistered<FinanceConfigController>()) {
+    injector.registerLazySingleton<FinanceConfigController>(
+      () => FinanceConfigController(
+        injector<GetFinanceConfigUseCase>(),
+        injector<UpdateFinanceConfigUseCase>(),
       ),
     );
   }

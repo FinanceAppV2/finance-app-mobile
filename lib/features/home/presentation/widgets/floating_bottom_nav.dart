@@ -7,19 +7,21 @@ import '../../../../core/theme/app_theme.dart';
 class FloatingBottomNav extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onItemTapped;
+  final VoidCallback? onAddTapped;
 
   const FloatingBottomNav({
     super.key,
     required this.selectedIndex,
     required this.onItemTapped,
+    this.onAddTapped,
   });
 
   static const _icons = <IconData>[
     Icons.home_rounded,
-    Icons.receipt_long_rounded,
+    Icons.credit_card_rounded,
     Icons.add_rounded,
+    Icons.receipt_long_rounded,
     Icons.pie_chart_rounded,
-    Icons.person_outline_rounded,
   ];
 
   @override
@@ -47,7 +49,7 @@ class FloatingBottomNav extends StatelessWidget {
 
                 if (isCentral) {
                   return GestureDetector(
-                    onTap: () => onItemTapped(index),
+                    onTap: onAddTapped,
                     child: Container(
                       width: 40,
                       height: 40,

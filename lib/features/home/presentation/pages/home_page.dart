@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../cards/presentation/pages/cards_page.dart';
+import '../../../expenses/presentation/widgets/add_expense_sheet.dart';
+import '../../../fixed_expenses/presentation/pages/fixed_expenses_page.dart';
+import '../../../reports/presentation/pages/reports_page.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/expense_tile.dart';
 import '../widgets/expenses_header.dart';
@@ -39,6 +43,19 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
+  void _onAddExpense() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const AddExpenseSheet(),
+    ).then((result) {
+      if (result == true) {
+        _controller.loadData();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,40 +64,43 @@ class _HomePageState extends State<HomePage> {
       drawer: const _AppDrawer(),
       body: Stack(
         children: [
-          ClipPath(
-            clipper: _HeaderClipper(),
-            child: Container(
-              height: 280,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppColors.verdeMedio,
-                    AppColors.verdeEscuro,
-                    AppColors.background,
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Column(
-            children: [
-              const SizedBox(height: 20),
-              Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 560),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 26, right: 26, top: 40),
-                    child: HomeHeader(
-                      greeting: _getGreeting(),
-                      userName: _controller.userName ?? '',
-                      onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                    ),
+          if (_selectedIndex == 0)
+            ClipPath(
+              clipper: _HeaderClipper(),
+              child: Container(
+                height: 280,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      AppColors.verdeMedio,
+                      AppColors.verdeEscuro,
+                      AppColors.background,
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+            ),
+          Column(
+            children: [
+              if (_selectedIndex == 0) ...[
+                const SizedBox(height: 20),
+                Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 560),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 26, right: 26, top: 40),
+                      child: HomeHeader(
+                        greeting: _getGreeting(),
+                        userName: _controller.userName ?? '',
+                        onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+              ],
               Expanded(
                 child: _buildBody(),
               ),
@@ -93,6 +113,7 @@ class _HomePageState extends State<HomePage> {
             child: FloatingBottomNav(
               selectedIndex: _selectedIndex,
               onItemTapped: (index) => setState(() => _selectedIndex = index),
+              onAddTapped: _onAddExpense,
             ),
           ),
         ],
@@ -101,6 +122,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBody() {
+    switch (_selectedIndex) {
+      case 0:
+        return _buildHomeContent();
+      case 1:
+        return const CardsPage();
+      case 3:
+        return const FixedExpensesPage();
+      case 4:
+        return const ReportsPage();
+      default:
+        return _buildHomeContent();
+    }
+  }
+
+  Widget _buildHomeContent() {
     if (_controller.status == HomeStatus.loading) {
       return const Center(
         child: CircularProgressIndicator(color: AppColors.verdeDestaque),
@@ -206,7 +242,10 @@ class _AppDrawer extends StatelessWidget {
             _DrawerItem(
               icon: Icons.settings_outlined,
               label: 'Configurações',
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/settings');
+              },
             ),
             const Spacer(),
             _DrawerItem(
