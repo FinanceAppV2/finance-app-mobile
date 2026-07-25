@@ -16,8 +16,8 @@ class FinanceConfigModel extends Equatable {
   factory FinanceConfigModel.fromJson(Map<String, dynamic> json) {
     return FinanceConfigModel(
       monthlyIncome: (json['monthlyIncome'] as num?)?.toDouble() ?? 0,
-      spendingLimit: (json['spendingLimit'] as num?)?.toDouble() ?? 0,
-      savingsGoal: (json['savingsGoal'] as num?)?.toDouble() ?? 0,
+      spendingLimit: (json['spendingLimitMonthly'] as num?)?.toDouble() ?? 0,
+      savingsGoal: (json['savingsGoalMonthly'] as num?)?.toDouble() ?? 0,
     );
   }
 
