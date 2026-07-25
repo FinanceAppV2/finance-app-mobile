@@ -33,8 +33,8 @@ class FinanceConfigRemoteDatasource {
         '/users/$userId/finance-config',
         data: {
           'monthlyIncome': monthlyIncome,
-          'spendingLimit': spendingLimit,
-          'savingsGoal': savingsGoal,
+          'spendingLimitMonthly': spendingLimit,
+          'savingsGoalMonthly': savingsGoal,
         },
       );
       return FinanceConfigModel.fromJson(response.data as Map<String, dynamic>);
