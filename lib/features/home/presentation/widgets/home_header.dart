@@ -6,12 +6,14 @@ class HomeHeader extends StatelessWidget {
   final String greeting;
   final String userName;
   final VoidCallback? onMenuPressed;
+  final VoidCallback? onReload;
 
   const HomeHeader({
     super.key,
     required this.greeting,
     required this.userName,
     this.onMenuPressed,
+    this.onReload,
   });
 
   @override
@@ -65,6 +67,24 @@ class HomeHeader extends StatelessWidget {
           icon: const Icon(
             Icons.notifications_none_rounded,
             color: AppColors.branco,
+          ),
+        ),
+        const SizedBox(width: 4),
+        InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onReload,
+          child: Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: AppColors.verdeDestaque.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(
+              Icons.refresh_rounded,
+              color: AppColors.verdeDestaque,
+              size: 20,
+            ),
           ),
         ),
       ],

@@ -6,6 +6,8 @@ import 'di/injector.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
 
+final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
@@ -24,6 +26,7 @@ class FinanceApp extends StatelessWidget {
       theme: AppTheme.dark,
       initialRoute: AppRoutes.splash,
       routes: AppPages.routes,
+      navigatorObservers: [routeObserver],
     );
   }
 }

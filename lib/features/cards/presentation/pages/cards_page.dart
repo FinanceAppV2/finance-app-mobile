@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/shimmer_loading.dart';
 import '../../domain/entities/card.dart';
 import '../controllers/cards_controller.dart';
 import '../widgets/add_card_sheet.dart';
@@ -164,9 +165,7 @@ class _CardsPageState extends State<CardsPage> {
 
   Widget _buildBody() {
     if (_controller.status == CardsStatus.loading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.verdeDestaque),
-      );
+      return const ShimmerLoading(child: SkeletonCardsPage());
     }
 
     if (_controller.status == CardsStatus.error) {

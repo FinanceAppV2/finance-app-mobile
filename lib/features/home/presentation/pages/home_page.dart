@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/shimmer_loading.dart';
+import '../../../../main.dart';
 import '../../../cards/presentation/pages/cards_page.dart';
 import '../../../expenses/presentation/widgets/add_expense_sheet.dart';
 import '../../../fixed_expenses/presentation/pages/fixed_expenses_page.dart';
@@ -23,7 +26,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with RouteAware {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _controller = GetIt.instance<HomeController>();
   int _selectedIndex = 0;
@@ -40,9 +43,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
   void dispose() {
+    routeObserver.unsubscribe(this);
     _controller.removeListener(_onStateChanged);
     super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    _controller.loadData(month: _selectedMonth, year: _selectedYear);
   }
 
   void _onStateChanged() {
@@ -186,11 +201,15 @@ class _HomePageState extends State<HomePage> {
                         greeting: _getGreeting(),
                         userName: _controller.userName ?? '',
                         onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                        onReload: () => _controller.loadData(
+                          month: _selectedMonth,
+                          year: _selectedYear,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 8),
               ],
               Expanded(
                 child: _buildBody(),
@@ -229,9 +248,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildHomeContent() {
     if (_controller.status == HomeStatus.loading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.verdeDestaque),
-      );
+      return const ShimmerLoading(child: SkeletonScreen());
     }
 
     if (_controller.status == HomeStatus.error) {
@@ -313,49 +330,222 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class _AppDrawer extends StatelessWidget {
+class _AppDrawer extends StatefulWidget {
   const _AppDrawer();
+
+  @override
+  State<_AppDrawer> createState() => _AppDrawerState();
+}
+
+class _AppDrawerState extends State<_AppDrawer> with SingleTickerProviderStateMixin {
+  String _name = '';
+  String _email = '';
+  String _lastName = '';
+  late AnimationController _animController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+    _fadeAnimation = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
+    _loadUser();
+    _animController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadUser() async {
+    const storage = FlutterSecureStorage();
+    final name = await storage.read(key: 'user_name') ?? '';
+    final lastName = await storage.read(key: 'user_lastName') ?? '';
+    final email = await storage.read(key: 'user_email') ?? '';
+    if (mounted) setState(() { _name = name; _lastName = lastName; _email = email; });
+  }
+
+  String get _initial {
+    if (_name.isEmpty) return '?';
+    return _name[0].toUpperCase();
+  }
+
+  String get _displayName {
+    if (_name.isEmpty) return 'Usuário';
+    if (_lastName.isEmpty) return _name;
+    return '$_name $_lastName';
+  }
+
+  Future<bool> _confirmLogout() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.cinzaEscuro,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Sair', style: TextStyle(color: AppColors.branco)),
+        content: const Text(
+          'Tem certeza que deseja sair?',
+          style: TextStyle(color: AppColors.branco),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text(
+              'Cancelar',
+              style: TextStyle(color: AppColors.cinzaClaro),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text(
+              'Sair',
+              style: TextStyle(color: AppColors.error),
+            ),
+          ),
+        ],
+      ),
+    );
+    return result ?? false;
+  }
+
+  void _navigateTo(String route) {
+    Navigator.pop(context);
+    Navigator.pushNamed(context, route);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: AppColors.verdeEscuro,
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 24),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: AppColors.branco,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
+      backgroundColor: Colors.transparent,
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.verdeMedio,
+              AppColors.verdeEscuro,
+              AppColors.background,
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: Column(
+              children: [
+                ClipPath(
+                  clipper: _DrawerHeaderClipper(),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.fromLTRB(24, 32, 24, 48),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          AppColors.verdePrincipal,
+                          AppColors.verdeMedio,
+                        ],
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.branco, width: 2.5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.verdeEscuro.withValues(alpha: 0.4),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: CircleAvatar(
+                            radius: 32,
+                            backgroundColor: AppColors.background.withValues(alpha: 0.35),
+                            child: Text(
+                              _initial,
+                              style: const TextStyle(
+                                color: AppColors.branco,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        Text(
+                          _displayName,
+                          style: const TextStyle(
+                            color: AppColors.branco,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _email,
+                          style: const TextStyle(
+                            color: AppColors.branco,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                    child: Column(
+                      children: [
+                        _DrawerItem(
+                          icon: Icons.home_rounded,
+                          label: 'Início',
+                          onTap: () => Navigator.pop(context),
+                        ),
+                        const Spacer(),
+                        Container(
+                          height: 1,
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          color: AppColors.branco.withValues(alpha: 0.08),
+                        ),
+                        _DrawerItem(
+                          icon: Icons.settings_rounded,
+                          label: 'Configurações',
+                          onTap: () => _navigateTo('/settings'),
+                        ),
+                        _DrawerItem(
+                          icon: Icons.logout_rounded,
+                          label: 'Sair',
+                          iconColor: AppColors.error,
+                          labelColor: AppColors.error,
+                          onTap: () async {
+                            final navigator = Navigator.of(context);
+                            final confirm = await _confirmLogout();
+                            if (confirm && mounted) {
+                              const FlutterSecureStorage().deleteAll();
+                              navigator.pushReplacementNamed('/login');
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-            _DrawerItem(
-              icon: Icons.home_rounded,
-              label: 'Inicio',
-              onTap: () => Navigator.pop(context),
-            ),
-            _DrawerItem(
-              icon: Icons.settings_outlined,
-              label: 'Configurações',
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/settings');
-              },
-            ),
-            const Spacer(),
-            _DrawerItem(
-              icon: Icons.logout_rounded,
-              label: 'Sair',
-              onTap: () => Navigator.pushReplacementNamed(context, '/login'),
-            ),
-            const SizedBox(height: 16),
-          ],
+          ),
         ),
       ),
     );
@@ -366,28 +556,82 @@ class _DrawerItem extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final Color? iconColor;
+  final Color? labelColor;
 
   const _DrawerItem({
     required this.icon,
     required this.label,
     required this.onTap,
+    this.iconColor,
+    this.labelColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon, color: AppColors.verdeDestaque, size: 22),
-      title: Text(
-        label,
-        style: const TextStyle(
-          color: AppColors.branco,
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
+    final ic = iconColor ?? AppColors.verdeDestaque;
+    final tc = labelColor ?? AppColors.branco;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: ic.withValues(alpha: 0.15), width: 0.5),
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: ic, size: 22),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      color: tc,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Icon(Icons.chevron_right_rounded, color: ic.withValues(alpha: 0.4), size: 20),
+              ],
+            ),
+          ),
         ),
       ),
-      onTap: onTap,
     );
   }
+}
+
+class _DrawerHeaderClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path()
+      ..lineTo(0, size.height - 28)
+      ..quadraticBezierTo(
+        size.width * 0.25,
+        size.height,
+        size.width * 0.5,
+        size.height - 12,
+      )
+      ..quadraticBezierTo(
+        size.width * 0.75,
+        size.height - 24,
+        size.width,
+        size.height - 8,
+      )
+      ..lineTo(size.width, 0)
+      ..close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
 
 class _HeaderClipper extends CustomClipper<Path> {
