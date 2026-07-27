@@ -6,6 +6,6 @@ import '../repositories/reports_repository.dart';
 class GetChartTopExpensesUseCase {
   final ReportsRepository _repository;
   GetChartTopExpensesUseCase(this._repository);
-  Future<Either<String, List<ChartTopExpense>>> execute({int? year}) =>
-      _repository.getTopExpenses(year: year);
+  Future<Either<String, List<ChartTopExpense>>> execute({int? year, int? month}) =>
+      _repository.getTopExpenses(year: year, month: month);
 }

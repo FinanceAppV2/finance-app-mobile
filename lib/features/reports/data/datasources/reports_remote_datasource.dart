@@ -20,26 +20,27 @@ class ReportsRemoteDataSource {
     return id;
   }
 
-  Map<String, dynamic> _params({int? year}) {
+  Map<String, dynamic> _params({int? year, int? month}) {
     final params = <String, dynamic>{};
     if (year != null) params['year'] = year;
+    if (month != null) params['month'] = month;
     return params;
   }
 
-  Future<List<ChartPaymentMethodModel>> getPaymentMethods({int? year}) async {
+  Future<List<ChartPaymentMethodModel>> getPaymentMethods({int? year, int? month}) async {
     final userId = await _getUserId();
     final response = await _dio.get(
       '/users/$userId/charts/payment-methods',
-      queryParameters: _params(year: year),
+      queryParameters: _params(year: year, month: month),
     );
     return (response.data as List).map((e) => ChartPaymentMethodModel.fromJson(e)).toList();
   }
 
-  Future<List<ChartCategoryModel>> getCategories({int? year}) async {
+  Future<List<ChartCategoryModel>> getCategories({int? year, int? month}) async {
     final userId = await _getUserId();
     final response = await _dio.get(
       '/users/$userId/charts/categories',
-      queryParameters: _params(year: year),
+      queryParameters: _params(year: year, month: month),
     );
     return (response.data as List).map((e) => ChartCategoryModel.fromJson(e)).toList();
   }
@@ -62,20 +63,20 @@ class ReportsRemoteDataSource {
     return (response.data as List).map((e) => ChartMonthlyTrendModel.fromJson(e)).toList();
   }
 
-  Future<ChartFixedVsVariableModel> getFixedVsVariable({int? year}) async {
+  Future<ChartFixedVsVariableModel> getFixedVsVariable({int? year, int? month}) async {
     final userId = await _getUserId();
     final response = await _dio.get(
       '/users/$userId/charts/fixed-vs-variable',
-      queryParameters: _params(year: year),
+      queryParameters: _params(year: year, month: month),
     );
     return ChartFixedVsVariableModel.fromJson(response.data as Map<String, dynamic>);
   }
 
-  Future<List<ChartTopExpenseModel>> getTopExpenses({int? year}) async {
+  Future<List<ChartTopExpenseModel>> getTopExpenses({int? year, int? month}) async {
     final userId = await _getUserId();
     final response = await _dio.get(
       '/users/$userId/charts/top-expenses',
-      queryParameters: _params(year: year),
+      queryParameters: _params(year: year, month: month),
     );
     return (response.data as List).map((e) => ChartTopExpenseModel.fromJson(e)).toList();
   }

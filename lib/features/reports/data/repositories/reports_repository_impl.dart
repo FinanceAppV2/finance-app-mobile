@@ -15,9 +15,9 @@ class ReportsRepositoryImpl implements ReportsRepository {
   ReportsRepositoryImpl(this._dataSource);
 
   @override
-  Future<Either<String, List<ChartPaymentMethod>>> getPaymentMethods({int? year}) async {
+  Future<Either<String, List<ChartPaymentMethod>>> getPaymentMethods({int? year, int? month}) async {
     try {
-      final models = await _dataSource.getPaymentMethods(year: year);
+      final models = await _dataSource.getPaymentMethods(year: year, month: month);
       return Right(models.map((m) => m.toEntity()).toList());
     } catch (e) {
       return Left('Erro ao carregar métodos de pagamento: $e');
@@ -25,9 +25,9 @@ class ReportsRepositoryImpl implements ReportsRepository {
   }
 
   @override
-  Future<Either<String, List<ChartCategory>>> getCategories({int? year}) async {
+  Future<Either<String, List<ChartCategory>>> getCategories({int? year, int? month}) async {
     try {
-      final models = await _dataSource.getCategories(year: year);
+      final models = await _dataSource.getCategories(year: year, month: month);
       return Right(models.map((m) => m.toEntity()).toList());
     } catch (e) {
       return Left('Erro ao carregar categorias: $e');
@@ -55,9 +55,9 @@ class ReportsRepositoryImpl implements ReportsRepository {
   }
 
   @override
-  Future<Either<String, ChartFixedVsVariable>> getFixedVsVariable({int? year}) async {
+  Future<Either<String, ChartFixedVsVariable>> getFixedVsVariable({int? year, int? month}) async {
     try {
-      final model = await _dataSource.getFixedVsVariable(year: year);
+      final model = await _dataSource.getFixedVsVariable(year: year, month: month);
       return Right(model.toEntity());
     } catch (e) {
       return Left('Erro ao carregar despesas fixas vs variáveis: $e');
@@ -65,9 +65,9 @@ class ReportsRepositoryImpl implements ReportsRepository {
   }
 
   @override
-  Future<Either<String, List<ChartTopExpense>>> getTopExpenses({int? year}) async {
+  Future<Either<String, List<ChartTopExpense>>> getTopExpenses({int? year, int? month}) async {
     try {
-      final models = await _dataSource.getTopExpenses(year: year);
+      final models = await _dataSource.getTopExpenses(year: year, month: month);
       return Right(models.map((m) => m.toEntity()).toList());
     } catch (e) {
       return Left('Erro ao carregar maiores despesas: $e');

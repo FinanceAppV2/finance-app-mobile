@@ -6,6 +6,6 @@ import '../repositories/reports_repository.dart';
 class GetChartPaymentMethodsUseCase {
   final ReportsRepository _repository;
   GetChartPaymentMethodsUseCase(this._repository);
-  Future<Either<String, List<ChartPaymentMethod>>> execute({int? year}) =>
-      _repository.getPaymentMethods(year: year);
+  Future<Either<String, List<ChartPaymentMethod>>> execute({int? year, int? month}) =>
+      _repository.getPaymentMethods(year: year, month: month);
 }

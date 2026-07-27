@@ -6,6 +6,6 @@ import '../repositories/reports_repository.dart';
 class GetChartFixedVsVariableUseCase {
   final ReportsRepository _repository;
   GetChartFixedVsVariableUseCase(this._repository);
-  Future<Either<String, ChartFixedVsVariable>> execute({int? year}) =>
-      _repository.getFixedVsVariable(year: year);
+  Future<Either<String, ChartFixedVsVariable>> execute({int? year, int? month}) =>
+      _repository.getFixedVsVariable(year: year, month: month);
 }

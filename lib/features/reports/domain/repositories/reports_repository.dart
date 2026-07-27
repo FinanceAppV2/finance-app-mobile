@@ -8,10 +8,10 @@ import '../entities/chart_payment_method.dart';
 import '../entities/chart_top_expense.dart';
 
 abstract class ReportsRepository {
-  Future<Either<String, List<ChartPaymentMethod>>> getPaymentMethods({int? year});
-  Future<Either<String, List<ChartCategory>>> getCategories({int? year});
+  Future<Either<String, List<ChartPaymentMethod>>> getPaymentMethods({int? year, int? month});
+  Future<Either<String, List<ChartCategory>>> getCategories({int? year, int? month});
   Future<Either<String, ChartHighestMonth>> getHighestMonth({int? year});
   Future<Either<String, List<ChartMonthlyTrend>>> getMonthlyTrend({int? year});
-  Future<Either<String, ChartFixedVsVariable>> getFixedVsVariable({int? year});
-  Future<Either<String, List<ChartTopExpense>>> getTopExpenses({int? year});
+  Future<Either<String, ChartFixedVsVariable>> getFixedVsVariable({int? year, int? month});
+  Future<Either<String, List<ChartTopExpense>>> getTopExpenses({int? year, int? month});
 }

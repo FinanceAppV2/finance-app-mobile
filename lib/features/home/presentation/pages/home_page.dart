@@ -341,16 +341,6 @@ class _AppDrawer extends StatelessWidget {
               onTap: () => Navigator.pop(context),
             ),
             _DrawerItem(
-              icon: Icons.receipt_long_rounded,
-              label: 'Gastos',
-              onTap: () => Navigator.pop(context),
-            ),
-            _DrawerItem(
-              icon: Icons.pie_chart_rounded,
-              label: 'Gráficos',
-              onTap: () => Navigator.pop(context),
-            ),
-            _DrawerItem(
               icon: Icons.settings_outlined,
               label: 'Configurações',
               onTap: () {

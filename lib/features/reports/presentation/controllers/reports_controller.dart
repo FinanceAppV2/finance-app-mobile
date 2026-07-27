@@ -56,12 +56,14 @@ class ReportsController extends ChangeNotifier {
     _status = ReportsStatus.loading;
     notifyListeners();
 
-    final paymentMethodsResult = _getPaymentMethodsUseCase.execute(year: year);
-    final categoriesResult = _getCategoriesUseCase.execute(year: year);
+    final currentMonth = DateTime.now().month;
+
+    final paymentMethodsResult = _getPaymentMethodsUseCase.execute(year: year, month: currentMonth);
+    final categoriesResult = _getCategoriesUseCase.execute(year: year, month: currentMonth);
     final highestMonthResult = _getHighestMonthUseCase.execute(year: year);
     final monthlyTrendResult = _getMonthlyTrendUseCase.execute(year: year);
-    final fixedVsVariableResult = _getFixedVsVariableUseCase.execute(year: year);
-    final topExpensesResult = _getTopExpensesUseCase.execute(year: year);
+    final fixedVsVariableResult = _getFixedVsVariableUseCase.execute(year: year, month: currentMonth);
+    final topExpensesResult = _getTopExpensesUseCase.execute(year: year, month: currentMonth);
 
     final results = await Future.wait([
       paymentMethodsResult,
