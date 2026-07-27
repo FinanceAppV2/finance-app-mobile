@@ -32,13 +32,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   icon: Icons.person_outline_rounded,
                   label: 'Perfil',
                   subtitle: 'Editar nome e e-mail',
-                  onTap: () {},
+                  onTap: () => Navigator.pushNamed(context, '/profile'),
                 ),
                 _SettingsTile(
                   icon: Icons.lock_outline_rounded,
                   label: 'Alterar senha',
                   subtitle: 'Atualizar sua senha de acesso',
-                  onTap: () {},
+                  onTap: () => Navigator.pushNamed(context, '/change-password'),
                 ),
               ],
             ),
@@ -67,12 +67,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   onChanged: (value) {
                     setState(() => _notificationsEnabled = value);
                   },
-                ),
-                _SettingsTile(
-                  icon: Icons.attach_money_rounded,
-                  label: 'Moeda',
-                  subtitle: 'BRL (R\$)',
-                  onTap: () {},
                 ),
               ],
             ),

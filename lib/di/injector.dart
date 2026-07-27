@@ -6,9 +6,11 @@ import 'package:finance_app_mobile/core/network/dio_client.dart';
 import 'package:finance_app_mobile/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:finance_app_mobile/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:finance_app_mobile/features/auth/domain/repositories/auth_repository.dart';
+import 'package:finance_app_mobile/features/auth/domain/usecases/change_password_usecase.dart';
 import 'package:finance_app_mobile/features/auth/domain/usecases/check_auth_usecase.dart';
 import 'package:finance_app_mobile/features/auth/domain/usecases/login_usecase.dart';
 import 'package:finance_app_mobile/features/auth/domain/usecases/register_usecase.dart';
+import 'package:finance_app_mobile/features/auth/domain/usecases/update_profile_usecase.dart';
 import 'package:finance_app_mobile/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:finance_app_mobile/features/auth/presentation/controllers/register_controller.dart';
 import 'package:finance_app_mobile/features/cards/data/datasources/card_remote_datasource.dart';
@@ -94,6 +96,16 @@ Future<void> initializeDependencies() async {
   if (!injector.isRegistered<CheckAuthUseCase>()) {
     injector.registerLazySingleton<CheckAuthUseCase>(
       () => CheckAuthUseCase(injector<FlutterSecureStorage>()),
+    );
+  }
+  if (!injector.isRegistered<UpdateProfileUseCase>()) {
+    injector.registerLazySingleton<UpdateProfileUseCase>(
+      () => UpdateProfileUseCase(injector<AuthRepository>()),
+    );
+  }
+  if (!injector.isRegistered<ChangePasswordUseCase>()) {
+    injector.registerLazySingleton<ChangePasswordUseCase>(
+      () => ChangePasswordUseCase(injector<AuthRepository>()),
     );
   }
   if (!injector.isRegistered<AuthController>()) {

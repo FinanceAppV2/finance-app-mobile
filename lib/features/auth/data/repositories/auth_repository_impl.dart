@@ -52,4 +52,30 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left('Erro ao criar conta: $e');
     }
   }
+
+  @override
+  Future<Either<String, User>> updateUser({
+    required String id,
+    String? name,
+    String? lastName,
+    String? email,
+    String? phone,
+    String? currentPassword,
+    String? password,
+  }) async {
+    try {
+      final response = await _remoteDataSource.updateUser(
+        id: id,
+        name: name,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        currentPassword: currentPassword,
+        password: password,
+      );
+      return Right(response.toEntity());
+    } catch (e) {
+      return Left('Erro ao atualizar perfil: $e');
+    }
+  }
 }

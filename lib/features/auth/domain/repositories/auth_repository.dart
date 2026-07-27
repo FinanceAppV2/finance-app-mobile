@@ -17,4 +17,14 @@ abstract class AuthRepository {
     required String cpf,
     required String password,
   });
+
+  Future<Either<String, User>> updateUser({
+    required String id,
+    String? name,
+    String? lastName,
+    String? email,
+    String? phone,
+    String? currentPassword,
+    String? password,
+  });
 }

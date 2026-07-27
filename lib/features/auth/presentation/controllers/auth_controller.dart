@@ -39,6 +39,12 @@ class AuthController extends ChangeNotifier {
         await _storage.write(key: 'user_name', value: loginResult.user.name);
         await _storage.write(
             key: 'user_email', value: loginResult.user.email);
+        await _storage.write(
+            key: 'user_lastName', value: loginResult.user.lastName);
+        if (loginResult.user.phone != null) {
+          await _storage.write(
+              key: 'user_phone', value: loginResult.user.phone!);
+        }
 
         _status = AuthStatus.success;
         notifyListeners();
