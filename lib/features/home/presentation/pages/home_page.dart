@@ -6,11 +6,14 @@ import '../../../cards/presentation/pages/cards_page.dart';
 import '../../../expenses/presentation/widgets/add_expense_sheet.dart';
 import '../../../fixed_expenses/presentation/pages/fixed_expenses_page.dart';
 import '../../../reports/presentation/pages/reports_page.dart';
+import '../../domain/entities/expense.dart';
 import '../controllers/home_controller.dart';
+import '../widgets/edit_expense_sheet.dart';
 import '../widgets/expense_tile.dart';
 import '../widgets/expenses_header.dart';
 import '../widgets/floating_bottom_nav.dart';
 import '../widgets/home_header.dart';
+import '../widgets/filter_bottom_sheet.dart';
 import '../widgets/summary_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,12 +27,16 @@ class _HomePageState extends State<HomePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _controller = GetIt.instance<HomeController>();
   int _selectedIndex = 0;
+  int _selectedMonth = DateTime.now().month;
+  int _selectedYear = DateTime.now().year;
+  String? _selectedCategory;
+  String? _selectedPaymentMethod;
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(_onStateChanged);
-    _controller.loadData();
+    _controller.loadData(month: _selectedMonth, year: _selectedYear);
   }
 
   @override
@@ -43,6 +50,33 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
+  void _openFilterSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => FilterBottomSheet(
+        selectedMonth: _selectedMonth,
+        selectedYear: _selectedYear,
+        selectedCategory: _selectedCategory,
+        selectedPaymentMethod: _selectedPaymentMethod,
+      ),
+    ).then((result) {
+      if (result is FilterResult) {
+        setState(() {
+          _selectedMonth = result.month;
+          _selectedYear = result.year;
+          _selectedCategory = result.category;
+          _selectedPaymentMethod = result.paymentMethod;
+        });
+        _controller.loadData(
+          month: _selectedMonth,
+          year: _selectedYear,
+        );
+      }
+    });
+  }
+
   void _onAddExpense() {
     showModalBottomSheet(
       context: context,
@@ -51,9 +85,66 @@ class _HomePageState extends State<HomePage> {
       builder: (_) => const AddExpenseSheet(),
     ).then((result) {
       if (result == true) {
-        _controller.loadData();
+        _controller.loadData(month: _selectedMonth, year: _selectedYear);
       }
     });
+  }
+
+  void _onEditExpense(Expense expense) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => EditExpenseSheet(expense: expense),
+    ).then((result) {
+      if (result == true) {
+        _controller.loadData(month: _selectedMonth, year: _selectedYear);
+      }
+    });
+  }
+
+  Future<void> _onDeleteExpense(Expense expense) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.verdeEscuro,
+        title: const Text('Excluir despesa', style: TextStyle(color: AppColors.branco)),
+        content: Text(
+          'Deseja excluir "${expense.description}"?',
+          style: const TextStyle(color: AppColors.cinzaClaro),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancelar', style: TextStyle(color: AppColors.cinzaClaro)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Excluir', style: TextStyle(color: AppColors.error)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    final messenger = ScaffoldMessenger.of(context);
+    final success = await _controller.deleteExpense(expense.id);
+
+    if (!mounted) return;
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          success ? 'Despesa excluída com sucesso!' : 'Erro ao excluir despesa',
+        ),
+        backgroundColor: success ? AppColors.success : AppColors.error,
+      ),
+    );
+
+    if (success) {
+      _controller.loadData(month: _selectedMonth, year: _selectedYear);
+    }
   }
 
   @override
@@ -157,7 +248,8 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => _controller.loadData(),
+              onPressed: () =>
+                  _controller.loadData(month: _selectedMonth, year: _selectedYear),
               child: const Text('Tentar novamente'),
             ),
           ],
@@ -175,23 +267,42 @@ class _HomePageState extends State<HomePage> {
               SummaryCard(summary: _controller.summary!),
             const SizedBox(height: 36),
             ExpensesHeader(
-              title: 'Gastos recentes',
-              count: _controller.expenses.length,
-              onSeeAll: () => ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Todos os gastos serão exibidos aqui.'),
-                ),
-              ),
+              title: 'Gastos do mês',
+              count: _filteredExpenses.length,
+              onFilter: _openFilterSheet,
             ),
             const SizedBox(height: 8),
-            ..._controller.expenses.map(
-              (expense) => ExpenseTile(expense: expense),
+            ..._filteredExpenses.map(
+              (expense) {
+                final isFixed = expense.id.startsWith('fixed_');
+                return ExpenseTile(
+                  expense: expense,
+                  isFixed: isFixed,
+                  onEdit: isFixed ? null : () => _onEditExpense(expense),
+                  onDelete: isFixed ? null : () => _onDeleteExpense(expense),
+                );
+              },
             ),
             const SizedBox(height: 120),
           ],
         ),
       ),
     );
+  }
+
+  List<Expense> get _filteredExpenses {
+    var expenses = _controller.expenses;
+    if (_selectedCategory != null) {
+      expenses = expenses
+          .where((e) => e.category == _selectedCategory)
+          .toList();
+    }
+    if (_selectedPaymentMethod != null) {
+      expenses = expenses
+          .where((e) => e.paymentMethod == _selectedPaymentMethod)
+          .toList();
+    }
+    return expenses;
   }
 
   String _getGreeting() {

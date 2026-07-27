@@ -5,8 +5,17 @@ import '../../domain/entities/expense.dart';
 
 class ExpenseTile extends StatelessWidget {
   final Expense expense;
+  final bool isFixed;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
-  const ExpenseTile({super.key, required this.expense});
+  const ExpenseTile({
+    super.key,
+    required this.expense,
+    this.isFixed = false,
+    this.onEdit,
+    this.onDelete,
+  });
 
   static const _categoryColors = <String, Color>{
     'Alimentação': Color(0xFFFF7043),
@@ -22,7 +31,7 @@ class ExpenseTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = _categoryColors[expense.category] ?? AppColors.cinzaClaro;
 
-    return Container(
+    final tile = Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: const BoxDecoration(
         border: Border(
@@ -58,9 +67,13 @@ class ExpenseTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  expense.category.toUpperCase(),
+                  isFixed
+                      ? '${expense.category.toUpperCase()} • FIXA'
+                      : expense.category.toUpperCase(),
                   style: TextStyle(
-                    color: AppColors.cinzaClaro.withValues(alpha: 0.85),
+                    color: isFixed
+                        ? AppColors.verdeDestaque
+                        : AppColors.cinzaClaro.withValues(alpha: 0.85),
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                   ),
@@ -84,16 +97,16 @@ class ExpenseTile extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.south_east_rounded,
-                    color: AppColors.error,
+                  Icon(
+                    isFixed ? Icons.autorenew_rounded : Icons.south_east_rounded,
+                    color: isFixed ? AppColors.verdeDestaque : AppColors.error,
                     size: 12,
                   ),
                   const SizedBox(width: 3),
                   Text(
                     _formatDate(expense.date),
-                    style: const TextStyle(
-                      color: AppColors.error,
+                    style: TextStyle(
+                      color: isFixed ? AppColors.verdeDestaque : AppColors.error,
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
                     ),
@@ -104,6 +117,56 @@ class ExpenseTile extends StatelessWidget {
           ),
         ],
       ),
+    );
+
+    if (isFixed) return tile;
+
+    return Dismissible(
+      key: ValueKey('expense_${expense.id}'),
+      direction: DismissDirection.horizontal,
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: AppColors.cinzaEscuro, width: 0.5),
+          ),
+        ),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.edit_rounded, color: AppColors.branco, size: 20),
+            SizedBox(width: 6),
+            Text('Editar', style: TextStyle(color: AppColors.branco, fontWeight: FontWeight.w600)),
+          ],
+        ),
+      ),
+      secondaryBackground: Container(
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.only(left: 20),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: AppColors.cinzaEscuro, width: 0.5),
+          ),
+        ),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.delete_rounded, color: AppColors.branco, size: 20),
+            SizedBox(width: 6),
+            Text('Excluir', style: TextStyle(color: AppColors.branco, fontWeight: FontWeight.w600)),
+          ],
+        ),
+      ),
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.endToStart) {
+          onEdit?.call();
+        } else {
+          onDelete?.call();
+        }
+        return false;
+      },
+      child: tile,
     );
   }
 
@@ -129,8 +192,9 @@ class ExpenseTile extends StatelessWidget {
   }
 
   String _formatDate(String date) {
-    final parts = date.split('-');
+    final clean = date.contains('T') ? date.split('T')[0] : date;
+    final parts = clean.split('-');
     if (parts.length != 3) return date;
-    return '${parts[2]}/${parts[1]}';
+    return '${parts[2]}/${parts[1]}/${parts[0]}';
   }
 }

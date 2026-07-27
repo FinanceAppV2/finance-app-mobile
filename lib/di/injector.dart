@@ -15,13 +15,17 @@ import 'package:finance_app_mobile/features/cards/data/datasources/card_remote_d
 import 'package:finance_app_mobile/features/cards/data/repositories/card_repository_impl.dart';
 import 'package:finance_app_mobile/features/cards/domain/repositories/card_repository.dart';
 import 'package:finance_app_mobile/features/cards/domain/usecases/create_card_usecase.dart';
+import 'package:finance_app_mobile/features/cards/domain/usecases/delete_card_usecase.dart';
 import 'package:finance_app_mobile/features/cards/domain/usecases/get_cards_usecase.dart';
+import 'package:finance_app_mobile/features/cards/domain/usecases/update_card_usecase.dart';
 import 'package:finance_app_mobile/features/cards/presentation/controllers/cards_controller.dart';
 import 'package:finance_app_mobile/features/home/data/datasources/home_remote_datasource.dart';
 import 'package:finance_app_mobile/features/home/data/repositories/home_repository_impl.dart';
 import 'package:finance_app_mobile/features/home/domain/repositories/home_repository.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/get_monthly_summary_usecase.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/get_recent_expenses_usecase.dart';
+import 'package:finance_app_mobile/features/home/domain/usecases/delete_expense_usecase.dart';
+import 'package:finance_app_mobile/features/home/domain/usecases/update_expense_usecase.dart';
 import 'package:finance_app_mobile/features/home/presentation/controllers/home_controller.dart';
 import 'package:finance_app_mobile/features/finance_config/data/datasources/finance_config_remote_datasource.dart';
 import 'package:finance_app_mobile/features/finance_config/data/repositories/finance_config_repository_impl.dart';
@@ -34,6 +38,12 @@ import 'package:finance_app_mobile/features/expenses/data/repositories/expenses_
 import 'package:finance_app_mobile/features/expenses/domain/repositories/expenses_repository.dart';
 import 'package:finance_app_mobile/features/expenses/domain/usecases/create_expense_usecase.dart';
 import 'package:finance_app_mobile/features/expenses/presentation/controllers/expense_controller.dart';
+import 'package:finance_app_mobile/features/fixed_expenses/data/datasources/fixed_expense_remote_datasource.dart';
+import 'package:finance_app_mobile/features/fixed_expenses/data/repositories/fixed_expenses_repository_impl.dart';
+import 'package:finance_app_mobile/features/fixed_expenses/domain/repositories/fixed_expenses_repository.dart';
+import 'package:finance_app_mobile/features/fixed_expenses/domain/usecases/get_fixed_expenses_usecase.dart';
+import 'package:finance_app_mobile/features/fixed_expenses/domain/usecases/create_fixed_expense_usecase.dart';
+import 'package:finance_app_mobile/features/fixed_expenses/presentation/controllers/fixed_expenses_controller.dart';
 
 final injector = GetIt.instance;
 
@@ -107,11 +117,24 @@ Future<void> initializeDependencies() async {
       () => GetRecentExpensesUseCase(injector<HomeRepository>()),
     );
   }
+  if (!injector.isRegistered<DeleteExpenseUseCase>()) {
+    injector.registerLazySingleton<DeleteExpenseUseCase>(
+      () => DeleteExpenseUseCase(injector<HomeRepository>()),
+    );
+  }
+  if (!injector.isRegistered<UpdateExpenseUseCase>()) {
+    injector.registerLazySingleton<UpdateExpenseUseCase>(
+      () => UpdateExpenseUseCase(injector<HomeRepository>()),
+    );
+  }
   if (!injector.isRegistered<HomeController>()) {
     injector.registerLazySingleton<HomeController>(
       () => HomeController(
         injector<GetMonthlySummaryUseCase>(),
         injector<GetRecentExpensesUseCase>(),
+        injector<GetFixedExpensesUseCase>(),
+        injector<DeleteExpenseUseCase>(),
+        injector<UpdateExpenseUseCase>(),
         injector<FlutterSecureStorage>(),
       ),
     );
@@ -137,11 +160,23 @@ Future<void> initializeDependencies() async {
       () => CreateCardUseCase(injector<CardRepository>()),
     );
   }
+  if (!injector.isRegistered<UpdateCardUseCase>()) {
+    injector.registerLazySingleton<UpdateCardUseCase>(
+      () => UpdateCardUseCase(injector<CardRepository>()),
+    );
+  }
+  if (!injector.isRegistered<DeleteCardUseCase>()) {
+    injector.registerLazySingleton<DeleteCardUseCase>(
+      () => DeleteCardUseCase(injector<CardRepository>()),
+    );
+  }
   if (!injector.isRegistered<CardsController>()) {
     injector.registerLazySingleton<CardsController>(
       () => CardsController(
         injector<GetCardsUseCase>(),
         injector<CreateCardUseCase>(),
+        injector<UpdateCardUseCase>(),
+        injector<DeleteCardUseCase>(),
       ),
     );
   }
@@ -201,6 +236,40 @@ Future<void> initializeDependencies() async {
   if (!injector.isRegistered<ExpenseController>()) {
     injector.registerLazySingleton<ExpenseController>(
       () => ExpenseController(injector<CreateExpenseUseCase>()),
+    );
+  }
+
+  if (!injector.isRegistered<FixedExpenseRemoteDataSource>()) {
+    injector.registerLazySingleton<FixedExpenseRemoteDataSource>(
+      () => FixedExpenseRemoteDataSource(
+        injector<Dio>(),
+        injector<FlutterSecureStorage>(),
+      ),
+    );
+  }
+  if (!injector.isRegistered<FixedExpensesRepository>()) {
+    injector.registerLazySingleton<FixedExpensesRepository>(
+      () => FixedExpensesRepositoryImpl(
+        injector<FixedExpenseRemoteDataSource>(),
+      ),
+    );
+  }
+  if (!injector.isRegistered<GetFixedExpensesUseCase>()) {
+    injector.registerLazySingleton<GetFixedExpensesUseCase>(
+      () => GetFixedExpensesUseCase(injector<FixedExpensesRepository>()),
+    );
+  }
+  if (!injector.isRegistered<CreateFixedExpenseUseCase>()) {
+    injector.registerLazySingleton<CreateFixedExpenseUseCase>(
+      () => CreateFixedExpenseUseCase(injector<FixedExpensesRepository>()),
+    );
+  }
+  if (!injector.isRegistered<FixedExpensesController>()) {
+    injector.registerLazySingleton<FixedExpensesController>(
+      () => FixedExpensesController(
+        injector<GetFixedExpensesUseCase>(),
+        injector<CreateFixedExpenseUseCase>(),
+      ),
     );
   }
 }

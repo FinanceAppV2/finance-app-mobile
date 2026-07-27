@@ -5,6 +5,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../domain/entities/card.dart';
 import '../controllers/cards_controller.dart';
 import '../widgets/add_card_sheet.dart';
+import '../widgets/edit_card_sheet.dart';
 
 class CardsPage extends StatefulWidget {
   const CardsPage({super.key});
@@ -45,6 +46,68 @@ class _CardsPageState extends State<CardsPage> {
         _controller.loadCards();
       }
     });
+  }
+
+  void _onEditCard(CreditCard card) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => EditCardSheet(card: card),
+    ).then((result) {
+      if (result == true) {
+        _controller.loadCards();
+      }
+    });
+  }
+
+  Future<void> _onDeleteCard(CreditCard card) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.verdeEscuro,
+        title: const Text(
+          'Excluir cartão',
+          style: TextStyle(color: AppColors.branco),
+        ),
+        content: Text(
+          'Deseja excluir o cartão "${card.nome}"?',
+          style: const TextStyle(color: AppColors.cinzaClaro),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text(
+              'Cancelar',
+              style: TextStyle(color: AppColors.cinzaClaro),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(
+              'Excluir',
+              style: TextStyle(color: AppColors.error),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+    if (!mounted) return;
+
+    final messenger = ScaffoldMessenger.of(context);
+    final success = await _controller.deleteCard(id: card.id);
+    if (!mounted) return;
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          success ? 'Cartão excluído com sucesso!' : 'Erro ao excluir cartão',
+        ),
+        backgroundColor: success ? AppColors.success : AppColors.error,
+      ),
+    );
   }
 
   @override
@@ -163,7 +226,11 @@ class _CardsPageState extends State<CardsPage> {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       itemCount: _controller.cards.length,
       itemBuilder: (context, index) {
-        return _CardWidget(card: _controller.cards[index]);
+        return _CardWidget(
+          card: _controller.cards[index],
+          onEdit: _onEditCard,
+          onDelete: _onDeleteCard,
+        );
       },
     );
   }
@@ -171,8 +238,14 @@ class _CardsPageState extends State<CardsPage> {
 
 class _CardWidget extends StatelessWidget {
   final CreditCard card;
+  final ValueChanged<CreditCard> onEdit;
+  final ValueChanged<CreditCard> onDelete;
 
-  const _CardWidget({required this.card});
+  const _CardWidget({
+    required this.card,
+    required this.onEdit,
+    required this.onDelete,
+  });
 
   Color _hexToColor(String hex) {
     hex = hex.replaceFirst('#', '');
@@ -239,12 +312,39 @@ class _CardWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(
-                card.bandeira[0] + card.bandeira.substring(1).toLowerCase(),
-                style: TextStyle(
-                  color: AppColors.branco.withValues(alpha: 0.8),
-                  fontSize: 12,
+              PopupMenuButton<String>(
+                color: AppColors.verdeEscuro,
+                icon: Icon(
+                  Icons.more_vert,
+                  color: AppColors.branco.withValues(alpha: 0.7),
+                  size: 20,
                 ),
+                onSelected: (value) {
+                  if (value == 'edit') onEdit(card);
+                  if (value == 'delete') onDelete(card);
+                },
+                itemBuilder: (_) => [
+                  const PopupMenuItem(
+                    value: 'edit',
+                    child: Row(
+                      children: [
+                        Icon(Icons.edit_rounded, size: 18, color: AppColors.branco),
+                        SizedBox(width: 8),
+                        Text('Editar', style: TextStyle(color: AppColors.branco)),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'delete',
+                    child: Row(
+                      children: [
+                        Icon(Icons.delete_rounded, size: 18, color: AppColors.error),
+                        SizedBox(width: 8),
+                        Text('Excluir', style: TextStyle(color: AppColors.error)),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

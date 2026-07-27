@@ -49,4 +49,36 @@ class CardRemoteDataSource {
     });
     return CardModel.fromJson(response.data as Map<String, dynamic>);
   }
+
+  Future<CardModel> updateCard({
+    required String id,
+    required String nome,
+    required String emissora,
+    required String bandeira,
+    required String finalNumero,
+    required String nomeTitular,
+    required int diaVencimento,
+    required int diaFechamento,
+    required double limiteDisponivel,
+    required String cor,
+    required String icone,
+  }) async {
+    final response = await _dio.put('/cards/$id', data: {
+      'nome': nome,
+      'emissora': emissora,
+      'bandeira': bandeira,
+      'finalNumero': finalNumero,
+      'nomeTitular': nomeTitular,
+      'diaVencimento': diaVencimento,
+      'diaFechamento': diaFechamento,
+      'limiteDisponivel': limiteDisponivel,
+      'cor': cor,
+      'icone': icone,
+    });
+    return CardModel.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  Future<void> deleteCard({required String id}) async {
+    await _dio.delete('/cards/$id');
+  }
 }

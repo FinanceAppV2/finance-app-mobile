@@ -2,19 +2,28 @@ import 'package:flutter/material.dart';
 
 import '../../domain/entities/card.dart';
 import '../../domain/usecases/create_card_usecase.dart';
+import '../../domain/usecases/delete_card_usecase.dart';
 import '../../domain/usecases/get_cards_usecase.dart';
+import '../../domain/usecases/update_card_usecase.dart';
 
 enum CardsStatus { initial, loading, success, error }
 
 class CardsController extends ChangeNotifier {
   final GetCardsUseCase _getCardsUseCase;
   final CreateCardUseCase _createCardUseCase;
+  final UpdateCardUseCase _updateCardUseCase;
+  final DeleteCardUseCase _deleteCardUseCase;
 
   CardsStatus _status = CardsStatus.initial;
   List<CreditCard> _cards = [];
   String? _errorMessage;
 
-  CardsController(this._getCardsUseCase, this._createCardUseCase);
+  CardsController(
+    this._getCardsUseCase,
+    this._createCardUseCase,
+    this._updateCardUseCase,
+    this._deleteCardUseCase,
+  );
 
   CardsStatus get status => _status;
   List<CreditCard> get cards => _cards;
@@ -65,6 +74,62 @@ class CardsController extends ChangeNotifier {
       cor: cor,
       icone: icone,
     );
+
+    return result.fold(
+      (error) {
+        _errorMessage = error;
+        notifyListeners();
+        return false;
+      },
+      (_) {
+        loadCards();
+        return true;
+      },
+    );
+  }
+
+  Future<bool> updateCard({
+    required String id,
+    required String nome,
+    required String emissora,
+    required String bandeira,
+    required String finalNumero,
+    required String nomeTitular,
+    required int diaVencimento,
+    required int diaFechamento,
+    required double limiteDisponivel,
+    required String cor,
+    required String icone,
+  }) async {
+    final result = await _updateCardUseCase.execute(
+      id: id,
+      nome: nome,
+      emissora: emissora,
+      bandeira: bandeira,
+      finalNumero: finalNumero,
+      nomeTitular: nomeTitular,
+      diaVencimento: diaVencimento,
+      diaFechamento: diaFechamento,
+      limiteDisponivel: limiteDisponivel,
+      cor: cor,
+      icone: icone,
+    );
+
+    return result.fold(
+      (error) {
+        _errorMessage = error;
+        notifyListeners();
+        return false;
+      },
+      (_) {
+        loadCards();
+        return true;
+      },
+    );
+  }
+
+  Future<bool> deleteCard({required String id}) async {
+    final result = await _deleteCardUseCase.execute(id: id);
 
     return result.fold(
       (error) {

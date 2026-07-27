@@ -5,12 +5,18 @@ import '../../domain/entities/expense.dart';
 import '../../domain/entities/monthly_summary.dart';
 import '../../domain/usecases/get_monthly_summary_usecase.dart';
 import '../../domain/usecases/get_recent_expenses_usecase.dart';
+import '../../domain/usecases/delete_expense_usecase.dart';
+import '../../domain/usecases/update_expense_usecase.dart';
+import '../../../fixed_expenses/domain/usecases/get_fixed_expenses_usecase.dart';
 
 enum HomeStatus { initial, loading, success, error }
 
 class HomeController extends ChangeNotifier {
   final GetMonthlySummaryUseCase _getMonthlySummaryUseCase;
   final GetRecentExpensesUseCase _getRecentExpensesUseCase;
+  final GetFixedExpensesUseCase _getFixedExpensesUseCase;
+  final DeleteExpenseUseCase _deleteExpenseUseCase;
+  final UpdateExpenseUseCase _updateExpenseUseCase;
   final FlutterSecureStorage _storage;
 
   HomeStatus _status = HomeStatus.initial;
@@ -22,6 +28,9 @@ class HomeController extends ChangeNotifier {
   HomeController(
     this._getMonthlySummaryUseCase,
     this._getRecentExpensesUseCase,
+    this._getFixedExpensesUseCase,
+    this._deleteExpenseUseCase,
+    this._updateExpenseUseCase,
     this._storage,
   );
 
@@ -38,8 +47,13 @@ class HomeController extends ChangeNotifier {
 
     _userName = await _storage.read(key: 'user_name');
 
-    final summaryResult = await _getMonthlySummaryUseCase.execute(month: month, year: year);
-    final expensesResult = await _getRecentExpensesUseCase.execute(month: month, year: year);
+    final now = DateTime.now();
+    final m = month ?? now.month;
+    final y = year ?? now.year;
+
+    final summaryResult = await _getMonthlySummaryUseCase.execute(month: m, year: y);
+    final expensesResult = await _getRecentExpensesUseCase.execute(month: m, year: y);
+    final fixedResult = await _getFixedExpensesUseCase.execute();
 
     summaryResult.fold(
       (error) {
@@ -56,12 +70,72 @@ class HomeController extends ChangeNotifier {
             notifyListeners();
           },
           (expenses) {
-            _expenses = expenses;
+            final fixedExpenses = fixedResult.fold(
+              (_) => <Expense>[],
+              (fixed) => fixed
+                  .where((f) => f.active)
+                  .map((f) => _fixedToExpense(f, m, y))
+                  .toList(),
+            );
+            final all = [...fixedExpenses, ...expenses];
+            all.sort((a, b) => b.date.compareTo(a.date));
+            _expenses = all;
             _status = HomeStatus.success;
             notifyListeners();
           },
         );
       },
+    );
+  }
+
+  Future<bool> deleteExpense(String id) async {
+    final result = await _deleteExpenseUseCase.execute(id);
+    return result.fold(
+      (_) => false,
+      (_) => true,
+    );
+  }
+
+  Future<bool> updateExpense({
+    required String id,
+    required String description,
+    required double value,
+    required String category,
+    required String paymentMethod,
+    required DateTime date,
+    String? cardId,
+    int? installments,
+  }) async {
+    final result = await _updateExpenseUseCase.execute(
+      id: id,
+      description: description,
+      value: value,
+      category: category,
+      paymentMethod: paymentMethod,
+      date: date,
+      cardId: cardId,
+      installments: installments,
+    );
+    return result.fold(
+      (_) => false,
+      (_) => true,
+    );
+  }
+
+  Expense _fixedToExpense(
+    dynamic fixed,
+    int month,
+    int year,
+  ) {
+    final day = fixed.dueDay > 28 ? 28 : fixed.dueDay;
+    final date = DateTime(year, month, day);
+    return Expense(
+      id: 'fixed_${fixed.id}',
+      description: fixed.description,
+      value: fixed.value,
+      category: fixed.category,
+      paymentMethod: fixed.paymentMethod,
+      date: date.toIso8601String().split('T')[0],
     );
   }
 }
