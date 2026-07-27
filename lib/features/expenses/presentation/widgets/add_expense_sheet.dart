@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../core/formatters/currency_input_formatter.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../cards/domain/entities/card.dart';
 import '../../../cards/domain/usecases/get_cards_usecase.dart';
@@ -141,10 +142,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
 
     final controller = GetIt.instance<ExpenseController>();
 
-    final valueText = _valueController.text
-        .replaceAll('.', '')
-        .replaceAll(',', '.');
-    final value = double.parse(valueText);
+    final value = CurrencyInputFormatter.parse(_valueController.text);
 
     await controller.createExpense(
       description: _descriptionController.text.trim(),
@@ -238,14 +236,12 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
               TextFormField(
                 controller: _valueController,
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  _CurrencyInputFormatter(),
-                ],
+                inputFormatters: [const CurrencyInputFormatter()],
                 style: const TextStyle(color: AppColors.branco),
                 decoration: const InputDecoration(
                   labelText: 'Valor',
                   hintText: 'R\$ 0,00',
+                  prefixText: 'R\$ ',
                   prefixIcon: Icon(
                     Icons.attach_money_rounded,
                     color: AppColors.verdeMedio,
@@ -433,9 +429,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
         ),
         child: Text(
           'Nenhum cartão cadastrado',
-          style: TextStyle(
-            color: AppColors.cinzaClaro.withValues(alpha: 0.7),
-          ),
+          style: TextStyle(color: AppColors.cinzaClaro.withValues(alpha: 0.7)),
         ),
       );
     }
@@ -499,29 +493,5 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
     }
 
     return Color(int.parse('FF$normalizedHex', radix: 16));
-  }
-}
-
-class _CurrencyInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue old,
-    TextEditingValue next,
-  ) {
-    if (next.text.isEmpty) return next;
-
-    final digits = next.text.replaceAll(RegExp(r'[^\d]'), '');
-    if (digits.isEmpty) return const TextEditingValue();
-
-    final value = int.parse(digits);
-    final formatted = value.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (match) => '${match[1]}.',
-    );
-
-    return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
   }
 }

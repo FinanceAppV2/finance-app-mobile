@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../core/formatters/currency_input_formatter.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../cards/domain/entities/card.dart';
 import '../../../cards/domain/usecases/get_cards_usecase.dart';
@@ -29,15 +30,31 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
 
   static const _categories = [
     {'value': 'FOOD', 'label': 'Alimentação', 'icon': Icons.restaurant_rounded},
-    {'value': 'TRANSPORT', 'label': 'Transporte', 'icon': Icons.directions_car_rounded},
+    {
+      'value': 'TRANSPORT',
+      'label': 'Transporte',
+      'icon': Icons.directions_car_rounded,
+    },
     {'value': 'HOUSING', 'label': 'Moradia', 'icon': Icons.home_rounded},
     {'value': 'HEALTH', 'label': 'Saúde', 'icon': Icons.favorite_rounded},
-    {'value': 'EDUCATION', 'label': 'Educação', 'icon': Icons.menu_book_rounded},
+    {
+      'value': 'EDUCATION',
+      'label': 'Educação',
+      'icon': Icons.menu_book_rounded,
+    },
     {'value': 'LEISURE', 'label': 'Lazer', 'icon': Icons.movie_rounded},
-    {'value': 'CLOTHING', 'label': 'Vestuário', 'icon': Icons.checkroom_rounded},
+    {
+      'value': 'CLOTHING',
+      'label': 'Vestuário',
+      'icon': Icons.checkroom_rounded,
+    },
     {'value': 'SERVICES', 'label': 'Serviços', 'icon': Icons.build_rounded},
     {'value': 'TAXES', 'label': 'Impostos', 'icon': Icons.receipt_rounded},
-    {'value': 'INVESTMENTS', 'label': 'Investimentos', 'icon': Icons.trending_up_rounded},
+    {
+      'value': 'INVESTMENTS',
+      'label': 'Investimentos',
+      'icon': Icons.trending_up_rounded,
+    },
     {'value': 'OTHERS', 'label': 'Outros', 'icon': Icons.more_horiz_rounded},
   ];
 
@@ -101,10 +118,7 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
 
     final controller = GetIt.instance<FixedExpensesController>();
 
-    final valueText = _valueController.text
-        .replaceAll('.', '')
-        .replaceAll(',', '.');
-    final value = double.parse(valueText);
+    final value = CurrencyInputFormatter.parse(_valueController.text);
 
     await controller.createFixedExpense(
       description: _descriptionController.text.trim(),
@@ -196,14 +210,12 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
               TextFormField(
                 controller: _valueController,
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  _CurrencyInputFormatter(),
-                ],
+                inputFormatters: [const CurrencyInputFormatter()],
                 style: const TextStyle(color: AppColors.branco),
                 decoration: const InputDecoration(
                   labelText: 'Valor',
                   hintText: 'R\$ 0,00',
+                  prefixText: 'R\$ ',
                   prefixIcon: Icon(
                     Icons.attach_money_rounded,
                     color: AppColors.verdeMedio,
@@ -374,9 +386,7 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
         ),
         child: Text(
           'Nenhum cartão cadastrado',
-          style: TextStyle(
-            color: AppColors.cinzaClaro.withValues(alpha: 0.7),
-          ),
+          style: TextStyle(color: AppColors.cinzaClaro.withValues(alpha: 0.7)),
         ),
       );
     }
@@ -440,29 +450,5 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
     }
 
     return Color(int.parse('FF$normalizedHex', radix: 16));
-  }
-}
-
-class _CurrencyInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue old,
-    TextEditingValue next,
-  ) {
-    if (next.text.isEmpty) return next;
-
-    final digits = next.text.replaceAll(RegExp(r'[^\d]'), '');
-    if (digits.isEmpty) return const TextEditingValue();
-
-    final value = int.parse(digits);
-    final formatted = value.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (match) => '${match[1]}.',
-    );
-
-    return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
   }
 }

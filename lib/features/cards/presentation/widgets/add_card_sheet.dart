@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../core/formatters/currency_input_formatter.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../presentation/controllers/cards_controller.dart';
 
@@ -27,25 +27,60 @@ class _AddCardSheetState extends State<AddCardSheet> {
   bool _isLoading = false;
 
   static const _emissores = [
-    'BANCO_DO_BRASIL', 'ITAU', 'BRADESCO', 'SANTANDER', 'CAIXA',
-    'INTER', 'NUBANK', 'C6_BANK', 'MERCADO_PAGO', 'PICPAY',
-    'PAGSEGURO', 'ORIGINAL', 'BTG_PACTUAL', 'WILL_BANK', 'NEON',
-    'AGIBANK', 'OUTRO',
+    'BANCO_DO_BRASIL',
+    'ITAU',
+    'BRADESCO',
+    'SANTANDER',
+    'CAIXA',
+    'INTER',
+    'NUBANK',
+    'C6_BANK',
+    'MERCADO_PAGO',
+    'PICPAY',
+    'PAGSEGURO',
+    'ORIGINAL',
+    'BTG_PACTUAL',
+    'WILL_BANK',
+    'NEON',
+    'AGIBANK',
+    'OUTRO',
   ];
 
   static const _bandeiras = [
-    'VISA', 'MASTERCARD', 'ELO', 'AMEX', 'HIPERCARD',
-    'DINERS', 'DISCOVER', 'JCB', 'AURA', 'CABAL', 'MAESTRO', 'OUTRA',
+    'VISA',
+    'MASTERCARD',
+    'ELO',
+    'AMEX',
+    'HIPERCARD',
+    'DINERS',
+    'DISCOVER',
+    'JCB',
+    'AURA',
+    'CABAL',
+    'MAESTRO',
+    'OUTRA',
   ];
 
   static const _cores = [
-    '#4CAF50', '#2196F3', '#F44336', '#FF9800', '#9C27B0',
-    '#00BCD4', '#FF5722', '#607D8B', '#795548', '#E91E63',
+    '#4CAF50',
+    '#2196F3',
+    '#F44336',
+    '#FF9800',
+    '#9C27B0',
+    '#00BCD4',
+    '#FF5722',
+    '#607D8B',
+    '#795548',
+    '#E91E63',
   ];
 
   static const _icones = [
-    'credit_card', 'payments', 'account_balance_wallet', 'savings',
-    'local_atm', 'card_giftcard',
+    'credit_card',
+    'payments',
+    'account_balance_wallet',
+    'savings',
+    'local_atm',
+    'card_giftcard',
   ];
 
   @override
@@ -64,17 +99,26 @@ class _AddCardSheetState extends State<AddCardSheet> {
 
   IconData _getIconData(String name) {
     switch (name) {
-      case 'payments': return Icons.payments_rounded;
-      case 'account_balance_wallet': return Icons.account_balance_wallet_rounded;
-      case 'savings': return Icons.savings_rounded;
-      case 'local_atm': return Icons.local_atm_rounded;
-      case 'card_giftcard': return Icons.card_giftcard_rounded;
-      default: return Icons.credit_card_rounded;
+      case 'payments':
+        return Icons.payments_rounded;
+      case 'account_balance_wallet':
+        return Icons.account_balance_wallet_rounded;
+      case 'savings':
+        return Icons.savings_rounded;
+      case 'local_atm':
+        return Icons.local_atm_rounded;
+      case 'card_giftcard':
+        return Icons.card_giftcard_rounded;
+      default:
+        return Icons.credit_card_rounded;
     }
   }
 
   String _formatEmissora(String emissora) {
-    return emissora.split('_').map((w) => w[0] + w.substring(1).toLowerCase()).join(' ');
+    return emissora
+        .split('_')
+        .map((w) => w[0] + w.substring(1).toLowerCase())
+        .join(' ');
   }
 
   Future<void> _onSubmit() async {
@@ -83,8 +127,7 @@ class _AddCardSheetState extends State<AddCardSheet> {
     setState(() => _isLoading = true);
 
     final controller = GetIt.instance<CardsController>();
-    final limiteText = _limiteController.text.replaceAll('.', '').replaceAll(',', '.');
-    final limite = double.tryParse(limiteText) ?? 0;
+    final limite = CurrencyInputFormatter.parse(_limiteController.text);
 
     final success = await controller.createCard(
       nome: _nomeController.text.trim(),
@@ -162,10 +205,14 @@ class _AddCardSheetState extends State<AddCardSheet> {
                 decoration: const InputDecoration(
                   labelText: 'Nome do cartão',
                   hintText: 'Ex: Nubank',
-                  prefixIcon: Icon(Icons.label_outline, color: AppColors.verdeMedio),
+                  prefixIcon: Icon(
+                    Icons.label_outline,
+                    color: AppColors.verdeMedio,
+                  ),
                 ),
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty) return 'Nome é obrigatório';
+                  if (value == null || value.trim().isEmpty)
+                    return 'Nome é obrigatório';
                   return null;
                 },
               ),
@@ -176,7 +223,10 @@ class _AddCardSheetState extends State<AddCardSheet> {
                 style: const TextStyle(color: AppColors.branco),
                 decoration: const InputDecoration(
                   labelText: 'Emissora',
-                  prefixIcon: Icon(Icons.business_outlined, color: AppColors.verdeMedio),
+                  prefixIcon: Icon(
+                    Icons.business_outlined,
+                    color: AppColors.verdeMedio,
+                  ),
                 ),
                 items: _emissores.map((e) {
                   return DropdownMenuItem(
@@ -195,7 +245,10 @@ class _AddCardSheetState extends State<AddCardSheet> {
                 style: const TextStyle(color: AppColors.branco),
                 decoration: const InputDecoration(
                   labelText: 'Bandeira',
-                  prefixIcon: Icon(Icons.credit_card_outlined, color: AppColors.verdeMedio),
+                  prefixIcon: Icon(
+                    Icons.credit_card_outlined,
+                    color: AppColors.verdeMedio,
+                  ),
                 ),
                 items: _bandeiras.map((b) {
                   return DropdownMenuItem(
@@ -232,10 +285,14 @@ class _AddCardSheetState extends State<AddCardSheet> {
                 style: const TextStyle(color: AppColors.branco),
                 decoration: const InputDecoration(
                   labelText: 'Nome do titular',
-                  prefixIcon: Icon(Icons.person_outline, color: AppColors.verdeMedio),
+                  prefixIcon: Icon(
+                    Icons.person_outline,
+                    color: AppColors.verdeMedio,
+                  ),
                 ),
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty) return 'Obrigatório';
+                  if (value == null || value.trim().isEmpty)
+                    return 'Obrigatório';
                   return null;
                 },
               ),
@@ -243,15 +300,16 @@ class _AddCardSheetState extends State<AddCardSheet> {
               TextFormField(
                 controller: _limiteController,
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  _CurrencyInputFormatter(),
-                ],
+                inputFormatters: [const CurrencyInputFormatter()],
                 style: const TextStyle(color: AppColors.branco),
                 decoration: const InputDecoration(
                   labelText: 'Limite disponível',
                   hintText: 'R\$ 0,00',
-                  prefixIcon: Icon(Icons.attach_money_rounded, color: AppColors.verdeMedio),
+                  prefixText: 'R\$ ',
+                  prefixIcon: Icon(
+                    Icons.attach_money_rounded,
+                    color: AppColors.verdeMedio,
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Obrigatório';
@@ -262,37 +320,45 @@ class _AddCardSheetState extends State<AddCardSheet> {
               Row(
                 children: [
                   Expanded(
-                    child:                     DropdownButtonFormField<int>(
+                    child: DropdownButtonFormField<int>(
                       initialValue: _diaVencimento,
                       dropdownColor: AppColors.verdeEscuro,
                       style: const TextStyle(color: AppColors.branco),
                       decoration: const InputDecoration(
                         labelText: 'Vencimento',
-                        prefixIcon: Icon(Icons.calendar_today, color: AppColors.verdeMedio),
+                        prefixIcon: Icon(
+                          Icons.calendar_today,
+                          color: AppColors.verdeMedio,
+                        ),
                       ),
                       items: List.generate(31, (i) => i + 1).map((d) {
                         return DropdownMenuItem(value: d, child: Text('$d'));
                       }).toList(),
                       onChanged: (value) {
-                        if (value != null) setState(() => _diaVencimento = value);
+                        if (value != null)
+                          setState(() => _diaVencimento = value);
                       },
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child:                     DropdownButtonFormField<int>(
+                    child: DropdownButtonFormField<int>(
                       initialValue: _diaFechamento,
                       dropdownColor: AppColors.verdeEscuro,
                       style: const TextStyle(color: AppColors.branco),
                       decoration: const InputDecoration(
                         labelText: 'Fechamento',
-                        prefixIcon: Icon(Icons.event, color: AppColors.verdeMedio),
+                        prefixIcon: Icon(
+                          Icons.event,
+                          color: AppColors.verdeMedio,
+                        ),
                       ),
                       items: List.generate(31, (i) => i + 1).map((d) {
                         return DropdownMenuItem(value: d, child: Text('$d'));
                       }).toList(),
                       onChanged: (value) {
-                        if (value != null) setState(() => _diaFechamento = value);
+                        if (value != null)
+                          setState(() => _diaFechamento = value);
                       },
                     ),
                   ),
@@ -402,13 +468,17 @@ class _AddCardSheetState extends State<AddCardSheet> {
                       : AppColors.background.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: isSelected ? AppColors.verdeDestaque : AppColors.cinzaEscuro,
+                    color: isSelected
+                        ? AppColors.verdeDestaque
+                        : AppColors.cinzaEscuro,
                     width: 1,
                   ),
                 ),
                 child: Icon(
                   _getIconData(icone),
-                  color: isSelected ? AppColors.verdeDestaque : AppColors.cinzaClaro,
+                  color: isSelected
+                      ? AppColors.verdeDestaque
+                      : AppColors.cinzaClaro,
                   size: 20,
                 ),
               ),
@@ -416,27 +486,6 @@ class _AddCardSheetState extends State<AddCardSheet> {
           }).toList(),
         ),
       ],
-    );
-  }
-}
-
-class _CurrencyInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue old, TextEditingValue next) {
-    if (next.text.isEmpty) return next;
-
-    final digits = next.text.replaceAll(RegExp(r'[^\d]'), '');
-    if (digits.isEmpty) return const TextEditingValue();
-
-    final value = int.parse(digits);
-    final formatted = value.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (match) => '${match[1]}.',
-    );
-
-    return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }

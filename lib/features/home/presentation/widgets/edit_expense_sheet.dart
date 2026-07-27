@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../core/formatters/currency_input_formatter.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../cards/domain/entities/card.dart';
 import '../../../cards/domain/usecases/get_cards_usecase.dart';
@@ -33,15 +34,31 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
 
   static const _categories = [
     {'value': 'FOOD', 'label': 'Alimentação', 'icon': Icons.restaurant_rounded},
-    {'value': 'TRANSPORT', 'label': 'Transporte', 'icon': Icons.directions_car_rounded},
+    {
+      'value': 'TRANSPORT',
+      'label': 'Transporte',
+      'icon': Icons.directions_car_rounded,
+    },
     {'value': 'HOUSING', 'label': 'Moradia', 'icon': Icons.home_rounded},
     {'value': 'HEALTH', 'label': 'Saúde', 'icon': Icons.favorite_rounded},
-    {'value': 'EDUCATION', 'label': 'Educação', 'icon': Icons.menu_book_rounded},
+    {
+      'value': 'EDUCATION',
+      'label': 'Educação',
+      'icon': Icons.menu_book_rounded,
+    },
     {'value': 'LEISURE', 'label': 'Lazer', 'icon': Icons.movie_rounded},
-    {'value': 'CLOTHING', 'label': 'Vestuário', 'icon': Icons.checkroom_rounded},
+    {
+      'value': 'CLOTHING',
+      'label': 'Vestuário',
+      'icon': Icons.checkroom_rounded,
+    },
     {'value': 'SERVICES', 'label': 'Serviços', 'icon': Icons.build_rounded},
     {'value': 'TAXES', 'label': 'Impostos', 'icon': Icons.receipt_rounded},
-    {'value': 'INVESTMENTS', 'label': 'Investimentos', 'icon': Icons.trending_up_rounded},
+    {
+      'value': 'INVESTMENTS',
+      'label': 'Investimentos',
+      'icon': Icons.trending_up_rounded,
+    },
     {'value': 'OTHERS', 'label': 'Outros', 'icon': Icons.more_horiz_rounded},
   ];
 
@@ -60,7 +77,7 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
     super.initState();
     _descriptionController.text = widget.expense.description;
     final value = widget.expense.value;
-    _valueController.text = value.toStringAsFixed(2).replaceAll('.', ',');
+    _valueController.text = CurrencyInputFormatter.format(value);
     _selectedCategory = widget.expense.category;
     _selectedPaymentMethod = widget.expense.paymentMethod;
     final rawDate = widget.expense.date.contains('T')
@@ -68,7 +85,11 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
         : widget.expense.date;
     final parts = rawDate.split('-');
     _selectedDate = parts.length == 3
-        ? DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]))
+        ? DateTime(
+            int.parse(parts[0]),
+            int.parse(parts[1]),
+            int.parse(parts[2]),
+          )
         : DateTime.now();
     _loadCards();
   }
@@ -137,8 +158,7 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
 
     final controller = GetIt.instance<HomeController>();
 
-    final valueText = _valueController.text.replaceAll('.', '').replaceAll(',', '.');
-    final value = double.parse(valueText);
+    final value = CurrencyInputFormatter.parse(_valueController.text);
 
     final success = await controller.updateExpense(
       id: widget.expense.id,
@@ -217,7 +237,10 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                   hintText: 'Ex: Supermercado',
-                  prefixIcon: Icon(Icons.description_outlined, color: AppColors.verdeMedio),
+                  prefixIcon: Icon(
+                    Icons.description_outlined,
+                    color: AppColors.verdeMedio,
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -230,15 +253,16 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
               TextFormField(
                 controller: _valueController,
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  _CurrencyInputFormatter(),
-                ],
+                inputFormatters: [const CurrencyInputFormatter()],
                 style: const TextStyle(color: AppColors.branco),
                 decoration: const InputDecoration(
                   labelText: 'Valor',
                   hintText: 'R\$ 0,00',
-                  prefixIcon: Icon(Icons.attach_money_rounded, color: AppColors.verdeMedio),
+                  prefixText: 'R\$ ',
+                  prefixIcon: Icon(
+                    Icons.attach_money_rounded,
+                    color: AppColors.verdeMedio,
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -254,14 +278,21 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
                 style: const TextStyle(color: AppColors.branco),
                 decoration: const InputDecoration(
                   labelText: 'Categoria',
-                  prefixIcon: Icon(Icons.category_outlined, color: AppColors.verdeMedio),
+                  prefixIcon: Icon(
+                    Icons.category_outlined,
+                    color: AppColors.verdeMedio,
+                  ),
                 ),
                 items: _categories.map((cat) {
                   return DropdownMenuItem(
                     value: cat['value'] as String,
                     child: Row(
                       children: [
-                        Icon(cat['icon'] as IconData, size: 18, color: AppColors.verdeMedio),
+                        Icon(
+                          cat['icon'] as IconData,
+                          size: 18,
+                          color: AppColors.verdeMedio,
+                        ),
                         const SizedBox(width: 8),
                         Text(cat['label'] as String),
                       ],
@@ -281,7 +312,10 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
                 style: const TextStyle(color: AppColors.branco),
                 decoration: const InputDecoration(
                   labelText: 'Forma de pagamento',
-                  prefixIcon: Icon(Icons.payment_outlined, color: AppColors.verdeMedio),
+                  prefixIcon: Icon(
+                    Icons.payment_outlined,
+                    color: AppColors.verdeMedio,
+                  ),
                 ),
                 items: _paymentMethods.map((method) {
                   return DropdownMenuItem(
@@ -315,7 +349,10 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
                   decoration: const InputDecoration(
                     labelText: 'Parcelas',
                     hintText: 'Ex: 3',
-                    prefixIcon: Icon(Icons.receipt_long_rounded, color: AppColors.verdeMedio),
+                    prefixIcon: Icon(
+                      Icons.receipt_long_rounded,
+                      color: AppColors.verdeMedio,
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -335,7 +372,10 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
                 child: InputDecorator(
                   decoration: const InputDecoration(
                     labelText: 'Data',
-                    prefixIcon: Icon(Icons.calendar_today_rounded, color: AppColors.verdeMedio),
+                    prefixIcon: Icon(
+                      Icons.calendar_today_rounded,
+                      color: AppColors.verdeMedio,
+                    ),
                   ),
                   child: Text(
                     '${_selectedDate.day.toString().padLeft(2, '0')}/${_selectedDate.month.toString().padLeft(2, '0')}/${_selectedDate.year}',
@@ -359,7 +399,10 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
                         )
                       : const Text(
                           'Salvar',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                 ),
               ),
@@ -376,12 +419,18 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
       return const InputDecorator(
         decoration: InputDecoration(
           labelText: 'Cartão de crédito',
-          prefixIcon: Icon(Icons.credit_card_rounded, color: AppColors.verdeMedio),
+          prefixIcon: Icon(
+            Icons.credit_card_rounded,
+            color: AppColors.verdeMedio,
+          ),
         ),
         child: SizedBox(
           width: 20,
           height: 20,
-          child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.verdeMedio),
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: AppColors.verdeMedio,
+          ),
         ),
       );
     }
@@ -390,7 +439,10 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
       return InputDecorator(
         decoration: const InputDecoration(
           labelText: 'Cartão de crédito',
-          prefixIcon: Icon(Icons.credit_card_rounded, color: AppColors.verdeMedio),
+          prefixIcon: Icon(
+            Icons.credit_card_rounded,
+            color: AppColors.verdeMedio,
+          ),
         ),
         child: Text(
           'Nenhum cartão cadastrado',
@@ -405,7 +457,10 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
       style: const TextStyle(color: AppColors.branco),
       decoration: const InputDecoration(
         labelText: 'Cartão de crédito',
-        prefixIcon: Icon(Icons.credit_card_rounded, color: AppColors.verdeMedio),
+        prefixIcon: Icon(
+          Icons.credit_card_rounded,
+          color: AppColors.verdeMedio,
+        ),
       ),
       items: _cards.map((card) {
         return DropdownMenuItem(
@@ -420,7 +475,11 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
                   color: _hexToColor(card.cor),
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: const Icon(Icons.credit_card, color: AppColors.branco, size: 14),
+                child: const Icon(
+                  Icons.credit_card,
+                  color: AppColors.branco,
+                  size: 14,
+                ),
               ),
               const SizedBox(width: 8),
               Flexible(
@@ -446,26 +505,5 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
       return AppColors.verdeMedio;
     }
     return Color(int.parse('FF$normalizedHex', radix: 16));
-  }
-}
-
-class _CurrencyInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue old, TextEditingValue next) {
-    if (next.text.isEmpty) return next;
-
-    final digits = next.text.replaceAll(RegExp(r'[^\d]'), '');
-    if (digits.isEmpty) return const TextEditingValue();
-
-    final value = int.parse(digits);
-    final formatted = value.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (match) => '${match[1]}.',
-    );
-
-    return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
   }
 }
