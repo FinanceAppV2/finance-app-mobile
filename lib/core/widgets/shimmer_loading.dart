@@ -92,6 +92,7 @@ class SkeletonSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white24),
       ),
@@ -123,7 +124,6 @@ class _SkeletonMainInfo extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
       ),
       child: const Column(
@@ -146,7 +146,6 @@ class _SkeletonProgress extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
       ),
       child: const Column(
