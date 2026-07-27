@@ -44,6 +44,16 @@ import 'package:finance_app_mobile/features/fixed_expenses/domain/repositories/f
 import 'package:finance_app_mobile/features/fixed_expenses/domain/usecases/get_fixed_expenses_usecase.dart';
 import 'package:finance_app_mobile/features/fixed_expenses/domain/usecases/create_fixed_expense_usecase.dart';
 import 'package:finance_app_mobile/features/fixed_expenses/presentation/controllers/fixed_expenses_controller.dart';
+import 'package:finance_app_mobile/features/reports/data/datasources/reports_remote_datasource.dart';
+import 'package:finance_app_mobile/features/reports/data/repositories/reports_repository_impl.dart';
+import 'package:finance_app_mobile/features/reports/domain/repositories/reports_repository.dart';
+import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_categories_usecase.dart';
+import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_fixed_vs_variable_usecase.dart';
+import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_highest_month_usecase.dart';
+import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_monthly_trend_usecase.dart';
+import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_payment_methods_usecase.dart';
+import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_top_expenses_usecase.dart';
+import 'package:finance_app_mobile/features/reports/presentation/controllers/reports_controller.dart';
 
 final injector = GetIt.instance;
 
@@ -269,6 +279,62 @@ Future<void> initializeDependencies() async {
       () => FixedExpensesController(
         injector<GetFixedExpensesUseCase>(),
         injector<CreateFixedExpenseUseCase>(),
+      ),
+    );
+  }
+
+  if (!injector.isRegistered<ReportsRemoteDataSource>()) {
+    injector.registerLazySingleton<ReportsRemoteDataSource>(
+      () => ReportsRemoteDataSource(
+        injector<Dio>(),
+        injector<FlutterSecureStorage>(),
+      ),
+    );
+  }
+  if (!injector.isRegistered<ReportsRepository>()) {
+    injector.registerLazySingleton<ReportsRepository>(
+      () => ReportsRepositoryImpl(injector<ReportsRemoteDataSource>()),
+    );
+  }
+  if (!injector.isRegistered<GetChartPaymentMethodsUseCase>()) {
+    injector.registerLazySingleton<GetChartPaymentMethodsUseCase>(
+      () => GetChartPaymentMethodsUseCase(injector<ReportsRepository>()),
+    );
+  }
+  if (!injector.isRegistered<GetChartCategoriesUseCase>()) {
+    injector.registerLazySingleton<GetChartCategoriesUseCase>(
+      () => GetChartCategoriesUseCase(injector<ReportsRepository>()),
+    );
+  }
+  if (!injector.isRegistered<GetChartHighestMonthUseCase>()) {
+    injector.registerLazySingleton<GetChartHighestMonthUseCase>(
+      () => GetChartHighestMonthUseCase(injector<ReportsRepository>()),
+    );
+  }
+  if (!injector.isRegistered<GetChartMonthlyTrendUseCase>()) {
+    injector.registerLazySingleton<GetChartMonthlyTrendUseCase>(
+      () => GetChartMonthlyTrendUseCase(injector<ReportsRepository>()),
+    );
+  }
+  if (!injector.isRegistered<GetChartFixedVsVariableUseCase>()) {
+    injector.registerLazySingleton<GetChartFixedVsVariableUseCase>(
+      () => GetChartFixedVsVariableUseCase(injector<ReportsRepository>()),
+    );
+  }
+  if (!injector.isRegistered<GetChartTopExpensesUseCase>()) {
+    injector.registerLazySingleton<GetChartTopExpensesUseCase>(
+      () => GetChartTopExpensesUseCase(injector<ReportsRepository>()),
+    );
+  }
+  if (!injector.isRegistered<ReportsController>()) {
+    injector.registerLazySingleton<ReportsController>(
+      () => ReportsController(
+        injector<GetChartPaymentMethodsUseCase>(),
+        injector<GetChartCategoriesUseCase>(),
+        injector<GetChartHighestMonthUseCase>(),
+        injector<GetChartMonthlyTrendUseCase>(),
+        injector<GetChartFixedVsVariableUseCase>(),
+        injector<GetChartTopExpensesUseCase>(),
       ),
     );
   }
