@@ -29,6 +29,11 @@ import 'package:finance_app_mobile/features/finance_config/domain/repositories/f
 import 'package:finance_app_mobile/features/finance_config/domain/usecases/get_finance_config_usecase.dart';
 import 'package:finance_app_mobile/features/finance_config/domain/usecases/update_finance_config_usecase.dart';
 import 'package:finance_app_mobile/features/finance_config/presentation/controllers/finance_config_controller.dart';
+import 'package:finance_app_mobile/features/expenses/data/datasources/expense_remote_datasource.dart';
+import 'package:finance_app_mobile/features/expenses/data/repositories/expenses_repository_impl.dart';
+import 'package:finance_app_mobile/features/expenses/domain/repositories/expenses_repository.dart';
+import 'package:finance_app_mobile/features/expenses/domain/usecases/create_expense_usecase.dart';
+import 'package:finance_app_mobile/features/expenses/presentation/controllers/expense_controller.dart';
 
 final injector = GetIt.instance;
 
@@ -172,6 +177,30 @@ Future<void> initializeDependencies() async {
         injector<GetFinanceConfigUseCase>(),
         injector<UpdateFinanceConfigUseCase>(),
       ),
+    );
+  }
+
+  if (!injector.isRegistered<ExpenseRemoteDataSource>()) {
+    injector.registerLazySingleton<ExpenseRemoteDataSource>(
+      () => ExpenseRemoteDataSource(
+        injector<Dio>(),
+        injector<FlutterSecureStorage>(),
+      ),
+    );
+  }
+  if (!injector.isRegistered<ExpensesRepository>()) {
+    injector.registerLazySingleton<ExpensesRepository>(
+      () => ExpensesRepositoryImpl(injector<ExpenseRemoteDataSource>()),
+    );
+  }
+  if (!injector.isRegistered<CreateExpenseUseCase>()) {
+    injector.registerLazySingleton<CreateExpenseUseCase>(
+      () => CreateExpenseUseCase(injector<ExpensesRepository>()),
+    );
+  }
+  if (!injector.isRegistered<ExpenseController>()) {
+    injector.registerLazySingleton<ExpenseController>(
+      () => ExpenseController(injector<CreateExpenseUseCase>()),
     );
   }
 }
