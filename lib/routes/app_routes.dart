@@ -9,4 +9,5 @@ class AppRoutes {
   static const String financeConfig = '/finance-config';
   static const String profile = '/profile';
   static const String changePassword = '/change-password';
+  static const String patrimony = '/patrimony';
 }
