@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../../../core/formatters/currency_input_formatter.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../cards/domain/entities/card.dart';
 import '../../../cards/domain/usecases/get_cards_usecase.dart';
+import '../controllers/expense_controller.dart';
 
 class AddExpenseSheet extends StatefulWidget {
   const AddExpenseSheet({super.key});
@@ -19,6 +19,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
   final _formKey = GlobalKey<FormState>();
   final _descriptionController = TextEditingController();
   final _valueController = TextEditingController();
+  final _installmentsController = TextEditingController(text: '1');
   String _selectedCategory = 'FOOD';
   String _selectedPaymentMethod = 'PIX';
   DateTime _selectedDate = DateTime.now();
@@ -78,6 +79,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
   void dispose() {
     _descriptionController.dispose();
     _valueController.dispose();
+    _installmentsController.dispose();
     super.dispose();
   }
 
@@ -138,31 +140,25 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
 
     setState(() => _isLoading = true);
 
-    try {
-      final storage = GetIt.instance<FlutterSecureStorage>();
-      final userId = await storage.read(key: 'user_id');
-      final dio = GetIt.instance<Dio>();
+    final controller = GetIt.instance<ExpenseController>();
 
-      final valueText = _valueController.text
-          .replaceAll('.', '')
-          .replaceAll(',', '.');
-      final value = double.parse(valueText);
+    final value = CurrencyInputFormatter.parse(_valueController.text);
 
-      final data = <String, dynamic>{
-        'description': _descriptionController.text.trim(),
-        'value': value,
-        'category': _selectedCategory,
-        'paymentMethod': _selectedPaymentMethod,
-        'date': _selectedDate.toIso8601String().split('T')[0],
-      };
+    await controller.createExpense(
+      description: _descriptionController.text.trim(),
+      value: value,
+      category: _selectedCategory,
+      paymentMethod: _selectedPaymentMethod,
+      date: _selectedDate,
+      cardId: _selectedPaymentMethod == 'CREDIT_CARD' ? _selectedCardId : null,
+      installments: _selectedPaymentMethod == 'CREDIT_CARD'
+          ? int.tryParse(_installmentsController.text)
+          : null,
+    );
 
-      if (_selectedPaymentMethod == 'CREDIT_CARD') {
-        data['cardId'] = _selectedCardId;
-      }
+    if (!mounted) return;
 
-      await dio.post('/users/$userId/expenses', data: data);
-
-      if (!mounted) return;
+    if (controller.status == ExpenseStatus.success) {
       Navigator.pop(context, true);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -170,17 +166,16 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
           backgroundColor: AppColors.success,
         ),
       );
-    } on DioException catch (e) {
-      final message =
-          e.response?.data?['message']?.toString() ??
-          'Erro ao cadastrar despesa';
-      if (!mounted) return;
+    } else if (controller.status == ExpenseStatus.error) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: AppColors.error),
+        SnackBar(
+          content: Text(controller.errorMessage ?? 'Erro ao cadastrar despesa'),
+          backgroundColor: AppColors.error,
+        ),
       );
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
     }
+
+    if (mounted) setState(() => _isLoading = false);
   }
 
   @override
@@ -231,8 +226,9 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                   ),
                 ),
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty)
+                  if (value == null || value.trim().isEmpty) {
                     return 'Descrição é obrigatória';
+                  }
                   return null;
                 },
               ),
@@ -240,22 +236,21 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
               TextFormField(
                 controller: _valueController,
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  _CurrencyInputFormatter(),
-                ],
+                inputFormatters: [const CurrencyInputFormatter()],
                 style: const TextStyle(color: AppColors.branco),
                 decoration: const InputDecoration(
                   labelText: 'Valor',
                   hintText: 'R\$ 0,00',
+                  prefixText: 'R\$ ',
                   prefixIcon: Icon(
                     Icons.attach_money_rounded,
                     color: AppColors.verdeMedio,
                   ),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty)
+                  if (value == null || value.isEmpty) {
                     return 'Valor é obrigatório';
+                  }
                   return null;
                 },
               ),
@@ -288,7 +283,9 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  if (value != null) setState(() => _selectedCategory = value);
+                  if (value != null) {
+                    setState(() => _selectedCategory = value);
+                  }
                 },
               ),
               const SizedBox(height: 12),
@@ -311,13 +308,46 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                 }).toList(),
                 onChanged: (value) {
                   if (value != null) {
-                    setState(() => _selectedPaymentMethod = value);
+                    setState(() {
+                      _selectedPaymentMethod = value;
+                      if (value != 'CREDIT_CARD') {
+                        _installmentsController.text = '1';
+                      }
+                    });
                   }
                 },
               ),
               if (_selectedPaymentMethod == 'CREDIT_CARD') ...[
                 const SizedBox(height: 12),
                 _buildCardSelector(),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: _installmentsController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2),
+                  ],
+                  style: const TextStyle(color: AppColors.branco),
+                  decoration: const InputDecoration(
+                    labelText: 'Parcelas',
+                    hintText: 'Ex: 3',
+                    prefixIcon: Icon(
+                      Icons.receipt_long_rounded,
+                      color: AppColors.verdeMedio,
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Parcelas é obrigatório';
+                    }
+                    final n = int.tryParse(value);
+                    if (n == null || n < 1 || n > 48) {
+                      return 'Parcelas deve ser entre 1 e 48';
+                    }
+                    return null;
+                  },
+                ),
               ],
               const SizedBox(height: 12),
               GestureDetector(
@@ -463,29 +493,5 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
     }
 
     return Color(int.parse('FF$normalizedHex', radix: 16));
-  }
-}
-
-class _CurrencyInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue old,
-    TextEditingValue next,
-  ) {
-    if (next.text.isEmpty) return next;
-
-    final digits = next.text.replaceAll(RegExp(r'[^\d]'), '');
-    if (digits.isEmpty) return const TextEditingValue();
-
-    final value = int.parse(digits);
-    final formatted = value.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (match) => '${match[1]}.',
-    );
-
-    return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
   }
 }

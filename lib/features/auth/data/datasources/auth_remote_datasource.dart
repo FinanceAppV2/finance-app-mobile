@@ -45,4 +45,25 @@ class AuthRemoteDataSource {
     }
 
   }
+
+  Future<UserModel> updateUser({
+    required String id,
+    String? name,
+    String? lastName,
+    String? email,
+    String? phone,
+    String? currentPassword,
+    String? password,
+  }) async {
+    final data = <String, dynamic>{};
+    if (name != null) data['name'] = name;
+    if (lastName != null) data['lastName'] = lastName;
+    if (email != null) data['email'] = email;
+    if (phone != null) data['phone'] = phone;
+    if (currentPassword != null) data['currentPassword'] = currentPassword;
+    if (password != null) data['password'] = password;
+
+    final response = await _dio.put('/users/$id', data: data);
+    return UserModel.fromJson(response.data as Map<String, dynamic>);
+  }
 }

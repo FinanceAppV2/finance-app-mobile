@@ -32,6 +32,44 @@ class HomeRepositoryImpl implements HomeRepository {
     }
   }
 
+  @override
+  Future<Either<String, Unit>> deleteExpense(String id) async {
+    try {
+      await _remoteDataSource.deleteExpense(id);
+      return const Right(unit);
+    } catch (e) {
+      return Left('Erro ao excluir despesa: $e');
+    }
+  }
+
+  @override
+  Future<Either<String, Unit>> updateExpense({
+    required String id,
+    required String description,
+    required double value,
+    required String category,
+    required String paymentMethod,
+    required DateTime date,
+    String? cardId,
+    int? installments,
+  }) async {
+    try {
+      await _remoteDataSource.updateExpense(
+        id: id,
+        description: description,
+        value: value,
+        category: category,
+        paymentMethod: paymentMethod,
+        date: date,
+        cardId: cardId,
+        installments: installments,
+      );
+      return const Right(unit);
+    } catch (e) {
+      return Left('Erro ao atualizar despesa: $e');
+    }
+  }
+
   MonthlySummary _toEntity(MonthlySummaryModel model) {
     return MonthlySummary(
       monthlyIncome: model.monthlyIncome,

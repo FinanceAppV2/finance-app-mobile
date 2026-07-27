@@ -42,4 +42,32 @@ class HomeRemoteDatasource {
     final list = (response.data as List).take(limit).toList();
     return list.map((e) => ExpenseModel.fromJson(e)).toList();
   }
+
+  Future<void> deleteExpense(String id) async {
+    final userId = await _getUserId();
+    await _dio.delete('/users/$userId/expenses/$id');
+  }
+
+  Future<void> updateExpense({
+    required String id,
+    required String description,
+    required double value,
+    required String category,
+    required String paymentMethod,
+    required DateTime date,
+    String? cardId,
+    int? installments,
+  }) async {
+    final userId = await _getUserId();
+    final data = <String, dynamic>{
+      'description': description,
+      'value': value,
+      'category': category,
+      'paymentMethod': paymentMethod,
+      'date': date.toIso8601String().split('T')[0],
+    };
+    if (cardId != null) data['cardId'] = cardId;
+    if (installments != null) data['installments'] = installments;
+    await _dio.put('/users/$userId/expenses/$id', data: data);
+  }
 }

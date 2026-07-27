@@ -16,4 +16,18 @@ abstract class CardRepository {
     required String cor,
     required String icone,
   });
+  Future<Either<String, CreditCard>> updateCard({
+    required String id,
+    required String nome,
+    required String emissora,
+    required String bandeira,
+    required String finalNumero,
+    required String nomeTitular,
+    required int diaVencimento,
+    required int diaFechamento,
+    required double limiteDisponivel,
+    required String cor,
+    required String icone,
+  });
+  Future<Either<String, void>> deleteCard({required String id});
 }

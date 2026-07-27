@@ -5,13 +5,13 @@ import '../../../../core/theme/app_theme.dart';
 class ExpensesHeader extends StatelessWidget {
   final String title;
   final int count;
-  final VoidCallback? onSeeAll;
+  final VoidCallback? onFilter;
 
   const ExpensesHeader({
     super.key,
     required this.title,
     required this.count,
-    this.onSeeAll,
+    this.onFilter,
   });
 
   @override
@@ -34,18 +34,17 @@ class ExpensesHeader extends StatelessWidget {
             fontSize: 12,
           ),
         ),
-        if (onSeeAll != null) ...[
-          const SizedBox(width: 8),
-          GestureDetector(
-            onTap: onSeeAll,
-            child: const Text(
-              'Ver todos',
-              style: TextStyle(
-                color: AppColors.verdeDestaque,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
+        if (onFilter != null) ...[
+          const SizedBox(width: 4),
+          IconButton(
+            onPressed: onFilter,
+            icon: Icon(
+              Icons.filter_list_rounded,
+              color: AppColors.cinzaClaro,
+              size: 20,
             ),
+            constraints: const BoxConstraints(),
+            padding: const EdgeInsets.all(4),
           ),
         ],
       ],

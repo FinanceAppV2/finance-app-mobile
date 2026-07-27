@@ -50,4 +50,48 @@ class CardRepositoryImpl implements CardRepository {
       return Left('Erro ao cadastrar cartão: $e');
     }
   }
+
+  @override
+  Future<Either<String, CreditCard>> updateCard({
+    required String id,
+    required String nome,
+    required String emissora,
+    required String bandeira,
+    required String finalNumero,
+    required String nomeTitular,
+    required int diaVencimento,
+    required int diaFechamento,
+    required double limiteDisponivel,
+    required String cor,
+    required String icone,
+  }) async {
+    try {
+      final model = await _remoteDataSource.updateCard(
+        id: id,
+        nome: nome,
+        emissora: emissora,
+        bandeira: bandeira,
+        finalNumero: finalNumero,
+        nomeTitular: nomeTitular,
+        diaVencimento: diaVencimento,
+        diaFechamento: diaFechamento,
+        limiteDisponivel: limiteDisponivel,
+        cor: cor,
+        icone: icone,
+      );
+      return Right(model.toEntity());
+    } catch (e) {
+      return Left('Erro ao atualizar cartão: $e');
+    }
+  }
+
+  @override
+  Future<Either<String, void>> deleteCard({required String id}) async {
+    try {
+      await _remoteDataSource.deleteCard(id: id);
+      return const Right(null);
+    } catch (e) {
+      return Left('Erro ao excluir cartão: $e');
+    }
+  }
 }

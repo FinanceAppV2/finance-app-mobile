@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../core/formatters/currency_input_formatter.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../presentation/controllers/finance_config_controller.dart';
 
@@ -44,32 +45,29 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
         _controller.config != null) {
       final config = _controller.config!;
       if (_incomeController.text.isEmpty) {
-        _incomeController.text = _formatValue(config.monthlyIncome);
+        _incomeController.text = CurrencyInputFormatter.format(
+          config.monthlyIncome,
+        );
       }
       if (_limitController.text.isEmpty) {
-        _limitController.text = _formatValue(config.spendingLimit);
+        _limitController.text = CurrencyInputFormatter.format(
+          config.spendingLimit,
+        );
       }
       if (_savingsController.text.isEmpty) {
-        _savingsController.text = _formatValue(config.savingsGoal);
+        _savingsController.text = CurrencyInputFormatter.format(
+          config.savingsGoal,
+        );
       }
     }
     setState(() {});
-  }
-
-  String _formatValue(double value) {
-    if (value == value.roundToDouble() && value < 100000) {
-      return value.toStringAsFixed(0);
-    }
-    return value.toStringAsFixed(2).replaceAll('.', ',');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Configuração Financeira'),
-      ),
+      appBar: AppBar(title: const Text('Configuração Financeira')),
       body: _buildBody(),
     );
   }
@@ -161,21 +159,19 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed:
-                      _controller.status == FinanceConfigStatus.loading
-                          ? null
-                          : _save,
-                  child:
-                      _controller.status == FinanceConfigStatus.loading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: AppColors.background,
-                              ),
-                            )
-                          : const Text('Salvar'),
+                  onPressed: _controller.status == FinanceConfigStatus.loading
+                      ? null
+                      : _save,
+                  child: _controller.status == FinanceConfigStatus.loading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColors.background,
+                          ),
+                        )
+                      : const Text('Salvar'),
                 ),
               ),
             ],
@@ -213,10 +209,8 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
         TextFormField(
           controller: controller,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          style: const TextStyle(
-            color: AppColors.branco,
-            fontSize: 15,
-          ),
+          inputFormatters: const [CurrencyInputFormatter()],
+          style: const TextStyle(color: AppColors.branco, fontSize: 15),
           decoration: InputDecoration(
             hintText: hint,
             prefixText: prefix,
@@ -230,10 +224,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
             if (value == null || value.trim().isEmpty) {
               return 'Preencha este campo';
             }
-            final parsed = double.tryParse(
-              value.replaceAll(',', '.').replaceAll(RegExp(r'[^\d.]'), ''),
-            );
-            if (parsed == null || parsed < 0) {
+            if (CurrencyInputFormatter.parse(value) < 0) {
               return 'Insira um valor válido';
             }
             return null;
@@ -246,15 +237,9 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final income = double.parse(
-      _incomeController.text.replaceAll(',', '.').replaceAll(RegExp(r'[^\d.]'), ''),
-    );
-    final limit = double.parse(
-      _limitController.text.replaceAll(',', '.').replaceAll(RegExp(r'[^\d.]'), ''),
-    );
-    final savings = double.parse(
-      _savingsController.text.replaceAll(',', '.').replaceAll(RegExp(r'[^\d.]'), ''),
-    );
+    final income = CurrencyInputFormatter.parse(_incomeController.text);
+    final limit = CurrencyInputFormatter.parse(_limitController.text);
+    final savings = CurrencyInputFormatter.parse(_savingsController.text);
 
     final success = await _controller.updateConfig(
       monthlyIncome: income,

@@ -40,12 +40,16 @@ class SummaryCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _MainInfo(
-                    label: 'Balanço',
-                    value: summary.remaining,
-                    color: summary.remaining >= 0
-                        ? AppColors.verdeDestaque
-                        : AppColors.error,
+                  child: GestureDetector(
+                    onTap: () => _showInfoPopup(context, 'Balanço',
+                        'Valor restante após somar todas as despesas do mês (incluindo despesas fixas) e subtrair da renda mensal.'),
+                    child: _MainInfo(
+                      label: 'Balanço',
+                      value: summary.remaining,
+                      color: summary.remaining >= 0
+                          ? AppColors.verdeDestaque
+                          : AppColors.error,
+                    ),
                   ),
                 ),
               ],
@@ -195,11 +199,15 @@ class _SavingsProgress extends StatelessWidget {
                   fontSize: 11,
                 ),
               ),
-              Text(
-                'Restante: R\$ $remainingFormatted',
-                style: TextStyle(
-                  color: AppColors.cinzaClaro.withValues(alpha: 0.7),
-                  fontSize: 11,
+              GestureDetector(
+                onTap: () => _showInfoPopup(context, 'Restante',
+                    'Valor que ainda pode ser gasto dentro do limite mensal definido.'),
+                child: Text(
+                  'Restante: R\$ $remainingFormatted',
+                  style: TextStyle(
+                    color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                    fontSize: 11,
+                  ),
                 ),
               ),
               Text(
@@ -215,4 +223,21 @@ class _SavingsProgress extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showInfoPopup(BuildContext context, String title, String message) {
+  showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: AppColors.verdeEscuro,
+      title: Text(title, style: const TextStyle(color: AppColors.branco)),
+      content: Text(message, style: const TextStyle(color: AppColors.cinzaClaro)),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(ctx),
+          child: const Text('OK', style: TextStyle(color: AppColors.verdeDestaque)),
+        ),
+      ],
+    ),
+  );
 }
