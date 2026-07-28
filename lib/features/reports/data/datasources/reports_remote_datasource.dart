@@ -7,6 +7,7 @@ import '../models/chart_highest_month_model.dart';
 import '../models/chart_monthly_trend_model.dart';
 import '../models/chart_payment_method_model.dart';
 import '../models/chart_top_expense_model.dart';
+import '../models/monthly_summary_model.dart';
 
 class ReportsRemoteDataSource {
   final Dio _dio;
@@ -79,5 +80,30 @@ class ReportsRemoteDataSource {
       queryParameters: _params(year: year, month: month),
     );
     return (response.data as List).map((e) => ChartTopExpenseModel.fromJson(e)).toList();
+  }
+
+  Future<MonthlySummaryModel> getMonthlySummary({int? month, int? year}) async {
+    final userId = await _getUserId();
+    final params = <String, dynamic>{};
+    if (month != null) params['month'] = month;
+    if (year != null) params['year'] = year;
+
+    final response = await _dio.get(
+      '/users/$userId/expenses/summary',
+      queryParameters: params.isNotEmpty ? params : null,
+    );
+    return MonthlySummaryModel.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  Future<String> generateAi({required String prompt}) async {
+    final response = await _dio.post(
+      '/ai/generate',
+      data: {'prompt': prompt},
+      options: Options(
+        connectTimeout: const Duration(seconds: 15),
+        receiveTimeout: const Duration(seconds: 120),
+      ),
+    );
+    return response.data['response'] as String;
   }
 }

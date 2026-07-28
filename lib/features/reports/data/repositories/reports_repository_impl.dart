@@ -73,4 +73,31 @@ class ReportsRepositoryImpl implements ReportsRepository {
       return Left('Erro ao carregar maiores despesas: $e');
     }
   }
+
+  @override
+  Future<Either<String, Map<String, double>>> getMonthlySummary({int? month, int? year}) async {
+    try {
+      final model = await _dataSource.getMonthlySummary(month: month, year: year);
+      return Right({
+        'monthlyIncome': model.monthlyIncome,
+        'totalExpenses': model.totalExpenses,
+        'totalFixedExpenses': model.totalFixedExpenses,
+        'remaining': model.remaining,
+        'savingsGoalMonthly': model.savingsGoalMonthly,
+        'spendingLimitMonthly': model.spendingLimitMonthly,
+      });
+    } catch (e) {
+      return Left('Erro ao carregar resumo mensal: $e');
+    }
+  }
+
+  @override
+  Future<Either<String, String>> generateAi({required String prompt}) async {
+    try {
+      final response = await _dataSource.generateAi(prompt: prompt);
+      return Right(response);
+    } catch (e) {
+      return Left('Erro ao gerar resposta: $e');
+    }
+  }
 }

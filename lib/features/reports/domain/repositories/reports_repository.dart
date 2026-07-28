@@ -14,4 +14,6 @@ abstract class ReportsRepository {
   Future<Either<String, List<ChartMonthlyTrend>>> getMonthlyTrend({int? year});
   Future<Either<String, ChartFixedVsVariable>> getFixedVsVariable({int? year, int? month});
   Future<Either<String, List<ChartTopExpense>>> getTopExpenses({int? year, int? month});
+  Future<Either<String, Map<String, double>>> getMonthlySummary({int? month, int? year});
+  Future<Either<String, String>> generateAi({required String prompt});
 }

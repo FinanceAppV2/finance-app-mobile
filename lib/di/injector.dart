@@ -46,9 +46,21 @@ import 'package:finance_app_mobile/features/fixed_expenses/domain/repositories/f
 import 'package:finance_app_mobile/features/fixed_expenses/domain/usecases/get_fixed_expenses_usecase.dart';
 import 'package:finance_app_mobile/features/fixed_expenses/domain/usecases/create_fixed_expense_usecase.dart';
 import 'package:finance_app_mobile/features/fixed_expenses/presentation/controllers/fixed_expenses_controller.dart';
+import 'package:finance_app_mobile/features/patrimony/data/datasources/asset_remote_datasource.dart';
+import 'package:finance_app_mobile/features/patrimony/data/repositories/asset_repository_impl.dart';
+import 'package:finance_app_mobile/features/patrimony/domain/repositories/asset_repository.dart';
+import 'package:finance_app_mobile/features/patrimony/domain/usecases/create_asset_usecase.dart';
+import 'package:finance_app_mobile/features/patrimony/domain/usecases/delete_asset_usecase.dart';
+import 'package:finance_app_mobile/features/patrimony/domain/usecases/get_asset_projection_usecase.dart';
+import 'package:finance_app_mobile/features/patrimony/domain/usecases/get_asset_summary_usecase.dart';
+import 'package:finance_app_mobile/features/patrimony/domain/usecases/get_assets_usecase.dart';
+import 'package:finance_app_mobile/features/patrimony/domain/usecases/update_asset_prices_usecase.dart';
+import 'package:finance_app_mobile/features/patrimony/domain/usecases/update_asset_usecase.dart';
+import 'package:finance_app_mobile/features/patrimony/presentation/controllers/asset_controller.dart';
 import 'package:finance_app_mobile/features/reports/data/datasources/reports_remote_datasource.dart';
 import 'package:finance_app_mobile/features/reports/data/repositories/reports_repository_impl.dart';
 import 'package:finance_app_mobile/features/reports/domain/repositories/reports_repository.dart';
+import 'package:finance_app_mobile/features/reports/domain/usecases/generate_ai_usecase.dart';
 import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_categories_usecase.dart';
 import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_fixed_vs_variable_usecase.dart';
 import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_highest_month_usecase.dart';
@@ -295,6 +307,68 @@ Future<void> initializeDependencies() async {
     );
   }
 
+  if (!injector.isRegistered<AssetRemoteDataSource>()) {
+    injector.registerLazySingleton<AssetRemoteDataSource>(
+      () => AssetRemoteDataSource(
+        injector<Dio>(),
+        injector<FlutterSecureStorage>(),
+      ),
+    );
+  }
+  if (!injector.isRegistered<AssetRepository>()) {
+    injector.registerLazySingleton<AssetRepository>(
+      () => AssetRepositoryImpl(injector<AssetRemoteDataSource>()),
+    );
+  }
+  if (!injector.isRegistered<GetAssetsUseCase>()) {
+    injector.registerLazySingleton<GetAssetsUseCase>(
+      () => GetAssetsUseCase(injector<AssetRepository>()),
+    );
+  }
+  if (!injector.isRegistered<GetAssetSummaryUseCase>()) {
+    injector.registerLazySingleton<GetAssetSummaryUseCase>(
+      () => GetAssetSummaryUseCase(injector<AssetRepository>()),
+    );
+  }
+  if (!injector.isRegistered<CreateAssetUseCase>()) {
+    injector.registerLazySingleton<CreateAssetUseCase>(
+      () => CreateAssetUseCase(injector<AssetRepository>()),
+    );
+  }
+  if (!injector.isRegistered<UpdateAssetUseCase>()) {
+    injector.registerLazySingleton<UpdateAssetUseCase>(
+      () => UpdateAssetUseCase(injector<AssetRepository>()),
+    );
+  }
+  if (!injector.isRegistered<DeleteAssetUseCase>()) {
+    injector.registerLazySingleton<DeleteAssetUseCase>(
+      () => DeleteAssetUseCase(injector<AssetRepository>()),
+    );
+  }
+  if (!injector.isRegistered<UpdateAssetPricesUseCase>()) {
+    injector.registerLazySingleton<UpdateAssetPricesUseCase>(
+      () => UpdateAssetPricesUseCase(injector<AssetRepository>()),
+    );
+  }
+  if (!injector.isRegistered<GetAssetProjectionUseCase>()) {
+    injector.registerLazySingleton<GetAssetProjectionUseCase>(
+      () => GetAssetProjectionUseCase(injector<AssetRepository>()),
+    );
+  }
+  if (!injector.isRegistered<AssetController>()) {
+    injector.registerLazySingleton<AssetController>(
+      () => AssetController(
+        injector<GetAssetsUseCase>(),
+        injector<GetAssetSummaryUseCase>(),
+        injector<CreateAssetUseCase>(),
+        injector<UpdateAssetUseCase>(),
+        injector<DeleteAssetUseCase>(),
+        injector<UpdateAssetPricesUseCase>(),
+        injector<GetAssetProjectionUseCase>(),
+      ),
+    );
+  }
+
   if (!injector.isRegistered<ReportsRemoteDataSource>()) {
     injector.registerLazySingleton<ReportsRemoteDataSource>(
       () => ReportsRemoteDataSource(
@@ -338,16 +412,26 @@ Future<void> initializeDependencies() async {
       () => GetChartTopExpensesUseCase(injector<ReportsRepository>()),
     );
   }
-  if (!injector.isRegistered<ReportsController>()) {
-    injector.registerLazySingleton<ReportsController>(
-      () => ReportsController(
-        injector<GetChartPaymentMethodsUseCase>(),
-        injector<GetChartCategoriesUseCase>(),
-        injector<GetChartHighestMonthUseCase>(),
-        injector<GetChartMonthlyTrendUseCase>(),
-        injector<GetChartFixedVsVariableUseCase>(),
-        injector<GetChartTopExpensesUseCase>(),
-      ),
+  if (!injector.isRegistered<GenerateAiUseCase>()) {
+    injector.registerLazySingleton<GenerateAiUseCase>(
+      () => GenerateAiUseCase(injector<ReportsRepository>()),
     );
   }
+  if (injector.isRegistered<ReportsController>()) {
+    await injector.unregister<ReportsController>(
+      disposingFunction: (controller) => controller.dispose(),
+    );
+  }
+  injector.registerLazySingleton<ReportsController>(
+    () => ReportsController(
+      injector<GetChartPaymentMethodsUseCase>(),
+      injector<GetChartCategoriesUseCase>(),
+      injector<GetChartHighestMonthUseCase>(),
+      injector<GetChartMonthlyTrendUseCase>(),
+      injector<GetChartFixedVsVariableUseCase>(),
+      injector<GetChartTopExpensesUseCase>(),
+      injector<GenerateAiUseCase>(),
+      injector<ReportsRepository>(),
+    ),
+  );
 }

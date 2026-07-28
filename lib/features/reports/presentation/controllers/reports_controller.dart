@@ -7,12 +7,14 @@ import '../../domain/entities/chart_highest_month.dart';
 import '../../domain/entities/chart_monthly_trend.dart';
 import '../../domain/entities/chart_payment_method.dart';
 import '../../domain/entities/chart_top_expense.dart';
+import '../../domain/usecases/generate_ai_usecase.dart';
 import '../../domain/usecases/get_chart_categories_usecase.dart';
 import '../../domain/usecases/get_chart_fixed_vs_variable_usecase.dart';
 import '../../domain/usecases/get_chart_highest_month_usecase.dart';
 import '../../domain/usecases/get_chart_monthly_trend_usecase.dart';
 import '../../domain/usecases/get_chart_payment_methods_usecase.dart';
 import '../../domain/usecases/get_chart_top_expenses_usecase.dart';
+import '../../domain/repositories/reports_repository.dart';
 
 enum ReportsStatus { initial, loading, success, error }
 
@@ -23,8 +25,11 @@ class ReportsController extends ChangeNotifier {
   final GetChartMonthlyTrendUseCase _getMonthlyTrendUseCase;
   final GetChartFixedVsVariableUseCase _getFixedVsVariableUseCase;
   final GetChartTopExpensesUseCase _getTopExpensesUseCase;
+  final GenerateAiUseCase _generateAiUseCase;
+  final ReportsRepository _repository;
 
   ReportsStatus _status = ReportsStatus.initial;
+  bool _isGeneratingAi = false;
   String? _errorMessage;
 
   List<ChartPaymentMethod>? _paymentMethods;
@@ -41,9 +46,12 @@ class ReportsController extends ChangeNotifier {
     this._getMonthlyTrendUseCase,
     this._getFixedVsVariableUseCase,
     this._getTopExpensesUseCase,
+    this._generateAiUseCase,
+    this._repository,
   );
 
   ReportsStatus get status => _status;
+  bool get isGeneratingAi => _isGeneratingAi;
   String? get errorMessage => _errorMessage;
   List<ChartPaymentMethod>? get paymentMethods => _paymentMethods;
   List<ChartCategory>? get categories => _categories;
@@ -97,5 +105,79 @@ class ReportsController extends ChangeNotifier {
 
     _status = ReportsStatus.success;
     notifyListeners();
+  }
+
+  void _appendSummary(Map<String, double> summary, StringBuffer buffer) {
+    buffer.writeln('- Renda mensal: R\$ ${summary['monthlyIncome']!.toStringAsFixed(2)}');
+    buffer.writeln('- Total despesas: R\$ ${summary['totalExpenses']!.toStringAsFixed(2)}');
+    buffer.writeln('- Despesas fixas: R\$ ${summary['totalFixedExpenses']!.toStringAsFixed(2)}');
+    buffer.writeln('- Restante: R\$ ${summary['remaining']!.toStringAsFixed(2)}');
+    buffer.writeln('- Meta de poupança: R\$ ${summary['savingsGoalMonthly']!.toStringAsFixed(2)}');
+    buffer.writeln('- Limite de gastos: R\$ ${summary['spendingLimitMonthly']!.toStringAsFixed(2)}');
+  }
+
+  String _buildContextPrompt() {
+    final buffer = StringBuffer('### Dados financeiros do usuário:\n');
+    if (_fixedVsVariable != null) {
+      buffer.writeln(
+        '- Despesas fixas: R\$ ${_fixedVsVariable!.fixedTotal.toStringAsFixed(2)}, '
+        'Variáveis: R\$ ${_fixedVsVariable!.variableTotal.toStringAsFixed(2)}',
+      );
+    }
+    if (_monthlyTrend != null && _monthlyTrend!.isNotEmpty) {
+      buffer.writeln('- Tendência mensal: ${_monthlyTrend!.map((m) => 'Mês ${m.month}: R\$ ${m.total.toStringAsFixed(2)}').join(', ')}');
+    }
+    if (_topExpenses != null && _topExpenses!.isNotEmpty) {
+      buffer.writeln('- Maiores despesas: ${_topExpenses!.map((e) => '${e.description} (R\$ ${e.value.toStringAsFixed(2)})').join(', ')}');
+    }
+    if (_categories != null && _categories!.isNotEmpty) {
+      buffer.writeln('- Gastos por categoria: ${_categories!.map((c) => '${c.category}: R\$ ${c.total.toStringAsFixed(2)}').join(', ')}');
+    }
+    if (_paymentMethods != null && _paymentMethods!.isNotEmpty) {
+      buffer.writeln('- Gastos por pagamento: ${_paymentMethods!.map((p) => '${p.paymentMethod}: R\$ ${p.total.toStringAsFixed(2)}').join(', ')}');
+    }
+    if (_highestMonth != null) {
+      buffer.writeln('- Mês com maior gasto: ${_highestMonth!.month}/${_highestMonth!.year} (R\$ ${_highestMonth!.total.toStringAsFixed(2)})');
+    }
+    return buffer.toString();
+  }
+
+  Future<String?> generateAi({
+    required String message,
+    required bool includeReportsData,
+  }) async {
+    _isGeneratingAi = true;
+    notifyListeners();
+
+    final prompt = StringBuffer();
+    if (includeReportsData) {
+      prompt.writeln(_buildContextPrompt());
+      prompt.writeln();
+
+      final summaryResult = await _repository.getMonthlySummary();
+      summaryResult.fold(
+        (_) {},
+        (summary) {
+          prompt.writeln('### Resumo financeiro do mês:');
+          _appendSummary(summary, prompt);
+          prompt.writeln();
+        },
+      );
+    }
+    prompt.writeln('### Pergunta do usuário:');
+    prompt.write(message);
+
+    final result = await _generateAiUseCase.execute(prompt: prompt.toString());
+
+    _isGeneratingAi = false;
+    notifyListeners();
+
+    return result.fold(
+      (error) {
+        _errorMessage = error;
+        return null;
+      },
+      (response) => response,
+    );
   }
 }

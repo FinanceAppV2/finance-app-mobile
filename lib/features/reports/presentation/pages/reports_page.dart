@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../controllers/reports_controller.dart';
+import '../widgets/ai_chat_sheet.dart';
 import '../widgets/categories_card.dart';
 import '../widgets/fixed_vs_variable_card.dart';
 import '../widgets/highest_month_card.dart';
@@ -53,7 +54,7 @@ class _ReportsPageState extends State<ReportsPage> {
         child: Column(
           children: [
             const SizedBox(height: 60),
-            _buildYearSelector(),
+            _buildHeaderRow(),
             const SizedBox(height: 12),
             Expanded(child: _buildBody()),
           ],
@@ -62,29 +63,51 @@ class _ReportsPageState extends State<ReportsPage> {
     );
   }
 
-  Widget _buildYearSelector() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        IconButton(
-          onPressed: () => _changeYear(-1),
-          icon: const Icon(Icons.chevron_left, color: AppColors.cinzaClaro),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          '$_selectedYear',
-          style: const TextStyle(
-            color: AppColors.branco,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
+  Widget _buildHeaderRow() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () => _changeYear(-1),
+                icon: const Icon(Icons.chevron_left, color: AppColors.cinzaClaro),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                '$_selectedYear',
+                style: const TextStyle(
+                  color: AppColors.branco,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(width: 4),
+              IconButton(
+                onPressed: () => _changeYear(1),
+                icon: const Icon(Icons.chevron_right, color: AppColors.cinzaClaro),
+              ),
+            ],
           ),
-        ),
-        const SizedBox(width: 8),
-        IconButton(
-          onPressed: () => _changeYear(1),
-          icon: const Icon(Icons.chevron_right, color: AppColors.cinzaClaro),
-        ),
-      ],
+          IconButton(
+            onPressed: _onOpenAi,
+            icon: const Icon(Icons.auto_awesome_rounded, color: AppColors.verdeDestaque),
+            tooltip: 'Assistente IA',
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onOpenAi() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const AiChatSheet(),
     );
   }
 
