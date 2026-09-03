@@ -39,7 +39,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
   void initState() {
     super.initState();
     _controller.addListener(_onStateChanged);
-    _controller.loadData(month: _selectedMonth, year: _selectedYear);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.loadData(month: _selectedMonth, year: _selectedYear);
+    });
   }
 
   @override

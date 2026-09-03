@@ -15,6 +15,7 @@ class DioClient {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'X-API-Key': dotenv.env['X_API_KEY'] ?? '',
         },
       ),
     );
