@@ -8,6 +8,7 @@ import '../features/settings/presentation/pages/settings_page.dart';
 import '../features/settings/presentation/pages/profile_page.dart';
 import '../features/settings/presentation/pages/change_password_page.dart';
 import '../features/patrimony/presentation/pages/patrimony_page.dart';
+import '../features/loans/presentation/pages/loans_page.dart';
 import '../features/finance_config/presentation/pages/finance_config_page.dart';
 import 'app_routes.dart';
 
@@ -24,5 +25,6 @@ class AppPages {
         AppRoutes.profile: (_) => const ProfilePage(),
         AppRoutes.changePassword: (_) => const ChangePasswordPage(),
         AppRoutes.patrimony: (_) => const PatrimonyPage(),
+        AppRoutes.loans: (_) => const LoansPage(),
       };
 }

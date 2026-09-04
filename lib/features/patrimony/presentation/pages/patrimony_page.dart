@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -412,14 +414,30 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
 class _ProjectionSheet extends StatelessWidget {
   final Asset asset;
 
+  static const _monthNames = [
+    'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+    'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez',
+  ];
+
   const _ProjectionSheet({required this.asset});
 
   @override
   Widget build(BuildContext context) {
     final controller = GetIt.instance<AssetController>();
     final projection = controller.projection;
+    final projectedValues =
+        projection?.projectedValues ?? const <ProjectedValue>[];
+    final minValue = projectedValues.isEmpty
+        ? 0.0
+        : projectedValues.map((e) => e.value).reduce(min);
+    final maxValue = projectedValues.isEmpty
+        ? 0.0
+        : projectedValues.map((e) => e.value).reduce(max);
 
     return Container(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.sizeOf(context).height * 0.72,
+      ),
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: AppColors.verdeEscuro,
@@ -432,12 +450,15 @@ class _ProjectionSheet extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Projeção - ${asset.name}',
-                style: const TextStyle(
-                  color: AppColors.branco,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                child: Text(
+                  'Projeção - ${asset.name}',
+                  style: const TextStyle(
+                    color: AppColors.branco,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               IconButton(
@@ -447,52 +468,44 @@ class _ProjectionSheet extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          if (projection == null)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(24),
-                child: CircularProgressIndicator(
-                  color: AppColors.verdeDestaque,
-                ),
-              ),
-            )
-          else ...[
-            _buildProjectionInfo(projection),
-            const SizedBox(height: 16),
-            const Text(
-              'Projeção para 12 meses:',
-              style: TextStyle(
-                color: AppColors.cinzaClaro,
-                fontSize: 13,
-              ),
-            ),
-            const SizedBox(height: 8),
-            ...projection.projectedValues.map((pv) {
-              final monthName = [
-                'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
-                'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez',
-              ][pv.month - 1];
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      monthName,
-                      style: const TextStyle(color: AppColors.branco),
+          Flexible(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (projection == null)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 24),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.verdeDestaque,
+                        ),
+                      ),
+                    )
+                  else ...[
+                    _buildProjectionInfo(projection),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Projeção para 12 meses:',
+                      style: TextStyle(
+                        color: AppColors.cinzaClaro,
+                        fontSize: 13,
+                      ),
                     ),
-                    Text(
-                      'R\$ ${pv.value.toStringAsFixed(2).replaceAll('.', ',')}',
-                      style: const TextStyle(
-                        color: AppColors.branco,
-                        fontWeight: FontWeight.w600,
+                    const SizedBox(height: 8),
+                    ...projection.projectedValues.map(
+                      (pv) => _ProjectionBarItem(
+                        monthName: _monthNames[(pv.month - 1) % 12],
+                        value: pv.value,
+                        minValue: minValue,
+                        maxValue: maxValue,
                       ),
                     ),
                   ],
-                ),
-              );
-            }),
-          ],
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -539,6 +552,87 @@ class _ProjectionSheet extends StatelessWidget {
               ],
             ),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+class _ProjectionBarItem extends StatelessWidget {
+  final String monthName;
+  final double value;
+  final double minValue;
+  final double maxValue;
+
+  const _ProjectionBarItem({
+    required this.monthName,
+    required this.value,
+    required this.minValue,
+    required this.maxValue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final range = maxValue - minValue;
+    final factor = range <= 0
+        ? 1.0
+        : 0.12 + ((value - minValue) / range) * 0.88;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 42,
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: AppColors.verdeMedio.withValues(alpha: 0.35),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  monthName,
+                  style: const TextStyle(
+                    color: AppColors.branco,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              Text(
+                'R\$ ${value.toStringAsFixed(2).replaceAll('.', ',')}',
+                style: const TextStyle(
+                  color: AppColors.branco,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Container(
+            height: 8,
+            decoration: BoxDecoration(
+              color: AppColors.background.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: factor,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.verdeMedio, AppColors.verdeDestaque],
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

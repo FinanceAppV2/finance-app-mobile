@@ -520,6 +520,11 @@ class _AppDrawerState extends State<_AppDrawer> with SingleTickerProviderStateMi
                           label: 'Patrimônios',
                           onTap: () => _navigateTo('/patrimony'),
                         ),
+                        _DrawerItem(
+                          icon: Icons.handshake_rounded,
+                          label: 'Empréstimos',
+                          onTap: () => _navigateTo('/loans'),
+                        ),
                         const Spacer(),
                         Container(
                           height: 1,

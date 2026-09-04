@@ -68,6 +68,14 @@ import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_mo
 import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_payment_methods_usecase.dart';
 import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_top_expenses_usecase.dart';
 import 'package:finance_app_mobile/features/reports/presentation/controllers/reports_controller.dart';
+import 'package:finance_app_mobile/features/loans/data/datasources/loan_remote_datasource.dart';
+import 'package:finance_app_mobile/features/loans/data/repositories/loan_repository_impl.dart';
+import 'package:finance_app_mobile/features/loans/domain/repositories/loan_repository.dart';
+import 'package:finance_app_mobile/features/loans/domain/usecases/create_loan_usecase.dart';
+import 'package:finance_app_mobile/features/loans/domain/usecases/delete_loan_usecase.dart';
+import 'package:finance_app_mobile/features/loans/domain/usecases/get_loans_usecase.dart';
+import 'package:finance_app_mobile/features/loans/domain/usecases/update_loan_usecase.dart';
+import 'package:finance_app_mobile/features/loans/presentation/controllers/loans_controller.dart';
 
 final injector = GetIt.instance;
 
@@ -434,4 +442,45 @@ Future<void> initializeDependencies() async {
       injector<ReportsRepository>(),
     ),
   );
+
+  if (!injector.isRegistered<LoanRemoteDataSource>()) {
+    injector.registerLazySingleton<LoanRemoteDataSource>(
+      () => LoanRemoteDataSource(injector<Dio>(), injector<FlutterSecureStorage>()),
+    );
+  }
+  if (!injector.isRegistered<LoanRepository>()) {
+    injector.registerLazySingleton<LoanRepository>(
+      () => LoanRepositoryImpl(injector<LoanRemoteDataSource>()),
+    );
+  }
+  if (!injector.isRegistered<GetLoansUseCase>()) {
+    injector.registerLazySingleton<GetLoansUseCase>(
+      () => GetLoansUseCase(injector<LoanRepository>()),
+    );
+  }
+  if (!injector.isRegistered<CreateLoanUseCase>()) {
+    injector.registerLazySingleton<CreateLoanUseCase>(
+      () => CreateLoanUseCase(injector<LoanRepository>()),
+    );
+  }
+  if (!injector.isRegistered<UpdateLoanUseCase>()) {
+    injector.registerLazySingleton<UpdateLoanUseCase>(
+      () => UpdateLoanUseCase(injector<LoanRepository>()),
+    );
+  }
+  if (!injector.isRegistered<DeleteLoanUseCase>()) {
+    injector.registerLazySingleton<DeleteLoanUseCase>(
+      () => DeleteLoanUseCase(injector<LoanRepository>()),
+    );
+  }
+  if (!injector.isRegistered<LoansController>()) {
+    injector.registerLazySingleton<LoansController>(
+      () => LoansController(
+        injector<GetLoansUseCase>(),
+        injector<CreateLoanUseCase>(),
+        injector<UpdateLoanUseCase>(),
+        injector<DeleteLoanUseCase>(),
+      ),
+    );
+  }
 }
