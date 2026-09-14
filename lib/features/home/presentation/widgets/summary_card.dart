@@ -190,31 +190,44 @@ class _SavingsProgress extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Gasto: R\$ $usedFormatted',
-                style: TextStyle(
-                  color: AppColors.cinzaClaro.withValues(alpha: 0.7),
-                  fontSize: 11,
-                ),
-              ),
-              GestureDetector(
-                onTap: () => _showInfoPopup(context, 'Restante',
-                    'Valor que ainda pode ser gasto dentro do limite mensal definido.'),
+              Flexible(
                 child: Text(
-                  'Restante: R\$ $remainingFormatted',
+                  'Gasto: R\$ $usedFormatted',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                   style: TextStyle(
                     color: AppColors.cinzaClaro.withValues(alpha: 0.7),
                     fontSize: 11,
                   ),
                 ),
               ),
-              Text(
-                'Limite: R\$ $limitFormatted',
-                style: TextStyle(
-                  color: AppColors.cinzaClaro.withValues(alpha: 0.7),
-                  fontSize: 11,
+              const SizedBox(width: 8),
+              Flexible(
+                child: GestureDetector(
+                  onTap: () => _showInfoPopup(context, 'Restante',
+                      'Valor que ainda pode ser gasto dentro do limite mensal definido.'),
+                  child: Text(
+                    'Restante: R\$ $remainingFormatted',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                      fontSize: 11,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  'Limite: R\$ $limitFormatted',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                    fontSize: 11,
+                  ),
                 ),
               ),
             ],
