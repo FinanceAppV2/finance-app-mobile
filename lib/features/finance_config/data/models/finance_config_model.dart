@@ -29,20 +29,35 @@ class FinanceConfigModel extends Equatable {
     required this.updatedAt,
   });
 
-  factory FinanceConfigModel.fromJson(Map<String, dynamic> json) {
+  factory FinanceConfigModel.fromMap(Map<String, dynamic> json) {
     return FinanceConfigModel(
-      id: json['id'],
+      id: json['id']?.toString() ?? '',
       monthlyIncome: (json['monthlyIncome'] as num?)?.toDouble() ?? 0,
       spendingLimit: (json['spendingLimitMonthly'] as num?)?.toDouble() ?? 0,
       savingsGoal: (json['savingsGoalMonthly'] as num?)?.toDouble() ?? 0,
       emergencyFundGoal: (json['emergencyFundGoal'] as num?)?.toDouble() ?? 0,
-      type: json['type'],
+      type: json['type']?.toString() ?? '',
       cashBalance: (json['cashBalance'] as num?)?.toDouble(),
       salaryDay: json['salaryDay'] as int?,
       paymentDay: json['paymentDay'] as int?,
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now()
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.tryParse(json['updatedAt'].toString()) ?? DateTime.now()
+          : DateTime.now(),
     );
+  }
+
+  static List<FinanceConfigModel> fromJson(dynamic json) {
+    if (json is List) {
+      return json
+          .map((item) => FinanceConfigModel.fromMap(item as Map<String, dynamic>))
+          .toList();
+    } else if (json is Map<String, dynamic>) {
+      return [FinanceConfigModel.fromMap(json)];
+    }
+    return [];
   }
 
   Map<String, dynamic> toJson() {

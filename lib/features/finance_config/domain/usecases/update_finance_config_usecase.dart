@@ -8,7 +8,7 @@ class UpdateFinanceConfigUseCase {
 
   UpdateFinanceConfigUseCase(this._repository);
 
-  Future<Either<String, FinanceConfig>> execute({
+  Future<Either<String, List<FinanceConfig>>> execute({
     required double monthlyIncome,
     required double spendingLimit,
     required double savingsGoal,

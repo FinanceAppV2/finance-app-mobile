@@ -11,7 +11,7 @@ class FinanceConfigController extends ChangeNotifier {
   final UpdateFinanceConfigUseCase _updateFinanceConfigUseCase;
 
   FinanceConfigStatus _status = FinanceConfigStatus.initial;
-  FinanceConfig? _config;
+  List<FinanceConfig> _configs = [];
   String? _errorMessage;
 
   FinanceConfigController(
@@ -20,7 +20,12 @@ class FinanceConfigController extends ChangeNotifier {
   );
 
   FinanceConfigStatus get status => _status;
-  FinanceConfig? get config => _config;
+  List<FinanceConfig> get configs => _configs;
+  FinanceConfig? get postpaidConfig =>
+      _configs.where((c) => c.type.toUpperCase() == 'POSPAID').firstOrNull;
+  FinanceConfig? get prepaidConfig =>
+      _configs.where((c) => c.type.toUpperCase() == 'PREPAID').firstOrNull;
+  FinanceConfig? get config => _configs.isNotEmpty ? _configs.first : null;
   String? get errorMessage => _errorMessage;
 
   Future<void> loadConfig() async {
@@ -36,8 +41,8 @@ class FinanceConfigController extends ChangeNotifier {
         _errorMessage = error;
         notifyListeners();
       },
-      (config) {
-        _config = config;
+      (configs) {
+        _configs = configs;
         _status = FinanceConfigStatus.success;
         notifyListeners();
       },
@@ -76,8 +81,8 @@ class FinanceConfigController extends ChangeNotifier {
         notifyListeners();
         return false;
       },
-      (config) {
-        _config = config;
+      (configs) {
+        _configs = configs;
         _status = FinanceConfigStatus.success;
         notifyListeners();
         return true;

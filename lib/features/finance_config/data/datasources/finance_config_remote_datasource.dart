@@ -15,13 +15,14 @@ class FinanceConfigRemoteDatasource {
     return id;
   }
 
-  Future<FinanceConfigModel> getFinanceConfig() async {
+  Future<List<FinanceConfigModel>> getFinanceConfig() async {
     final userId = await _getUserId();
     final response = await _dio.get('/users/$userId/finance-config');
-    return FinanceConfigModel.fromJson(response.data as Map<String, dynamic>);
+    final data = response.data;
+    return FinanceConfigModel.fromJson(data);
   }
 
-  Future<FinanceConfigModel> updateFinanceConfig({
+  Future<List<FinanceConfigModel>> updateFinanceConfig({
     required double monthlyIncome,
     required double spendingLimit,
     required double savingsGoal,
@@ -47,7 +48,8 @@ class FinanceConfigRemoteDatasource {
           'paymentDay': paymentDay,
         },
       );
-      return FinanceConfigModel.fromJson(response.data as Map<String, dynamic>);
+      final data = response.data;
+      return FinanceConfigModel.fromJson(data);
     } catch (e) {
       throw Exception('Erro ao atualizar configuração financeira: $e');
     }

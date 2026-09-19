@@ -8,7 +8,7 @@ class GetFinanceConfigUseCase {
 
   GetFinanceConfigUseCase(this._repository);
 
-  Future<Either<String, FinanceConfig>> execute() {
+  Future<Either<String, List<FinanceConfig>>> execute() {
     return _repository.getFinanceConfig();
   }
 }
