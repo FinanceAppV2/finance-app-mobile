@@ -221,23 +221,24 @@ class _EditCardSheetState extends State<EditCardSheet> {
                 ],
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _nomeController,
-                style: const TextStyle(color: AppColors.branco),
-                decoration: const InputDecoration(
-                  labelText: 'Nome do cartão',
-                  hintText: 'Ex: Nubank',
-                  prefixIcon: Icon(
-                    Icons.label_outline,
-                    color: AppColors.verdeMedio,
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty)
-                    return 'Nome é obrigatório';
-                  return null;
-                },
-              ),
+               TextFormField(
+                 controller: _nomeController,
+                 autofocus: false,
+                 style: const TextStyle(color: AppColors.branco),
+                 decoration: const InputDecoration(
+                   labelText: 'Nome do cartão',
+                   hintText: 'Ex: Nubank',
+                   prefixIcon: Icon(
+                     Icons.label_outline,
+                     color: AppColors.verdeMedio,
+                   ),
+                 ),
+                 validator: (value) {
+                   if (value == null || value.trim().isEmpty)
+                     return 'Nome é obrigatório';
+                   return null;
+                 },
+               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 initialValue: _selectedEmissora,
@@ -283,61 +284,63 @@ class _EditCardSheetState extends State<EditCardSheet> {
                 },
               ),
               const SizedBox(height: 12),
-              TextFormField(
-                controller: _finalController,
-                keyboardType: TextInputType.number,
-                maxLength: 4,
-                style: const TextStyle(color: AppColors.branco),
-                decoration: const InputDecoration(
-                  labelText: 'Últimos 4 dígitos',
-                  hintText: '0000',
-                  prefixIcon: Icon(Icons.tag, color: AppColors.verdeMedio),
-                  counterText: '',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) return 'Obrigatório';
-                  if (value.length != 4) return 'Deve ter 4 dígitos';
-                  return null;
-                },
-              ),
+               TextFormField(
+                 controller: _finalController,
+                 autofocus: false,
+                 keyboardType: TextInputType.number,
+                 maxLength: 4,
+                 style: const TextStyle(color: AppColors.branco),
+                 decoration: const InputDecoration(
+                   labelText: 'Últimos 4 dígitos',
+                   hintText: '0000',
+                   prefixIcon: Icon(Icons.tag, color: AppColors.verdeMedio),
+                   counterText: '',
+                 ),
+                 validator: (value) {
+                   if (value == null || value.isEmpty) return 'Obrigatório';
+                   if (value.length != 4) return 'Deve ter 4 dígitos';
+                   return null;
+                 },
+               ),
               const SizedBox(height: 12),
-              TextFormField(
-                controller: _titularController,
-                textCapitalization: TextCapitalization.words,
-                style: const TextStyle(color: AppColors.branco),
-                decoration: const InputDecoration(
-                  labelText: 'Nome do titular',
-                  prefixIcon: Icon(
-                    Icons.person_outline,
-                    color: AppColors.verdeMedio,
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty)
-                    return 'Obrigatório';
-                  return null;
-                },
-              ),
+               TextFormField(
+                 controller: _titularController,
+                 autofocus: false,
+                 textCapitalization: TextCapitalization.words,
+                 style: const TextStyle(color: AppColors.branco),
+                 decoration: const InputDecoration(
+                   labelText: 'Nome do titular',
+                   prefixIcon: Icon(
+                     Icons.person_outline,
+                     color: AppColors.verdeMedio,
+                   ),
+                 ),
+                 validator: (value) {
+                   if (value == null || value.trim().isEmpty)
+                     return 'Obrigatório';
+                   return null;
+                 },
+               ),
               const SizedBox(height: 12),
-              TextFormField(
-                controller: _limiteController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [const CurrencyInputFormatter()],
-                style: const TextStyle(color: AppColors.branco),
-                decoration: const InputDecoration(
-                  labelText: 'Limite disponível',
-                  hintText: 'R\$ 0,00',
-                  prefixText: 'R\$ ',
-                  prefixIcon: Icon(
-                    Icons.attach_money_rounded,
-                    color: AppColors.verdeMedio,
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) return 'Obrigatório';
-                  return null;
-                },
-              ),
+               TextFormField(
+                 controller: _limiteController,
+                 autofocus: false,
+                 keyboardType: TextInputType.number,
+                 style: const TextStyle(color: AppColors.branco),
+                 decoration: const InputDecoration(
+                   labelText: 'Limite disponível',
+                   hintText: 'R\$ 0,00',
+                   prefixText: 'R\$ ',
+                   prefixIcon: Icon(
+                     Icons.attach_money_rounded,
+                     color: AppColors.verdeMedio,
+                   ),
+                 ),
+                 validator: (value) {
+                   if (value == null || value.isEmpty) return 'Obrigatório';
+                   return null;
+                 },
+               ),
               const SizedBox(height: 12),
               Row(
                 children: [
