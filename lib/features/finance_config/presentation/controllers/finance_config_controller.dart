@@ -48,6 +48,11 @@ class FinanceConfigController extends ChangeNotifier {
     required double monthlyIncome,
     required double spendingLimit,
     required double savingsGoal,
+    required double emergencyFundGoal,
+    String? type,
+    double? cashBalance,
+    int? salaryDay,
+    int? paymentDay,
   }) async {
     _status = FinanceConfigStatus.loading;
     _errorMessage = null;
@@ -57,6 +62,11 @@ class FinanceConfigController extends ChangeNotifier {
       monthlyIncome: monthlyIncome,
       spendingLimit: spendingLimit,
       savingsGoal: savingsGoal,
+      emergencyFundGoal: emergencyFundGoal,
+      type: type,
+      cashBalance: cashBalance,
+      salaryDay: salaryDay,
+      paymentDay: paymentDay,
     );
 
     return result.fold(

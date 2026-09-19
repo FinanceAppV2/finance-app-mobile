@@ -24,12 +24,22 @@ class FinanceConfigRepositoryImpl implements FinanceConfigRepository {
     required double monthlyIncome,
     required double spendingLimit,
     required double savingsGoal,
+    required double emergencyFundGoal,
+    String? type,
+    double? cashBalance,
+    int? salaryDay,
+    int? paymentDay,
   }) async {
     try {
       final model = await _remoteDatasource.updateFinanceConfig(
         monthlyIncome: monthlyIncome,
         spendingLimit: spendingLimit,
         savingsGoal: savingsGoal,
+        emergencyFundGoal: emergencyFundGoal,
+        type: type,
+        cashBalance: cashBalance,
+        salaryDay: salaryDay,
+        paymentDay: paymentDay,
       );
       return Right(model.toEntity());
     } catch (e) {

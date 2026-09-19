@@ -25,6 +25,11 @@ class FinanceConfigRemoteDatasource {
     required double monthlyIncome,
     required double spendingLimit,
     required double savingsGoal,
+    required double emergencyFundGoal,
+    String? type,
+    double? cashBalance,
+    int? salaryDay,
+    int? paymentDay,
   }) async {
     final userId = await _getUserId();
 
@@ -35,6 +40,11 @@ class FinanceConfigRemoteDatasource {
           'monthlyIncome': monthlyIncome,
           'spendingLimitMonthly': spendingLimit,
           'savingsGoalMonthly': savingsGoal,
+          'emergencyFundGoal': emergencyFundGoal,
+          'type': type,
+          'cashBalance': cashBalance,
+          'salaryDay': salaryDay,
+          'paymentDay': paymentDay,
         },
       );
       return FinanceConfigModel.fromJson(response.data as Map<String, dynamic>);

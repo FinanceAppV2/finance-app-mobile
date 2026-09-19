@@ -8,5 +8,10 @@ abstract class FinanceConfigRepository {
     required double monthlyIncome,
     required double spendingLimit,
     required double savingsGoal,
+    required double emergencyFundGoal,
+    String? type,
+    double? cashBalance,
+    int? salaryDay,
+    int? paymentDay,
   });
 }
