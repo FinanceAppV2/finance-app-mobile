@@ -10,28 +10,38 @@ class FinanceConfigRepositoryImpl implements FinanceConfigRepository {
   FinanceConfigRepositoryImpl(this._remoteDatasource);
 
   @override
-  Future<Either<String, FinanceConfig>> getFinanceConfig() async {
+  Future<Either<String, List<FinanceConfig>>> getFinanceConfig() async {
     try {
-      final model = await _remoteDatasource.getFinanceConfig();
-      return Right(model.toEntity());
+      final models = await _remoteDatasource.getFinanceConfig();
+      return Right(models.map((m) => m.toEntity()).toList());
     } catch (e) {
       return Left('Erro ao carregar configuração financeira: $e');
     }
   }
 
   @override
-  Future<Either<String, FinanceConfig>> updateFinanceConfig({
+  Future<Either<String, List<FinanceConfig>>> updateFinanceConfig({
     required double monthlyIncome,
     required double spendingLimit,
     required double savingsGoal,
+    required double emergencyFundGoal,
+    String? type,
+    double? cashBalance,
+    int? salaryDay,
+    int? paymentDay,
   }) async {
     try {
-      final model = await _remoteDatasource.updateFinanceConfig(
+      final models = await _remoteDatasource.updateFinanceConfig(
         monthlyIncome: monthlyIncome,
         spendingLimit: spendingLimit,
         savingsGoal: savingsGoal,
+        emergencyFundGoal: emergencyFundGoal,
+        type: type,
+        cashBalance: cashBalance,
+        salaryDay: salaryDay,
+        paymentDay: paymentDay,
       );
-      return Right(model.toEntity());
+      return Right(models.map((m) => m.toEntity()).toList());
     } catch (e) {
       return Left('Erro ao atualizar configuração financeira: $e');
     }

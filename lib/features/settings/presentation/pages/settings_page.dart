@@ -112,11 +112,10 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.verdeEscuro,
-            borderRadius: BorderRadius.circular(12),
-          ),
+        Material(
+          color: AppColors.verdeEscuro,
+          borderRadius: BorderRadius.circular(12),
+          clipBehavior: Clip.antiAlias,
           child: Column(
             children: [
               for (int i = 0; i < children.length; i++) ...[
