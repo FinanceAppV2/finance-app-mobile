@@ -5,6 +5,9 @@ class ExpenseModel {
   final String category;
   final String paymentMethod;
   final String date;
+  final String? cardId;
+  final int? installments;
+  final String type;
 
   const ExpenseModel({
     required this.id,
@@ -13,6 +16,9 @@ class ExpenseModel {
     required this.category,
     required this.paymentMethod,
     required this.date,
+    this.cardId,
+    this.installments,
+    this.type = 'EXPENSE',
   });
 
   factory ExpenseModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +29,9 @@ class ExpenseModel {
       category: json['category'] as String,
       paymentMethod: json['paymentMethod'] as String,
       date: json['date'] as String,
+      cardId: json['cardId'] as String?,
+      installments: (json['installments'] as num?)?.toInt(),
+      type: json['type'] as String? ?? 'EXPENSE',
     );
   }
 }

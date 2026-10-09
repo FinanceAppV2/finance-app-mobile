@@ -336,7 +336,7 @@ class _ExpenseTileState extends State<ExpenseTile>
       ),
     );
 
-    if (widget.isFixed) return tile;
+    if (widget.onEdit == null && widget.onDelete == null) return tile;
 
     return Dismissible(
       key: ValueKey('expense_${widget.expense.id}'),
@@ -349,8 +349,8 @@ class _ExpenseTileState extends State<ExpenseTile>
           ),
           borderRadius: BorderRadius.circular(14),
         ),
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 24),
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.only(left: 24),
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -371,12 +371,12 @@ class _ExpenseTileState extends State<ExpenseTile>
         margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.error, AppColors.error.withValues(alpha: 0.7)],
+            colors: [AppColors.error.withValues(alpha: 0.7), AppColors.error],
           ),
           borderRadius: BorderRadius.circular(14),
         ),
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.only(left: 24),
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 24),
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -394,7 +394,7 @@ class _ExpenseTileState extends State<ExpenseTile>
         ),
       ),
       confirmDismiss: (direction) async {
-        if (direction == DismissDirection.endToStart) {
+        if (direction == DismissDirection.startToEnd) {
           widget.onEdit?.call();
         } else {
           widget.onDelete?.call();

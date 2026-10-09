@@ -44,9 +44,13 @@ class HomeRemoteDatasource {
     return list.map((e) => ExpenseModel.fromJson(e)).toList();
   }
 
+  Future<ExpenseModel> getExpenseById(String id) async {
+    final response = await _dio.get('/expenses/$id');
+    return ExpenseModel.fromJson(response.data as Map<String, dynamic>);
+  }
+
   Future<void> deleteExpense(String id) async {
-    final userId = await _getUserId();
-    await _dio.delete('/users/$userId/expenses/$id');
+    await _dio.delete('/expenses/$id');
   }
 
   Future<void> updateExpense({
@@ -59,7 +63,6 @@ class HomeRemoteDatasource {
     String? cardId,
     int? installments,
   }) async {
-    final userId = await _getUserId();
     final data = <String, dynamic>{
       'description': description,
       'value': value,
@@ -69,7 +72,7 @@ class HomeRemoteDatasource {
     };
     if (cardId != null) data['cardId'] = cardId;
     if (installments != null) data['installments'] = installments;
-    await _dio.put('/users/$userId/expenses/$id', data: data);
+    await _dio.put('/expenses/$id', data: data);
   }
 
   Future<SalaryCycleModel> getCurrentSalaryCycle({String? date}) async {

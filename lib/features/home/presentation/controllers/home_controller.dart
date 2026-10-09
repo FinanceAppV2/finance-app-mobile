@@ -6,6 +6,7 @@ import '../../domain/entities/monthly_summary.dart';
 import '../../domain/entities/salary_cycle.dart';
 import '../../domain/usecases/get_monthly_summary_usecase.dart';
 import '../../domain/usecases/get_recent_expenses_usecase.dart';
+import '../../domain/usecases/get_expense_by_id_usecase.dart';
 import '../../domain/usecases/delete_expense_usecase.dart';
 import '../../domain/usecases/update_expense_usecase.dart';
 import '../../domain/usecases/get_current_salary_cycle_usecase.dart';
@@ -17,6 +18,7 @@ class HomeController extends ChangeNotifier {
   final GetMonthlySummaryUseCase _getMonthlySummaryUseCase;
   final GetRecentExpensesUseCase _getRecentExpensesUseCase;
   final GetFixedExpensesUseCase _getFixedExpensesUseCase;
+  final GetExpenseByIdUseCase _getExpenseByIdUseCase;
   final DeleteExpenseUseCase _deleteExpenseUseCase;
   final UpdateExpenseUseCase _updateExpenseUseCase;
   final GetCurrentSalaryCycleUseCase _getCurrentSalaryCycleUseCase;
@@ -33,6 +35,7 @@ class HomeController extends ChangeNotifier {
     this._getMonthlySummaryUseCase,
     this._getRecentExpensesUseCase,
     this._getFixedExpensesUseCase,
+    this._getExpenseByIdUseCase,
     this._deleteExpenseUseCase,
     this._updateExpenseUseCase,
     this._getCurrentSalaryCycleUseCase,
@@ -94,6 +97,14 @@ class HomeController extends ChangeNotifier {
           },
         );
       },
+    );
+  }
+
+  Future<Expense?> getExpenseById(String id) async {
+    final result = await _getExpenseByIdUseCase.execute(id);
+    return result.fold(
+      (_) => null,
+      (expense) => expense,
     );
   }
 

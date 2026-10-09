@@ -27,6 +27,7 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
   late String _selectedPaymentMethod;
   late DateTime _selectedDate;
   bool _isLoading = false;
+  bool _expenseLoading = true;
 
   List<CreditCard> _cards = [];
   String? _selectedCardId;
@@ -75,14 +76,47 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
   @override
   void initState() {
     super.initState();
-    _descriptionController.text = widget.expense.description;
-    final value = widget.expense.value;
-    _valueController.text = CurrencyInputFormatter.format(value);
-    _selectedCategory = widget.expense.category;
-    _selectedPaymentMethod = widget.expense.paymentMethod;
-    final rawDate = widget.expense.date.contains('T')
-        ? widget.expense.date.split('T')[0]
-        : widget.expense.date;
+    _loadExpense();
+  }
+
+  // A listagem do mês devolve compras parceladas com o valor da parcela e a
+  // descrição "X - parcela N/M", então o formulário é preenchido com o
+  // registro original para não sobrescrever o valor total.
+  Future<void> _loadExpense() async {
+    final controller = GetIt.instance<HomeController>();
+    final expense = await controller.getExpenseById(widget.expense.id);
+
+    if (!mounted) return;
+
+    if (expense == null) {
+      final messenger = ScaffoldMessenger.of(context);
+      Navigator.pop(context);
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Erro ao carregar despesa'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _fillForm(expense);
+      _expenseLoading = false;
+    });
+    await _loadCards();
+  }
+
+  void _fillForm(Expense expense) {
+    _descriptionController.text = expense.description;
+    _valueController.text = CurrencyInputFormatter.format(expense.value);
+    _selectedCategory = expense.category;
+    _selectedPaymentMethod = expense.paymentMethod;
+    _selectedCardId = expense.cardId;
+    _installmentsController.text = (expense.installments ?? 1).toString();
+    final rawDate = expense.date.contains('T')
+        ? expense.date.split('T')[0]
+        : expense.date;
     final parts = rawDate.split('-');
     _selectedDate = parts.length == 3
         ? DateTime(
@@ -91,7 +125,6 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
             int.parse(parts[2]),
           )
         : DateTime.now();
-    _loadCards();
   }
 
   @override
@@ -110,7 +143,12 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
       result.fold((_) {}, (cards) {
         if (mounted) {
           setState(() {
-            _cards = cards.where((c) => c.ativo).toList();
+            _cards = cards
+                .where((c) => c.ativo || c.id == _selectedCardId)
+                .toList();
+            if (!_cards.any((c) => c.id == _selectedCardId)) {
+              _selectedCardId = null;
+            }
           });
         }
       });
@@ -168,9 +206,11 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
       paymentMethod: _selectedPaymentMethod,
       date: _selectedDate,
       cardId: _selectedPaymentMethod == 'CREDIT_CARD' ? _selectedCardId : null,
+      // A API ignora `installments: null` no update; enviar 1 garante que uma
+      // compra que deixou de ser no crédito não continue parcelada.
       installments: _selectedPaymentMethod == 'CREDIT_CARD'
           ? int.tryParse(_installmentsController.text)
-          : null,
+          : 1,
     );
 
     if (!mounted) return;
@@ -197,6 +237,29 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
 
   @override
   Widget build(BuildContext context) {
+    if (_expenseLoading) {
+      return Container(
+        decoration: const BoxDecoration(
+          color: AppColors.superficie,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildHeader(),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: Center(
+                child: CircularProgressIndicator(color: AppColors.latao),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Container(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -213,23 +276,7 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Editar Despesa',
-                    style: TextStyle(
-                      color: AppColors.marfim,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: AppColors.cinza),
-                  ),
-                ],
-              ),
+              _buildHeader(),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
@@ -411,6 +458,26 @@ class _EditExpenseSheetState extends State<EditExpenseSheet> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text(
+          'Editar Despesa',
+          style: TextStyle(
+            color: AppColors.marfim,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.close, color: AppColors.cinza),
+        ),
+      ],
     );
   }
 

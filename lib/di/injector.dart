@@ -27,6 +27,7 @@ import 'package:finance_app_mobile/features/home/domain/repositories/home_reposi
 import 'package:finance_app_mobile/features/home/domain/usecases/get_monthly_summary_usecase.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/get_recent_expenses_usecase.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/get_current_salary_cycle_usecase.dart';
+import 'package:finance_app_mobile/features/home/domain/usecases/get_expense_by_id_usecase.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/delete_expense_usecase.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/update_expense_usecase.dart';
 import 'package:finance_app_mobile/features/home/presentation/controllers/home_controller.dart';
@@ -174,6 +175,11 @@ Future<void> initializeDependencies() async {
       () => GetRecentExpensesUseCase(injector<HomeRepository>()),
     );
   }
+  if (!injector.isRegistered<GetExpenseByIdUseCase>()) {
+    injector.registerLazySingleton<GetExpenseByIdUseCase>(
+      () => GetExpenseByIdUseCase(injector<HomeRepository>()),
+    );
+  }
   if (!injector.isRegistered<DeleteExpenseUseCase>()) {
     injector.registerLazySingleton<DeleteExpenseUseCase>(
       () => DeleteExpenseUseCase(injector<HomeRepository>()),
@@ -195,6 +201,7 @@ Future<void> initializeDependencies() async {
         injector<GetMonthlySummaryUseCase>(),
         injector<GetRecentExpensesUseCase>(),
         injector<GetFixedExpensesUseCase>(),
+        injector<GetExpenseByIdUseCase>(),
         injector<DeleteExpenseUseCase>(),
         injector<UpdateExpenseUseCase>(),
         injector<GetCurrentSalaryCycleUseCase>(),

@@ -123,13 +123,20 @@ class _HomePageState extends State<HomePage> with RouteAware {
   }
 
   Future<void> _onDeleteExpense(Expense expense) async {
+    final installments = expense.installments ?? 1;
+    final message = installments > 1
+        ? 'Deseja excluir "${expense.description}"?\n\n'
+            'Esta compra é parcelada em ${installments}x. '
+            'Todas as parcelas serão excluídas.'
+        : 'Deseja excluir "${expense.description}"?';
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.superficie,
         title: const Text('Excluir despesa', style: TextStyle(color: AppColors.marfim)),
         content: Text(
-          'Deseja excluir "${expense.description}"?',
+          message,
           style: const TextStyle(color: AppColors.cinza),
         ),
         actions: [
@@ -302,11 +309,12 @@ class _HomePageState extends State<HomePage> with RouteAware {
             ..._filteredExpenses.map(
               (expense) {
                 final isFixed = expense.id.startsWith('fixed_');
+                final isEditable = !isFixed && !expense.isLoanInstallment;
                 return ExpenseTile(
                   expense: expense,
                   isFixed: isFixed,
-                  onEdit: isFixed ? null : () => _onEditExpense(expense),
-                  onDelete: isFixed ? null : () => _onDeleteExpense(expense),
+                  onEdit: isEditable ? () => _onEditExpense(expense) : null,
+                  onDelete: isEditable ? () => _onDeleteExpense(expense) : null,
                 );
               },
             ),
