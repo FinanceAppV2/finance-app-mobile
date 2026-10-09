@@ -3,8 +3,10 @@ default_platform(:android)
 platform :android do
   desc "Build and deploy the Android app to the Play Store (internal track)"
   lane :deploy do
+    build_number = ENV["GITHUB_RUN_NUMBER"] || "1"
+
     Dir.chdir("..") do
-      sh("flutter", "build", "appbundle", "--release")
+      sh("flutter", "build", "appbundle", "--release", "--build-number=#{build_number}")
     end
 
     upload_to_play_store(
