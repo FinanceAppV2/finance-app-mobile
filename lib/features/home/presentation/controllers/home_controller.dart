@@ -3,10 +3,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../domain/entities/expense.dart';
 import '../../domain/entities/monthly_summary.dart';
+import '../../domain/entities/salary_cycle.dart';
 import '../../domain/usecases/get_monthly_summary_usecase.dart';
 import '../../domain/usecases/get_recent_expenses_usecase.dart';
 import '../../domain/usecases/delete_expense_usecase.dart';
 import '../../domain/usecases/update_expense_usecase.dart';
+import '../../domain/usecases/get_current_salary_cycle_usecase.dart';
 import '../../../fixed_expenses/domain/usecases/get_fixed_expenses_usecase.dart';
 
 enum HomeStatus { initial, loading, success, error }
@@ -17,10 +19,12 @@ class HomeController extends ChangeNotifier {
   final GetFixedExpensesUseCase _getFixedExpensesUseCase;
   final DeleteExpenseUseCase _deleteExpenseUseCase;
   final UpdateExpenseUseCase _updateExpenseUseCase;
+  final GetCurrentSalaryCycleUseCase _getCurrentSalaryCycleUseCase;
   final FlutterSecureStorage _storage;
 
   HomeStatus _status = HomeStatus.initial;
   MonthlySummary? _summary;
+  SalaryCycle? _salaryCycle;
   List<Expense> _expenses = [];
   String? _userName;
   String? _errorMessage;
@@ -31,11 +35,13 @@ class HomeController extends ChangeNotifier {
     this._getFixedExpensesUseCase,
     this._deleteExpenseUseCase,
     this._updateExpenseUseCase,
+    this._getCurrentSalaryCycleUseCase,
     this._storage,
   );
 
   HomeStatus get status => _status;
   MonthlySummary? get summary => _summary;
+  SalaryCycle? get salaryCycle => _salaryCycle;
   List<Expense> get expenses => _expenses;
   String? get userName => _userName;
   String? get errorMessage => _errorMessage;
@@ -54,6 +60,9 @@ class HomeController extends ChangeNotifier {
     final summaryResult = await _getMonthlySummaryUseCase.execute(month: m, year: y);
     final expensesResult = await _getRecentExpensesUseCase.execute(month: m, year: y);
     final fixedResult = await _getFixedExpensesUseCase.execute();
+    final cycleResult = await _getCurrentSalaryCycleUseCase.execute();
+
+    cycleResult.fold((_) => null, (cycle) => _salaryCycle = cycle);
 
     summaryResult.fold(
       (error) {

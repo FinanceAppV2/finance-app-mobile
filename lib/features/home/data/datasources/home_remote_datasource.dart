@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/expense_model.dart';
 import '../models/monthly_summary_model.dart';
+import '../models/salary_cycle_model.dart';
 
 class HomeRemoteDatasource {
   final Dio _dio;
@@ -69,5 +70,16 @@ class HomeRemoteDatasource {
     if (cardId != null) data['cardId'] = cardId;
     if (installments != null) data['installments'] = installments;
     await _dio.put('/users/$userId/expenses/$id', data: data);
+  }
+
+  Future<SalaryCycleModel> getCurrentSalaryCycle({String? date}) async {
+    final userId = await _getUserId();
+    final params = <String, dynamic>{};
+    if (date != null) params['date'] = date;
+    final response = await _dio.get(
+      '/users/$userId/salary-cycle/current',
+      queryParameters: params.isNotEmpty ? params : null,
+    );
+    return SalaryCycleModel.fromJson(response.data as Map<String, dynamic>);
   }
 }

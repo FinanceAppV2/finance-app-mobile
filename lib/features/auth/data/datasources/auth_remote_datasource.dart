@@ -13,7 +13,7 @@ class AuthRemoteDataSource {
     required String password,
   }) async {
     final response = await _dio.post('/auth/login', data: {
-      'login': login,
+      'login': login.toLowerCase(),
       'password': password,
     });
 

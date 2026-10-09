@@ -2,6 +2,7 @@ import 'package:fpdart/fpdart.dart';
 
 import '../entities/expense.dart';
 import '../entities/monthly_summary.dart';
+import '../entities/salary_cycle.dart';
 
 abstract class HomeRepository {
   Future<Either<String, MonthlySummary>> getMonthlySummary({int? month, int? year});
@@ -17,4 +18,5 @@ abstract class HomeRepository {
     String? cardId,
     int? installments,
   });
+  Future<Either<String, SalaryCycle>> getCurrentSalaryCycle({String? date});
 }

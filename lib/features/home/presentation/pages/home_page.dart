@@ -16,7 +16,9 @@ import '../widgets/expense_tile.dart';
 import '../widgets/expenses_header.dart';
 import '../widgets/floating_bottom_nav.dart';
 import '../widgets/home_header.dart';
+import '../widgets/daily_budget_card.dart';
 import '../widgets/filter_bottom_sheet.dart';
+import '../widgets/salary_cycle_card.dart';
 import '../widgets/summary_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -284,6 +286,12 @@ class _HomePageState extends State<HomePage> with RouteAware {
           children: [
             if (_controller.summary != null)
               SummaryCard(summary: _controller.summary!),
+            if (_controller.salaryCycle != null) ...[
+              const SizedBox(height: 14),
+              SalaryCycleCard(cycle: _controller.salaryCycle!),
+              const SizedBox(height: 14),
+              DailyBudgetCard(cycle: _controller.salaryCycle!),
+            ],
             const SizedBox(height: 36),
             ExpensesHeader(
               title: 'Gastos do mês',
