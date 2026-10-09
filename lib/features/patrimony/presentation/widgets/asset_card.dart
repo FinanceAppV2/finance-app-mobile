@@ -35,11 +35,11 @@ class AssetCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isProfit
-              ? AppColors.verdeMedio.withValues(alpha: 0.5)
+              ? AppColors.latao.withValues(alpha: 0.5)
               : AppColors.error.withValues(alpha: 0.3),
         ),
       ),
@@ -55,12 +55,12 @@ class AssetCard extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: AppColors.verdeMedio.withValues(alpha: 0.3),
+                      color: AppColors.latao.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
                       _typeIcon(),
-                      color: AppColors.verdeDestaque,
+                      color: AppColors.lataoClaro,
                       size: 22,
                     ),
                   ),
@@ -71,7 +71,7 @@ class AssetCard extends StatelessWidget {
                       Text(
                         asset.name,
                         style: const TextStyle(
-                          color: AppColors.branco,
+                          color: AppColors.marfim,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -80,7 +80,7 @@ class AssetCard extends StatelessWidget {
                         Text(
                           asset.ticker!,
                           style: TextStyle(
-                            color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                            color: AppColors.cinza.withValues(alpha: 0.7),
                             fontSize: 12,
                           ),
                         ),
@@ -89,10 +89,10 @@ class AssetCard extends StatelessWidget {
                 ],
               ),
               PopupMenuButton<String>(
-                color: AppColors.verdeEscuro,
+                color: AppColors.superficie,
                 icon: Icon(
                   Icons.more_vert,
-                  color: AppColors.branco.withValues(alpha: 0.7),
+                  color: AppColors.marfim.withValues(alpha: 0.7),
                   size: 20,
                 ),
                 onSelected: (value) {
@@ -104,9 +104,9 @@ class AssetCard extends StatelessWidget {
                     value: 'edit',
                     child: Row(
                       children: [
-                        Icon(Icons.edit_rounded, size: 18, color: AppColors.branco),
+                        Icon(Icons.edit_rounded, size: 18, color: AppColors.marfim),
                         SizedBox(width: 8),
-                        Text('Editar', style: TextStyle(color: AppColors.branco)),
+                        Text('Editar', style: TextStyle(color: AppColors.marfim)),
                       ],
                     ),
                   ),
@@ -172,7 +172,7 @@ class AssetCard extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+            color: AppColors.cinza.withValues(alpha: 0.7),
             fontSize: 11,
           ),
         ),
@@ -180,7 +180,7 @@ class AssetCard extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            color: color ?? AppColors.branco,
+            color: color ?? AppColors.marfim,
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -193,13 +193,13 @@ class AssetCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColors.verdeMedio.withValues(alpha: 0.3),
+        color: AppColors.latao.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+          color: AppColors.cinza.withValues(alpha: 0.8),
           fontSize: 11,
         ),
       ),

@@ -159,7 +159,7 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       decoration: const BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: SingleChildScrollView(
@@ -176,27 +176,27 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
                   const Text(
                     'Nova Despesa Fixa',
                     style: TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: AppColors.cinzaClaro),
+                    icon: const Icon(Icons.close, color: AppColors.cinza),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                   hintText: 'Ex: Aluguel',
                   prefixIcon: Icon(
                     Icons.description_outlined,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.cinza,
                   ),
                 ),
                 validator: (value) {
@@ -211,14 +211,14 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
                 controller: _valueController,
                 keyboardType: TextInputType.number,
                 inputFormatters: [const CurrencyInputFormatter()],
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Valor',
                   hintText: 'R\$ 0,00',
                   prefixText: 'R\$ ',
                   prefixIcon: Icon(
                     Icons.attach_money_rounded,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.cinza,
                   ),
                 ),
                 validator: (value) {
@@ -236,13 +236,13 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(2),
                 ],
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Dia de vencimento',
                   hintText: 'Ex: 10',
                   prefixIcon: Icon(
                     Icons.calendar_today_rounded,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.cinza,
                   ),
                 ),
                 validator: (value) {
@@ -259,13 +259,13 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 initialValue: _selectedCategory,
-                dropdownColor: AppColors.verdeEscuro,
-                style: const TextStyle(color: AppColors.branco),
+                dropdownColor: AppColors.superficie,
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Categoria',
                   prefixIcon: Icon(
                     Icons.category_outlined,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.cinza,
                   ),
                 ),
                 items: _categories.map((cat) {
@@ -276,7 +276,7 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
                         Icon(
                           cat['icon'] as IconData,
                           size: 18,
-                          color: AppColors.verdeMedio,
+                          color: AppColors.latao,
                         ),
                         const SizedBox(width: 8),
                         Text(cat['label'] as String),
@@ -293,13 +293,13 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 initialValue: _selectedPaymentMethod,
-                dropdownColor: AppColors.verdeEscuro,
-                style: const TextStyle(color: AppColors.branco),
+                dropdownColor: AppColors.superficie,
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Forma de pagamento',
                   prefixIcon: Icon(
                     Icons.payment_outlined,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.cinza,
                   ),
                 ),
                 items: _paymentMethods.map((method) {
@@ -361,7 +361,7 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
           labelText: 'Cartão de crédito',
           prefixIcon: Icon(
             Icons.credit_card_rounded,
-            color: AppColors.verdeMedio,
+            color: AppColors.cinza,
           ),
         ),
         child: SizedBox(
@@ -369,7 +369,7 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
           height: 20,
           child: CircularProgressIndicator(
             strokeWidth: 2,
-            color: AppColors.verdeMedio,
+            color: AppColors.latao,
           ),
         ),
       );
@@ -381,12 +381,12 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
           labelText: 'Cartão de crédito',
           prefixIcon: Icon(
             Icons.credit_card_rounded,
-            color: AppColors.verdeMedio,
+            color: AppColors.cinza,
           ),
         ),
         child: Text(
           'Nenhum cartão cadastrado',
-          style: TextStyle(color: AppColors.cinzaClaro.withValues(alpha: 0.7)),
+          style: TextStyle(color: AppColors.cinza.withValues(alpha: 0.7)),
         ),
       );
     }
@@ -397,13 +397,13 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
 
     return DropdownButtonFormField<String>(
       initialValue: validId,
-      dropdownColor: AppColors.verdeEscuro,
-      style: const TextStyle(color: AppColors.branco),
+      dropdownColor: AppColors.superficie,
+      style: const TextStyle(color: AppColors.marfim),
       decoration: const InputDecoration(
         labelText: 'Cartão de crédito',
         prefixIcon: Icon(
           Icons.credit_card_rounded,
-          color: AppColors.verdeMedio,
+          color: AppColors.cinza,
         ),
       ),
       items: _cards.map((card) {
@@ -421,7 +421,7 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
                 ),
                 child: const Icon(
                   Icons.credit_card,
-                  color: AppColors.branco,
+                  color: AppColors.marfim,
                   size: 14,
                 ),
               ),
@@ -446,7 +446,7 @@ class _AddFixedExpenseSheetState extends State<AddFixedExpenseSheet> {
   Color _hexToColor(String hex) {
     final normalizedHex = hex.trim().replaceFirst('#', '');
     if (!RegExp(r'^[0-9A-Fa-f]{6}$').hasMatch(normalizedHex)) {
-      return AppColors.verdeMedio;
+      return AppColors.latao;
     }
 
     return Color(int.parse('FF$normalizedHex', radix: 16));

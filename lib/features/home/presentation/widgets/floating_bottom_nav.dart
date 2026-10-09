@@ -35,10 +35,10 @@ class FloatingBottomNav extends StatelessWidget {
           child: Container(
             height: 56,
             decoration: BoxDecoration(
-              color: AppColors.verdeEscuro.withValues(alpha: 0.65),
+              color: AppColors.superficie.withValues(alpha: 0.65),
               borderRadius: BorderRadius.circular(28),
               border: Border.all(
-                color: AppColors.verdeMedio.withValues(alpha: 0.3),
+                color: AppColors.latao.withValues(alpha: 0.3),
                 width: 0.5,
               ),
             ),
@@ -54,11 +54,11 @@ class FloatingBottomNav extends StatelessWidget {
                       width: 40,
                       height: 40,
                       decoration: const BoxDecoration(
-                        color: AppColors.verdeDestaque,
+                        color: AppColors.lataoClaro,
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.verdeDestaque,
+                            color: AppColors.lataoClaro,
                             blurRadius: 10,
                             offset: Offset(0, 3),
                           ),
@@ -81,7 +81,7 @@ class FloatingBottomNav extends StatelessWidget {
                     width: 36,
                     child: Icon(
                       _icons[index],
-                      color: isSelected ? AppColors.verdeDestaque : AppColors.cinzaClaro,
+                      color: isSelected ? AppColors.lataoClaro : AppColors.cinza,
                       size: 22,
                     ),
                   ),

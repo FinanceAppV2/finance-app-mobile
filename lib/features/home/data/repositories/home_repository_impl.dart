@@ -34,6 +34,16 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
+  Future<Either<String, Expense>> getExpenseById(String id) async {
+    try {
+      final model = await _remoteDataSource.getExpenseById(id);
+      return Right(_toExpenseEntity(model));
+    } catch (e) {
+      return Left('Erro ao carregar despesa: $e');
+    }
+  }
+
+  @override
   Future<Either<String, Unit>> deleteExpense(String id) async {
     try {
       await _remoteDataSource.deleteExpense(id);
@@ -90,6 +100,9 @@ class HomeRepositoryImpl implements HomeRepository {
       category: model.category,
       paymentMethod: model.paymentMethod,
       date: model.date,
+      cardId: model.cardId,
+      installments: model.installments,
+      type: model.type,
     );
   }
 

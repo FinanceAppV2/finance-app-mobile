@@ -74,7 +74,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       decoration: const BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: SingleChildScrollView(
@@ -89,7 +89,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 const Text(
                   'Filtros',
                   style: TextStyle(
-                    color: AppColors.branco,
+                    color: AppColors.marfim,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -98,7 +98,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   onPressed: _clearFilters,
                   child: const Text(
                     'Limpar',
-                    style: TextStyle(color: AppColors.verdeDestaque),
+                    style: TextStyle(color: AppColors.lataoClaro),
                   ),
                 ),
               ],
@@ -107,7 +107,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             const Text(
               'Mês',
               style: TextStyle(
-                color: AppColors.branco,
+                color: AppColors.marfim,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -129,8 +129,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? AppColors.verdeDestaque
-                          : AppColors.verdeMedio.withValues(alpha: 0.3),
+                          ? AppColors.lataoClaro
+                          : AppColors.latao.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
@@ -138,7 +138,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       style: TextStyle(
                         color: isSelected
                             ? AppColors.background
-                            : AppColors.cinzaClaro,
+                            : AppColors.cinza,
                         fontSize: 13,
                         fontWeight:
                             isSelected ? FontWeight.w700 : FontWeight.w500,
@@ -152,7 +152,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             const Text(
               'Ano',
               style: TextStyle(
-                color: AppColors.branco,
+                color: AppColors.marfim,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -173,16 +173,16 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? AppColors.verdePrincipal
-                          : AppColors.verdeMedio.withValues(alpha: 0.3),
+                          ? AppColors.latao
+                          : AppColors.latao.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       '$year',
                       style: TextStyle(
                         color: isSelected
-                            ? AppColors.branco
-                            : AppColors.cinzaClaro,
+                            ? AppColors.marfim
+                            : AppColors.cinza,
                         fontSize: 13,
                         fontWeight:
                             isSelected ? FontWeight.w700 : FontWeight.w500,
@@ -196,7 +196,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             const Text(
               'Categoria',
               style: TextStyle(
-                color: AppColors.branco,
+                color: AppColors.marfim,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -221,8 +221,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? AppColors.verdeDestaque
-                          : AppColors.verdeMedio.withValues(alpha: 0.3),
+                          ? AppColors.lataoClaro
+                          : AppColors.latao.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -233,7 +233,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           size: 16,
                           color: isSelected
                               ? AppColors.background
-                              : AppColors.cinzaClaro,
+                              : AppColors.cinza,
                         ),
                         const SizedBox(width: 6),
                         Text(
@@ -241,7 +241,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           style: TextStyle(
                             color: isSelected
                                 ? AppColors.background
-                                : AppColors.cinzaClaro,
+                                : AppColors.cinza,
                             fontSize: 13,
                             fontWeight:
                                 isSelected ? FontWeight.w700 : FontWeight.w500,
@@ -257,7 +257,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             const Text(
               'Forma de pagamento',
               style: TextStyle(
-                color: AppColors.branco,
+                color: AppColors.marfim,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -283,8 +283,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? AppColors.verdeDestaque
-                          : AppColors.verdeMedio.withValues(alpha: 0.3),
+                          ? AppColors.lataoClaro
+                          : AppColors.latao.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -295,7 +295,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           size: 16,
                           color: isSelected
                               ? AppColors.background
-                              : AppColors.cinzaClaro,
+                              : AppColors.cinza,
                         ),
                         const SizedBox(width: 6),
                         Text(
@@ -303,7 +303,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           style: TextStyle(
                             color: isSelected
                                 ? AppColors.background
-                                : AppColors.cinzaClaro,
+                                : AppColors.cinza,
                             fontSize: 13,
                             fontWeight:
                                 isSelected ? FontWeight.w700 : FontWeight.w500,

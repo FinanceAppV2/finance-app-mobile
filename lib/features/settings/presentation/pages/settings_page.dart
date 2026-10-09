@@ -111,7 +111,7 @@ class _SettingsPageState extends State<SettingsPage> {
         Text(
           title,
           style: TextStyle(
-            color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+            color: AppColors.cinza.withValues(alpha: 0.7),
             fontSize: 13,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,
@@ -119,7 +119,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         const SizedBox(height: 8),
         Material(
-          color: AppColors.verdeEscuro,
+          color: AppColors.superficie,
           borderRadius: BorderRadius.circular(12),
           clipBehavior: Clip.antiAlias,
           child: Column(
@@ -128,7 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 if (i > 0)
                   Divider(
                     height: 1,
-                    color: AppColors.cinzaEscuro.withValues(alpha: 0.3),
+                    color: AppColors.linha.withValues(alpha: 0.3),
                   ),
                 children[i],
               ],
@@ -143,21 +143,21 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.verdeEscuro,
+        backgroundColor: AppColors.superficie,
         title: const Text(
           'Sair da conta',
-          style: TextStyle(color: AppColors.branco),
+          style: TextStyle(color: AppColors.marfim),
         ),
         content: const Text(
           'Tem certeza que deseja sair?',
-          style: TextStyle(color: AppColors.cinzaClaro),
+          style: TextStyle(color: AppColors.cinza),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: const Text(
               'Cancelar',
-              style: TextStyle(color: AppColors.cinzaClaro),
+              style: TextStyle(color: AppColors.cinza),
             ),
           ),
           TextButton(
@@ -202,13 +202,13 @@ class _SettingsTile extends StatelessWidget {
     return ListTile(
       leading: Icon(
         icon,
-        color: iconColor ?? AppColors.verdeDestaque,
+        color: iconColor ?? AppColors.lataoClaro,
         size: 22,
       ),
       title: Text(
         label,
         style: TextStyle(
-          color: textColor ?? AppColors.branco,
+          color: textColor ?? AppColors.marfim,
           fontSize: 15,
           fontWeight: FontWeight.w500,
         ),
@@ -217,14 +217,14 @@ class _SettingsTile extends StatelessWidget {
           ? Text(
               subtitle!,
               style: TextStyle(
-                color: AppColors.cinzaClaro.withValues(alpha: 0.6),
+                color: AppColors.cinza.withValues(alpha: 0.6),
                 fontSize: 12,
               ),
             )
           : null,
       trailing: Icon(
         Icons.chevron_right_rounded,
-        color: AppColors.cinzaClaro.withValues(alpha: 0.5),
+        color: AppColors.cinza.withValues(alpha: 0.5),
         size: 20,
       ),
       onTap: onTap,
@@ -252,13 +252,13 @@ class _SettingsSwitch extends StatelessWidget {
     return SwitchListTile(
       secondary: Icon(
         icon,
-        color: AppColors.verdeDestaque,
+        color: AppColors.lataoClaro,
         size: 22,
       ),
       title: Text(
         label,
         style: const TextStyle(
-          color: AppColors.branco,
+          color: AppColors.marfim,
           fontSize: 15,
           fontWeight: FontWeight.w500,
         ),
@@ -267,14 +267,14 @@ class _SettingsSwitch extends StatelessWidget {
           ? Text(
               subtitle!,
               style: TextStyle(
-                color: AppColors.cinzaClaro.withValues(alpha: 0.6),
+                color: AppColors.cinza.withValues(alpha: 0.6),
                 fontSize: 12,
               ),
             )
           : null,
       value: value,
       onChanged: onChanged,
-      activeThumbColor: AppColors.verdeDestaque,
+      activeThumbColor: AppColors.lataoClaro,
     );
   }
 }

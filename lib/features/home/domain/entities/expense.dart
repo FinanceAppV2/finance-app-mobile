@@ -7,6 +7,9 @@ class Expense extends Equatable {
   final String category;
   final String paymentMethod;
   final String date;
+  final String? cardId;
+  final int? installments;
+  final String type;
 
   const Expense({
     required this.id,
@@ -15,8 +18,23 @@ class Expense extends Equatable {
     required this.category,
     required this.paymentMethod,
     required this.date,
+    this.cardId,
+    this.installments,
+    this.type = 'EXPENSE',
   });
 
+  bool get isLoanInstallment => type == 'LOAN_INSTALLMENT';
+
   @override
-  List<Object?> get props => [id, description, value, category, paymentMethod, date];
+  List<Object?> get props => [
+        id,
+        description,
+        value,
+        category,
+        paymentMethod,
+        date,
+        cardId,
+        installments,
+        type,
+      ];
 }

@@ -75,13 +75,13 @@ class _ReportsPageState extends State<ReportsPage> {
             children: [
               IconButton(
                 onPressed: () => _changeYear(-1),
-                icon: const Icon(Icons.chevron_left, color: AppColors.cinzaClaro),
+                icon: const Icon(Icons.chevron_left, color: AppColors.cinza),
               ),
               const SizedBox(width: 4),
               Text(
                 '$_selectedYear',
                 style: const TextStyle(
-                  color: AppColors.branco,
+                  color: AppColors.marfim,
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                 ),
@@ -89,13 +89,13 @@ class _ReportsPageState extends State<ReportsPage> {
               const SizedBox(width: 4),
               IconButton(
                 onPressed: () => _changeYear(1),
-                icon: const Icon(Icons.chevron_right, color: AppColors.cinzaClaro),
+                icon: const Icon(Icons.chevron_right, color: AppColors.cinza),
               ),
             ],
           ),
           IconButton(
             onPressed: _onOpenAi,
-            icon: const Icon(Icons.auto_awesome_rounded, color: AppColors.verdeDestaque),
+            icon: const Icon(Icons.auto_awesome_rounded, color: AppColors.lataoClaro),
             tooltip: 'Assistente IA',
           ),
         ],
@@ -115,7 +115,7 @@ class _ReportsPageState extends State<ReportsPage> {
   Widget _buildBody() {
     if (_controller.status == ReportsStatus.loading) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.verdeDestaque),
+        child: CircularProgressIndicator(color: AppColors.lataoClaro),
       );
     }
 
@@ -128,7 +128,7 @@ class _ReportsPageState extends State<ReportsPage> {
             const SizedBox(height: 16),
             Text(
               _controller.errorMessage ?? 'Erro ao carregar relatórios',
-              style: const TextStyle(color: AppColors.cinzaClaro),
+              style: const TextStyle(color: AppColors.cinza),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),

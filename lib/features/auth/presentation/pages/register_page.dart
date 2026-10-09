@@ -191,13 +191,13 @@ class _RegisterPageState extends State<RegisterPage> {
           width: 88,
           height: 88,
           decoration: BoxDecoration(
-            color: AppColors.verdeEscuro,
+            color: AppColors.superficie,
             shape: BoxShape.circle,
           ),
           child: const Icon(
             Icons.person_add_outlined,
             size: 44,
-            color: AppColors.verdeDestaque,
+            color: AppColors.lataoClaro,
           ),
         ),
         const SizedBox(height: 28),
@@ -211,7 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
         Text(
           'Preencha os dados para se cadastrar',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.cinzaClaro,
+                color: AppColors.cinza,
               ),
         ),
       ],
@@ -226,7 +226,7 @@ class _RegisterPageState extends State<RegisterPage> {
         Container(
           width: 48,
           height: 2,
-          color: _currentStep >= 1 ? AppColors.verdeDestaque : AppColors.cinzaEscuro,
+          color: _currentStep >= 1 ? AppColors.lataoClaro : AppColors.nevoa,
         ),
         _stepDot(1, 'Dados\nde acesso'),
       ],
@@ -243,7 +243,7 @@ class _RegisterPageState extends State<RegisterPage> {
           height: 36,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: active ? AppColors.verdeDestaque : AppColors.cinzaEscuro,
+            color: active ? AppColors.lataoClaro : AppColors.nevoa,
           ),
           child: Center(
             child: active
@@ -251,7 +251,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 : Text(
                     '${step + 1}',
                     style: const TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -263,7 +263,7 @@ class _RegisterPageState extends State<RegisterPage> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 11,
-            color: active ? AppColors.verdeDestaque : AppColors.cinzaEscuro,
+            color: active ? AppColors.lataoClaro : AppColors.nevoa,
             fontWeight: active ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
@@ -301,11 +301,11 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       controller: _nameController,
       textCapitalization: TextCapitalization.words,
-      style: const TextStyle(color: AppColors.branco),
+      style: const TextStyle(color: AppColors.marfim),
       decoration: const InputDecoration(
         labelText: 'Nome',
         hintText: 'Digite seu nome',
-        prefixIcon: Icon(Icons.person_outline, color: AppColors.verdeMedio),
+        prefixIcon: Icon(Icons.person_outline, color: AppColors.cinza),
       ),
       validator: (value) {
         if (value == null || value.trim().isEmpty) return 'Nome é obrigatório';
@@ -318,11 +318,11 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       controller: _lastNameController,
       textCapitalization: TextCapitalization.words,
-      style: const TextStyle(color: AppColors.branco),
+      style: const TextStyle(color: AppColors.marfim),
       decoration: const InputDecoration(
         labelText: 'Sobrenome',
         hintText: 'Digite seu sobrenome',
-        prefixIcon: Icon(Icons.person_outline, color: AppColors.verdeMedio),
+        prefixIcon: Icon(Icons.person_outline, color: AppColors.cinza),
       ),
       validator: (value) {
         if (value == null || value.trim().isEmpty) return 'Sobrenome é obrigatório';
@@ -336,11 +336,11 @@ class _RegisterPageState extends State<RegisterPage> {
       controller: _cpfController,
       keyboardType: TextInputType.number,
       inputFormatters: [_CpfInputFormatter()],
-      style: const TextStyle(color: AppColors.branco),
+      style: const TextStyle(color: AppColors.marfim),
       decoration: const InputDecoration(
         labelText: 'CPF',
         hintText: '000.000.000-00',
-        prefixIcon: Icon(Icons.badge_outlined, color: AppColors.verdeMedio),
+        prefixIcon: Icon(Icons.badge_outlined, color: AppColors.cinza),
       ),
       validator: (value) {
         if (value == null || value.trim().isEmpty) return 'CPF é obrigatório';
@@ -355,11 +355,11 @@ class _RegisterPageState extends State<RegisterPage> {
       controller: _phoneController,
       keyboardType: TextInputType.phone,
       inputFormatters: [_PhoneInputFormatter()],
-      style: const TextStyle(color: AppColors.branco),
+      style: const TextStyle(color: AppColors.marfim),
       decoration: const InputDecoration(
         labelText: 'Telefone',
         hintText: '(11) 99999-9999',
-        prefixIcon: Icon(Icons.phone_outlined, color: AppColors.verdeMedio),
+        prefixIcon: Icon(Icons.phone_outlined, color: AppColors.cinza),
       ),
       validator: (value) {
         if (value == null || value.trim().isEmpty) return 'Telefone é obrigatório';
@@ -373,11 +373,11 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
-      style: const TextStyle(color: AppColors.branco),
+      style: const TextStyle(color: AppColors.marfim),
       decoration: const InputDecoration(
         labelText: 'E-mail',
         hintText: 'Digite seu e-mail',
-        prefixIcon: Icon(Icons.email_outlined, color: AppColors.verdeMedio),
+        prefixIcon: Icon(Icons.email_outlined, color: AppColors.cinza),
       ),
       validator: (value) {
         if (value == null || value.trim().isEmpty) return 'E-mail é obrigatório';
@@ -391,15 +391,15 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       controller: _passwordController,
       obscureText: _obscurePassword,
-      style: const TextStyle(color: AppColors.branco),
+      style: const TextStyle(color: AppColors.marfim),
       decoration: InputDecoration(
         labelText: 'Senha',
         hintText: 'Crie uma senha',
-        prefixIcon: const Icon(Icons.lock_outline, color: AppColors.verdeMedio),
+        prefixIcon: const Icon(Icons.lock_outline, color: AppColors.cinza),
         suffixIcon: IconButton(
           icon: Icon(
             _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-            color: AppColors.verdeMedio,
+            color: AppColors.latao,
           ),
           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
         ),
@@ -416,15 +416,15 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       controller: _confirmPasswordController,
       obscureText: _obscureConfirmPassword,
-      style: const TextStyle(color: AppColors.branco),
+      style: const TextStyle(color: AppColors.marfim),
       decoration: InputDecoration(
         labelText: 'Confirmar senha',
         hintText: 'Repita a senha',
-        prefixIcon: const Icon(Icons.lock_outline, color: AppColors.verdeMedio),
+        prefixIcon: const Icon(Icons.lock_outline, color: AppColors.cinza),
         suffixIcon: IconButton(
           icon: Icon(
             _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-            color: AppColors.verdeMedio,
+            color: AppColors.latao,
           ),
           onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
         ),
@@ -496,7 +496,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   'Voltar',
                   style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.cinzaClaro,
+                    color: AppColors.cinza,
                   ),
                 ),
               ),
@@ -514,7 +514,7 @@ class _RegisterPageState extends State<RegisterPage> {
         Text(
           'Já tem uma conta? ',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.cinzaEscuro,
+                color: AppColors.cinza,
               ),
         ),
         GestureDetector(
@@ -522,7 +522,7 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Text(
             'Entrar',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.verdeDestaque,
+                  color: AppColors.lataoClaro,
                   fontWeight: FontWeight.bold,
                 ),
           ),

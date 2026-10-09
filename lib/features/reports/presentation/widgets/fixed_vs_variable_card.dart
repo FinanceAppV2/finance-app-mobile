@@ -19,7 +19,7 @@ class FixedVsVariableCard extends StatelessWidget {
             label: 'Fixas',
             value: data.fixedTotal,
             percentage: data.fixedPercentage,
-            color: AppColors.verdeDestaque,
+            color: AppColors.lataoClaro,
           ),
           const SizedBox(height: 8),
           _ProgressRow(
@@ -57,7 +57,7 @@ class _ProgressRow extends StatelessWidget {
           width: 70,
           child: Text(
             label,
-            style: const TextStyle(color: AppColors.branco, fontSize: 13),
+            style: const TextStyle(color: AppColors.marfim, fontSize: 13),
           ),
         ),
         const SizedBox(width: 8),
@@ -67,7 +67,7 @@ class _ProgressRow extends StatelessWidget {
             child: LinearProgressIndicator(
               value: percentage / 100,
               minHeight: 10,
-              backgroundColor: AppColors.cinzaEscuro,
+              backgroundColor: AppColors.linha,
               valueColor: AlwaysStoppedAnimation(color),
             ),
           ),
@@ -78,7 +78,7 @@ class _ProgressRow extends StatelessWidget {
           child: Text(
             'R\$ $formatted ($pct%)',
             textAlign: TextAlign.right,
-            style: const TextStyle(color: AppColors.cinzaClaro, fontSize: 11),
+            style: const TextStyle(color: AppColors.cinza, fontSize: 11),
           ),
         ),
       ],

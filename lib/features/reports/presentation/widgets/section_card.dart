@@ -15,8 +15,8 @@ class SectionCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.verdeMedio),
-        color: AppColors.verdeEscuro.withValues(alpha: 0.6),
+        border: Border.all(color: AppColors.latao),
+        color: AppColors.superficie.withValues(alpha: 0.6),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +24,7 @@ class SectionCard extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              color: AppColors.verdeDestaque,
+              color: AppColors.lataoClaro,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),

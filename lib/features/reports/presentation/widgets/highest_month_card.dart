@@ -27,7 +27,7 @@ class HighestMonthCard extends StatelessWidget {
           Text(
             '${_monthNames[monthIndex]}/${data.year}',
             style: const TextStyle(
-              color: AppColors.branco,
+              color: AppColors.marfim,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),

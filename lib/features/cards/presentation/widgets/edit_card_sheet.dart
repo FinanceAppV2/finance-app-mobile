@@ -192,7 +192,7 @@ class _EditCardSheetState extends State<EditCardSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       decoration: const BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: SingleChildScrollView(
@@ -209,14 +209,14 @@ class _EditCardSheetState extends State<EditCardSheet> {
                   const Text(
                     'Editar Cartão',
                     style: TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: AppColors.cinzaClaro),
+                    icon: const Icon(Icons.close, color: AppColors.cinza),
                   ),
                 ],
               ),
@@ -224,13 +224,13 @@ class _EditCardSheetState extends State<EditCardSheet> {
                TextFormField(
                  controller: _nomeController,
                  autofocus: false,
-                 style: const TextStyle(color: AppColors.branco),
+                 style: const TextStyle(color: AppColors.marfim),
                  decoration: const InputDecoration(
                    labelText: 'Nome do cartão',
                    hintText: 'Ex: Nubank',
                    prefixIcon: Icon(
                      Icons.label_outline,
-                     color: AppColors.verdeMedio,
+                     color: AppColors.cinza,
                    ),
                  ),
                  validator: (value) {
@@ -242,13 +242,13 @@ class _EditCardSheetState extends State<EditCardSheet> {
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 initialValue: _selectedEmissora,
-                dropdownColor: AppColors.verdeEscuro,
-                style: const TextStyle(color: AppColors.branco),
+                dropdownColor: AppColors.superficie,
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Emissora',
                   prefixIcon: Icon(
                     Icons.business_outlined,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.cinza,
                   ),
                 ),
                 items: _emissores.map((e) {
@@ -264,13 +264,13 @@ class _EditCardSheetState extends State<EditCardSheet> {
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 initialValue: _selectedBandeira,
-                dropdownColor: AppColors.verdeEscuro,
-                style: const TextStyle(color: AppColors.branco),
+                dropdownColor: AppColors.superficie,
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Bandeira',
                   prefixIcon: Icon(
                     Icons.credit_card_outlined,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.cinza,
                   ),
                 ),
                 items: _bandeiras.map((b) {
@@ -289,11 +289,11 @@ class _EditCardSheetState extends State<EditCardSheet> {
                  autofocus: false,
                  keyboardType: TextInputType.number,
                  maxLength: 4,
-                 style: const TextStyle(color: AppColors.branco),
+                 style: const TextStyle(color: AppColors.marfim),
                  decoration: const InputDecoration(
                    labelText: 'Últimos 4 dígitos',
                    hintText: '0000',
-                   prefixIcon: Icon(Icons.tag, color: AppColors.verdeMedio),
+                   prefixIcon: Icon(Icons.tag, color: AppColors.cinza),
                    counterText: '',
                  ),
                  validator: (value) {
@@ -307,12 +307,12 @@ class _EditCardSheetState extends State<EditCardSheet> {
                  controller: _titularController,
                  autofocus: false,
                  textCapitalization: TextCapitalization.words,
-                 style: const TextStyle(color: AppColors.branco),
+                 style: const TextStyle(color: AppColors.marfim),
                  decoration: const InputDecoration(
                    labelText: 'Nome do titular',
                    prefixIcon: Icon(
                      Icons.person_outline,
-                     color: AppColors.verdeMedio,
+                     color: AppColors.cinza,
                    ),
                  ),
                  validator: (value) {
@@ -326,14 +326,14 @@ class _EditCardSheetState extends State<EditCardSheet> {
                  controller: _limiteController,
                  autofocus: false,
                  keyboardType: TextInputType.number,
-                 style: const TextStyle(color: AppColors.branco),
+                 style: const TextStyle(color: AppColors.marfim),
                  decoration: const InputDecoration(
                    labelText: 'Limite disponível',
                    hintText: 'R\$ 0,00',
                    prefixText: 'R\$ ',
                    prefixIcon: Icon(
                      Icons.attach_money_rounded,
-                     color: AppColors.verdeMedio,
+                     color: AppColors.cinza,
                    ),
                  ),
                  validator: (value) {
@@ -347,13 +347,13 @@ class _EditCardSheetState extends State<EditCardSheet> {
                   Expanded(
                     child: DropdownButtonFormField<int>(
                       initialValue: _diaVencimento,
-                      dropdownColor: AppColors.verdeEscuro,
-                      style: const TextStyle(color: AppColors.branco),
+                      dropdownColor: AppColors.superficie,
+                      style: const TextStyle(color: AppColors.marfim),
                       decoration: const InputDecoration(
                         labelText: 'Vencimento',
                         prefixIcon: Icon(
                           Icons.calendar_today,
-                          color: AppColors.verdeMedio,
+                          color: AppColors.cinza,
                         ),
                       ),
                       items: List.generate(31, (i) => i + 1).map((d) {
@@ -369,13 +369,13 @@ class _EditCardSheetState extends State<EditCardSheet> {
                   Expanded(
                     child: DropdownButtonFormField<int>(
                       initialValue: _diaFechamento,
-                      dropdownColor: AppColors.verdeEscuro,
-                      style: const TextStyle(color: AppColors.branco),
+                      dropdownColor: AppColors.superficie,
+                      style: const TextStyle(color: AppColors.marfim),
                       decoration: const InputDecoration(
                         labelText: 'Fechamento',
                         prefixIcon: Icon(
                           Icons.event,
-                          color: AppColors.verdeMedio,
+                          color: AppColors.cinza,
                         ),
                       ),
                       items: List.generate(31, (i) => i + 1).map((d) {
@@ -431,7 +431,7 @@ class _EditCardSheetState extends State<EditCardSheet> {
         Text(
           'Cor',
           style: TextStyle(
-            color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+            color: AppColors.cinza.withValues(alpha: 0.7),
             fontSize: 12,
           ),
         ),
@@ -450,12 +450,12 @@ class _EditCardSheetState extends State<EditCardSheet> {
                   color: _hexToColor(cor),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isSelected ? AppColors.branco : Colors.transparent,
+                    color: isSelected ? AppColors.marfim : Colors.transparent,
                     width: 2,
                   ),
                 ),
                 child: isSelected
-                    ? const Icon(Icons.check, color: AppColors.branco, size: 18)
+                    ? const Icon(Icons.check, color: AppColors.marfim, size: 18)
                     : null,
               ),
             );
@@ -472,7 +472,7 @@ class _EditCardSheetState extends State<EditCardSheet> {
         Text(
           'Ícone',
           style: TextStyle(
-            color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+            color: AppColors.cinza.withValues(alpha: 0.7),
             fontSize: 12,
           ),
         ),
@@ -489,21 +489,21 @@ class _EditCardSheetState extends State<EditCardSheet> {
                 height: 40,
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? AppColors.verdeDestaque.withValues(alpha: 0.3)
+                      ? AppColors.lataoClaro.withValues(alpha: 0.3)
                       : AppColors.background.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: isSelected
-                        ? AppColors.verdeDestaque
-                        : AppColors.cinzaEscuro,
+                        ? AppColors.lataoClaro
+                        : AppColors.nevoa,
                     width: 1,
                   ),
                 ),
                 child: Icon(
                   _getIconData(icone),
                   color: isSelected
-                      ? AppColors.verdeDestaque
-                      : AppColors.cinzaClaro,
+                      ? AppColors.lataoClaro
+                      : AppColors.cinza,
                   size: 20,
                 ),
               ),

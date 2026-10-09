@@ -21,7 +21,7 @@ class ExpensesHeader extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
-            color: AppColors.branco,
+            color: AppColors.marfim,
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
@@ -30,7 +30,7 @@ class ExpensesHeader extends StatelessWidget {
         Text(
           '$count itens',
           style: TextStyle(
-            color: AppColors.cinzaClaro.withValues(alpha: 0.5),
+            color: AppColors.cinza.withValues(alpha: 0.5),
             fontSize: 12,
           ),
         ),
@@ -40,7 +40,7 @@ class ExpensesHeader extends StatelessWidget {
             onPressed: onFilter,
             icon: Icon(
               Icons.filter_list_rounded,
-              color: AppColors.cinzaClaro,
+              color: AppColors.cinza,
               size: 20,
             ),
             constraints: const BoxConstraints(),

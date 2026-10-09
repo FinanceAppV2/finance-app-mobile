@@ -47,8 +47,8 @@ class _SplashPageState extends State<SplashPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              AppColors.verdeMedio,
-              AppColors.verdeEscuro,
+              AppColors.latao,
+              AppColors.superficie,
               AppColors.background,
             ],
           ),
@@ -60,20 +60,20 @@ class _SplashPageState extends State<SplashPage> {
               width: 100,
               height: 100,
               decoration: const BoxDecoration(
-                color: AppColors.verdeEscuro,
+                color: AppColors.superficie,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.monetization_on_outlined,
                 size: 50,
-                color: AppColors.verdeDestaque,
+                color: AppColors.lataoClaro,
               ),
             ),
             const SizedBox(height: 24),
             const Text(
               'Finance App',
               style: TextStyle(
-                color: AppColors.branco,
+                color: AppColors.marfim,
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
@@ -82,7 +82,7 @@ class _SplashPageState extends State<SplashPage> {
             Text(
               'Controle financeiro inteligente',
               style: TextStyle(
-                color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+                color: AppColors.cinza.withValues(alpha: 0.8),
                 fontSize: 14,
               ),
             ),
@@ -92,7 +92,7 @@ class _SplashPageState extends State<SplashPage> {
               height: 24,
               child: CircularProgressIndicator(
                 strokeWidth: 2.5,
-                color: AppColors.verdeDestaque,
+                color: AppColors.lataoClaro,
               ),
             ),
           ],

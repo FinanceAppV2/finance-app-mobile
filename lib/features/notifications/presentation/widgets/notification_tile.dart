@@ -19,7 +19,7 @@ class NotificationTile extends StatelessWidget {
       case notification_entity.NotificationType.alert:
         return AppColors.warning;
       case notification_entity.NotificationType.info:
-        return AppColors.verdeDestaque;
+        return AppColors.lataoClaro;
       case notification_entity.NotificationType.success:
         return AppColors.success;
       case notification_entity.NotificationType.warning:
@@ -74,10 +74,10 @@ class NotificationTile extends StatelessWidget {
             decoration: BoxDecoration(
               color: notification.read
                   ? AppColors.background.withValues(alpha: 0.5)
-                  : AppColors.verdeEscuro.withValues(alpha: 0.3),
+                  : AppColors.superficie.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: notification.read ? AppColors.cinzaEscuro : typeColor.withValues(alpha: 0.5),
+                color: notification.read ? AppColors.nevoa : typeColor.withValues(alpha: 0.5),
               ),
             ),
             child: Row(
@@ -98,7 +98,7 @@ class NotificationTile extends StatelessWidget {
                       Text(
                         notification.title,
                         style: TextStyle(
-                          color: AppColors.branco,
+                          color: AppColors.marfim,
                           fontSize: 14,
                           fontWeight: notification.read ? FontWeight.w500 : FontWeight.w700,
                         ),
@@ -109,7 +109,7 @@ class NotificationTile extends StatelessWidget {
                       Text(
                         notification.message,
                         style: TextStyle(
-                          color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+                          color: AppColors.cinza.withValues(alpha: 0.8),
                           fontSize: 12,
                         ),
                         maxLines: 2,
@@ -119,7 +119,7 @@ class NotificationTile extends StatelessWidget {
                       Text(
                         _formatTime(notification.createdAt),
                         style: TextStyle(
-                          color: AppColors.cinzaClaro.withValues(alpha: 0.6),
+                          color: AppColors.cinza.withValues(alpha: 0.6),
                           fontSize: 11,
                         ),
                       ),

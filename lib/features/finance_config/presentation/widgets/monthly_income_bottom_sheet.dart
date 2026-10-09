@@ -86,7 +86,7 @@ class _MonthlyIncomeBottomSheetState extends State<MonthlyIncomeBottomSheet> {
         color: AppColors.background,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         border: Border(
-          top: BorderSide(color: AppColors.verdeMedio, width: 1.5),
+          top: BorderSide(color: AppColors.latao, width: 1.5),
         ),
       ),
       child: SafeArea(
@@ -101,7 +101,7 @@ class _MonthlyIncomeBottomSheetState extends State<MonthlyIncomeBottomSheet> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.cinzaEscuro.withValues(alpha: 0.6),
+                  color: AppColors.nevoa.withValues(alpha: 0.6),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -114,14 +114,14 @@ class _MonthlyIncomeBottomSheetState extends State<MonthlyIncomeBottomSheet> {
                   const Text(
                     'Renda Mensal',
                     style: TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close_rounded,
-                        color: AppColors.cinzaClaro),
+                        color: AppColors.cinza),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -138,7 +138,7 @@ class _MonthlyIncomeBottomSheetState extends State<MonthlyIncomeBottomSheet> {
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context, _currentValue),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.verdeDestaque,
+                    backgroundColor: AppColors.lataoClaro,
                     foregroundColor: AppColors.background,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -217,7 +217,7 @@ class _MonthlyIncomeBottomSheetState extends State<MonthlyIncomeBottomSheet> {
   Widget _buildKeypadButton(String text) {
     return Expanded(
       child: Material(
-        color: AppColors.verdeEscuro.withValues(alpha: 0.45),
+        color: AppColors.superficie.withValues(alpha: 0.45),
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: () => _onDigitPressed(text),
@@ -228,7 +228,7 @@ class _MonthlyIncomeBottomSheetState extends State<MonthlyIncomeBottomSheet> {
             child: Text(
               text,
               style: const TextStyle(
-                color: AppColors.branco,
+                color: AppColors.marfim,
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
               ),
@@ -247,7 +247,7 @@ class _MonthlyIncomeBottomSheetState extends State<MonthlyIncomeBottomSheet> {
   }) {
     return Expanded(
       child: Material(
-        color: AppColors.verdeEscuro.withValues(alpha: 0.25),
+        color: AppColors.superficie.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: onTap,
@@ -259,14 +259,14 @@ class _MonthlyIncomeBottomSheetState extends State<MonthlyIncomeBottomSheet> {
                 ? Text(
                     label,
                     style: TextStyle(
-                      color: isClear ? AppColors.warning : AppColors.branco,
+                      color: isClear ? AppColors.warning : AppColors.marfim,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   )
                 : Icon(
                     icon,
-                    color: AppColors.cinzaClaro,
+                    color: AppColors.cinza,
                     size: 22,
                   ),
           ),

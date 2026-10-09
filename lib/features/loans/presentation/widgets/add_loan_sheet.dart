@@ -41,8 +41,8 @@ class _AddLoanSheetState extends State<AddLoanSheet> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.dark(
-              primary: AppColors.verdeDestaque,
-              surface: AppColors.verdeEscuro,
+              primary: AppColors.lataoClaro,
+              surface: AppColors.superficie,
             ),
           ),
           child: child!,
@@ -97,7 +97,7 @@ class _AddLoanSheetState extends State<AddLoanSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       decoration: const BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: SingleChildScrollView(
@@ -114,25 +114,25 @@ class _AddLoanSheetState extends State<AddLoanSheet> {
                   const Text(
                     'Novo Empréstimo',
                     style: TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: AppColors.cinzaClaro),
+                    icon: const Icon(Icons.close, color: AppColors.cinza),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                   hintText: 'Ex: Empréstimo pessoal',
-                  prefixIcon: Icon(Icons.description_outlined, color: AppColors.verdeMedio),
+                  prefixIcon: Icon(Icons.description_outlined, color: AppColors.cinza),
                 ),
                 validator: (v) =>
                     (v == null || v.trim().isEmpty) ? 'Obrigatório' : null,
@@ -142,12 +142,12 @@ class _AddLoanSheetState extends State<AddLoanSheet> {
                 controller: _totalValueController,
                 keyboardType: TextInputType.number,
                 inputFormatters: [const CurrencyInputFormatter()],
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Valor total',
                   hintText: 'R\$ 0,00',
                   prefixText: 'R\$ ',
-                  prefixIcon: Icon(Icons.attach_money_rounded, color: AppColors.verdeMedio),
+                  prefixIcon: Icon(Icons.attach_money_rounded, color: AppColors.cinza),
                 ),
                 validator: (v) =>
                     (v == null || v.isEmpty) ? 'Obrigatório' : null,
@@ -163,11 +163,11 @@ class _AddLoanSheetState extends State<AddLoanSheet> {
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(3),
                       ],
-                      style: const TextStyle(color: AppColors.branco),
+                      style: const TextStyle(color: AppColors.marfim),
                       decoration: const InputDecoration(
                         labelText: 'Parcelas',
                         hintText: '12',
-                        prefixIcon: Icon(Icons.numbers_rounded, color: AppColors.verdeMedio),
+                        prefixIcon: Icon(Icons.numbers_rounded, color: AppColors.cinza),
                       ),
                       validator: (v) {
                         if (v == null || v.isEmpty) return 'Obrigatório';
@@ -185,12 +185,12 @@ class _AddLoanSheetState extends State<AddLoanSheet> {
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                       ],
-                      style: const TextStyle(color: AppColors.branco),
+                      style: const TextStyle(color: AppColors.marfim),
                       decoration: const InputDecoration(
                         labelText: 'Taxa (% a.m.)',
                         hintText: '0',
                         suffixText: '%',
-                        prefixIcon: Icon(Icons.percent_rounded, color: AppColors.verdeMedio),
+                        prefixIcon: Icon(Icons.percent_rounded, color: AppColors.cinza),
                       ),
                     ),
                   ),
@@ -202,9 +202,9 @@ class _AddLoanSheetState extends State<AddLoanSheet> {
                 child: InputDecorator(
                   decoration: const InputDecoration(
                     labelText: 'Data de início',
-                    prefixIcon: Icon(Icons.calendar_today_rounded, color: AppColors.verdeMedio),
+                    prefixIcon: Icon(Icons.calendar_today_rounded, color: AppColors.cinza),
                   ),
-                  child: Text(dateFormatted, style: const TextStyle(color: AppColors.branco)),
+                  child: Text(dateFormatted, style: const TextStyle(color: AppColors.marfim)),
                 ),
               ),
               const SizedBox(height: 20),

@@ -133,7 +133,7 @@ class _EditAssetSheetState extends State<EditAssetSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       decoration: const BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: SingleChildScrollView(
@@ -150,26 +150,26 @@ class _EditAssetSheetState extends State<EditAssetSheet> {
                   const Text(
                     'Editar Ativo',
                     style: TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: AppColors.cinzaClaro),
+                    icon: const Icon(Icons.close, color: AppColors.cinza),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _nameController,
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Nome do ativo',
                   hintText: 'Ex: Tesouro Selic',
                   prefixIcon:
-                      Icon(Icons.label_outline, color: AppColors.verdeMedio),
+                      Icon(Icons.label_outline, color: AppColors.cinza),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -181,12 +181,12 @@ class _EditAssetSheetState extends State<EditAssetSheet> {
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 initialValue: _selectedType,
-                dropdownColor: AppColors.verdeEscuro,
-                style: const TextStyle(color: AppColors.branco),
+                dropdownColor: AppColors.superficie,
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Tipo',
                   prefixIcon: Icon(Icons.category_outlined,
-                      color: AppColors.verdeMedio),
+                      color: AppColors.cinza),
                 ),
                 items: AssetType.values.map((t) {
                   return DropdownMenuItem(
@@ -201,12 +201,12 @@ class _EditAssetSheetState extends State<EditAssetSheet> {
               const SizedBox(height: 12),
               TextFormField(
                 controller: _categoryController,
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Categoria',
                   hintText: 'Ex: Renda Fixa',
                   prefixIcon: Icon(Icons.folder_outlined,
-                      color: AppColors.verdeMedio),
+                      color: AppColors.cinza),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -220,12 +220,12 @@ class _EditAssetSheetState extends State<EditAssetSheet> {
                 controller: _valueController,
                 keyboardType: TextInputType.number,
                 inputFormatters: [const CurrencyInputFormatter()],
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Valor atual',
                   hintText: 'R\$ 0,00',
                   prefixIcon: Icon(Icons.attach_money_rounded,
-                      color: AppColors.verdeMedio),
+                      color: AppColors.cinza),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -239,12 +239,12 @@ class _EditAssetSheetState extends State<EditAssetSheet> {
                 controller: _investedController,
                 keyboardType: TextInputType.number,
                 inputFormatters: [const CurrencyInputFormatter()],
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Valor investido',
                   hintText: 'R\$ 0,00',
                   prefixIcon: Icon(Icons.trending_down_rounded,
-                      color: AppColors.verdeMedio),
+                      color: AppColors.cinza),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -256,23 +256,23 @@ class _EditAssetSheetState extends State<EditAssetSheet> {
               const SizedBox(height: 12),
               TextFormField(
                 controller: _institutionController,
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Instituição',
                   hintText: 'Ex: Banco do Brasil',
                   prefixIcon: Icon(Icons.business_outlined,
-                      color: AppColors.verdeMedio),
+                      color: AppColors.cinza),
                 ),
               ),
               const SizedBox(height: 12),
               TextFormField(
                 controller: _tickerController,
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Ticker',
                   hintText: 'Ex: ITSA4',
                   prefixIcon:
-                      Icon(Icons.code, color: AppColors.verdeMedio),
+                      Icon(Icons.code, color: AppColors.cinza),
                 ),
               ),
               const SizedBox(height: 12),
@@ -283,12 +283,12 @@ class _EditAssetSheetState extends State<EditAssetSheet> {
                       controller: _rateController,
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
-                      style: const TextStyle(color: AppColors.branco),
+                      style: const TextStyle(color: AppColors.marfim),
                       decoration: const InputDecoration(
                         labelText: 'Taxa (%)',
                         hintText: '0,00',
                         prefixIcon: Icon(Icons.percent_rounded,
-                            color: AppColors.verdeMedio),
+                            color: AppColors.cinza),
                       ),
                     ),
                   ),
@@ -296,12 +296,12 @@ class _EditAssetSheetState extends State<EditAssetSheet> {
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       initialValue: _selectedRateType,
-                      dropdownColor: AppColors.verdeEscuro,
-                      style: const TextStyle(color: AppColors.branco),
+                      dropdownColor: AppColors.superficie,
+                      style: const TextStyle(color: AppColors.marfim),
                       decoration: const InputDecoration(
                         labelText: 'Tipo taxa',
                         prefixIcon: Icon(Icons.trending_up_rounded,
-                            color: AppColors.verdeMedio),
+                            color: AppColors.cinza),
                       ),
                       items: _rateTypes.map((t) {
                         return DropdownMenuItem(
@@ -322,12 +322,12 @@ class _EditAssetSheetState extends State<EditAssetSheet> {
               TextFormField(
                 controller: _notesController,
                 maxLines: 3,
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Notas',
                   hintText: 'Observações sobre o ativo',
                   prefixIcon: Icon(Icons.notes_rounded,
-                      color: AppColors.verdeMedio),
+                      color: AppColors.cinza),
                 ),
               ),
               const SizedBox(height: 20),

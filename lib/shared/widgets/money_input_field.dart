@@ -27,7 +27,7 @@ class MoneyInputField extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
-            color: AppColors.branco,
+            color: AppColors.marfim,
             fontSize: 13,
             fontWeight: FontWeight.w500,
           ),
@@ -39,7 +39,7 @@ class MoneyInputField extends StatelessWidget {
           readOnly: readOnly,
           keyboardType: TextInputType.number,
           inputFormatters: [const CurrencyInputFormatter()],
-          style: const TextStyle(color: AppColors.branco, fontSize: 15),
+          style: const TextStyle(color: AppColors.marfim, fontSize: 15),
           decoration: InputDecoration(
             hintText: 'Ex: 3.000,00',
             prefixText: 'R\$ ',
@@ -48,19 +48,19 @@ class MoneyInputField extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                color: AppColors.verdeDestaque.withValues(alpha: 0.3),
+                color: AppColors.lataoClaro.withValues(alpha: 0.3),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                color: AppColors.verdeDestaque.withValues(alpha: 0.3),
+                color: AppColors.lataoClaro.withValues(alpha: 0.3),
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                color: AppColors.verdeDestaque,
+                color: AppColors.lataoClaro,
               ),
             ),
           ),

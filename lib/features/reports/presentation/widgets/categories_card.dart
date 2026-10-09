@@ -32,7 +32,7 @@ class CategoriesCard extends StatelessWidget {
       title: 'Gastos por Categoria',
       child: Column(
         children: data.map((c) {
-          final color = _categoryColors[c.category] ?? AppColors.cinzaClaro;
+          final color = _categoryColors[c.category] ?? AppColors.cinza;
           final formatted = c.total.toStringAsFixed(2).replaceAll('.', ',');
           final pct = c.percentage.toStringAsFixed(0);
           return Padding(
@@ -53,13 +53,13 @@ class CategoriesCard extends StatelessWidget {
                         const SizedBox(width: 6),
                         Text(
                           c.category,
-                          style: const TextStyle(color: AppColors.branco, fontSize: 12),
+                          style: const TextStyle(color: AppColors.marfim, fontSize: 12),
                         ),
                       ],
                     ),
                     Text(
                       'R\$ $formatted ($pct%)',
-                      style: const TextStyle(color: AppColors.cinzaClaro, fontSize: 11),
+                      style: const TextStyle(color: AppColors.cinza, fontSize: 11),
                     ),
                   ],
                 ),
@@ -69,7 +69,7 @@ class CategoriesCard extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: c.total / maxBar,
                     minHeight: 6,
-                    backgroundColor: AppColors.cinzaEscuro,
+                    backgroundColor: AppColors.linha,
                     valueColor: AlwaysStoppedAnimation(color),
                   ),
                 ),

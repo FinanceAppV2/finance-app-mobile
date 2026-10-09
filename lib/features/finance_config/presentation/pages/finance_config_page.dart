@@ -241,7 +241,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
   Widget _buildBody() {
     if (!_initialLoaded && _controller.status == FinanceConfigStatus.loading) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.verdeDestaque),
+        child: CircularProgressIndicator(color: AppColors.lataoClaro),
       );
     }
     if (_controller.status == FinanceConfigStatus.error && !_initialLoaded) {
@@ -261,7 +261,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
                 _controller.errorMessage ?? 'Erro desconhecido',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  color: AppColors.cinzaClaro,
+                  color: AppColors.cinza,
                   fontSize: 14,
                 ),
               ),
@@ -295,13 +295,13 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
                 Icon(
                   Icons.swipe_rounded,
                   size: 14,
-                  color: AppColors.cinzaClaro.withValues(alpha: 0.6),
+                  color: AppColors.cinza.withValues(alpha: 0.6),
                 ),
                 const SizedBox(width: 6),
                 Text(
                   'Deslize para o lado para alternar o modo',
                   style: TextStyle(
-                    color: AppColors.cinzaClaro.withValues(alpha: 0.6),
+                    color: AppColors.cinza.withValues(alpha: 0.6),
                     fontSize: 12,
                   ),
                 ),
@@ -336,7 +336,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
                 Text(
                   'Renda mensal',
                   style: TextStyle(
-                    color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+                    color: AppColors.cinza.withValues(alpha: 0.8),
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
                   ),
@@ -345,7 +345,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
                 Icon(
                   Icons.edit_rounded,
                   size: 13,
-                  color: AppColors.verdeDestaque.withValues(alpha: 0.7),
+                  color: AppColors.lataoClaro.withValues(alpha: 0.7),
                 ),
               ],
             ),
@@ -368,7 +368,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
                       const Text(
                         'R\$ ',
                         style: TextStyle(
-                          color: AppColors.verdeDestaque,
+                          color: AppColors.lataoClaro,
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ),
@@ -376,7 +376,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
                       Text(
                         formattedIncome,
                         style: const TextStyle(
-                          color: AppColors.branco,
+                          color: AppColors.marfim,
                           fontSize: 34,
                           fontWeight: FontWeight.bold,
                           letterSpacing: -0.5,
@@ -398,9 +398,9 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.verdeEscuro.withValues(alpha: 0.5),
+        color: AppColors.superficie.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.verdeMedio.withValues(alpha: 0.3)),
+        border: Border.all(color: AppColors.latao.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -435,7 +435,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
         duration: const Duration(milliseconds: 250),
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.verdeDestaque : Colors.transparent,
+          color: isSelected ? AppColors.lataoClaro : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -444,13 +444,13 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
             Icon(
               icon,
               size: 16,
-              color: isSelected ? AppColors.background : AppColors.cinzaClaro,
+              color: isSelected ? AppColors.background : AppColors.cinza,
             ),
             const SizedBox(width: 8),
             Text(
               title,
               style: TextStyle(
-                color: isSelected ? AppColors.background : AppColors.branco,
+                color: isSelected ? AppColors.background : AppColors.marfim,
                 fontSize: 14,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               ),
@@ -470,9 +470,9 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppColors.verdeEscuro,
+              color: AppColors.superficie,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.verdeDestaque, width: 1.5),
+              border: Border.all(color: AppColors.lataoClaro, width: 1.5),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -526,9 +526,9 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppColors.verdeEscuro,
+              color: AppColors.superficie,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.verdeDestaque, width: 1.5),
+              border: Border.all(color: AppColors.lataoClaro, width: 1.5),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -587,10 +587,10 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: AppColors.verdeDestaque.withValues(alpha: 0.15),
+                color: AppColors.lataoClaro.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(icon, color: AppColors.verdeDestaque, size: 22),
+              child: Icon(icon, color: AppColors.lataoClaro, size: 22),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -600,7 +600,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
                   Text(
                     title,
                     style: const TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -618,7 +618,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
                     child: Text(
                       badgeText,
                       style: const TextStyle(
-                        color: AppColors.verdeDestaque,
+                        color: AppColors.lataoClaro,
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                       ),
@@ -633,7 +633,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
         Text(
           description,
           style: TextStyle(
-            color: AppColors.cinzaClaro.withValues(alpha: 0.9),
+            color: AppColors.cinza.withValues(alpha: 0.9),
             fontSize: 12,
             height: 1.3,
           ),
@@ -649,7 +649,7 @@ class _FinanceConfigPageState extends State<FinanceConfigPage> {
       decoration: BoxDecoration(
         color: AppColors.background,
         border: Border(
-          top: BorderSide(color: AppColors.verdeEscuro.withValues(alpha: 0.5)),
+          top: BorderSide(color: AppColors.superficie.withValues(alpha: 0.5)),
         ),
       ),
       child: SizedBox(

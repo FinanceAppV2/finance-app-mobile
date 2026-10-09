@@ -61,7 +61,7 @@ class _FixedExpensesPageState extends State<FixedExpensesPage> {
                 child: Text(
                   'Despesas Fixas',
                   style: TextStyle(
-                    color: AppColors.branco,
+                    color: AppColors.marfim,
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
@@ -70,7 +70,7 @@ class _FixedExpensesPageState extends State<FixedExpensesPage> {
               Text(
                 '${_controller.fixedExpenses.length} itens',
                 style: TextStyle(
-                  color: AppColors.cinzaClaro.withValues(alpha: 0.5),
+                  color: AppColors.cinza.withValues(alpha: 0.5),
                   fontSize: 12,
                 ),
               ),
@@ -79,7 +79,7 @@ class _FixedExpensesPageState extends State<FixedExpensesPage> {
                 onPressed: _onAdd,
                 icon: const Icon(
                   Icons.add_rounded,
-                  color: AppColors.verdeDestaque,
+                  color: AppColors.lataoClaro,
                   size: 22,
                 ),
                 constraints: const BoxConstraints(),
@@ -96,7 +96,7 @@ class _FixedExpensesPageState extends State<FixedExpensesPage> {
   Widget _buildBody() {
     if (_controller.status == FixedExpensesStatus.loading) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.verdeDestaque),
+        child: CircularProgressIndicator(color: AppColors.lataoClaro),
       );
     }
 
@@ -109,7 +109,7 @@ class _FixedExpensesPageState extends State<FixedExpensesPage> {
             const SizedBox(height: 16),
             Text(
               _controller.errorMessage ?? 'Erro ao carregar dados',
-              style: const TextStyle(color: AppColors.cinzaClaro),
+              style: const TextStyle(color: AppColors.cinza),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -130,13 +130,13 @@ class _FixedExpensesPageState extends State<FixedExpensesPage> {
             Icon(
               Icons.receipt_long_rounded,
               size: 64,
-              color: AppColors.verdeDestaque.withValues(alpha: 0.5),
+              color: AppColors.lataoClaro.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 16),
             Text(
               'Nenhuma despesa fixa cadastrada',
               style: TextStyle(
-                color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                color: AppColors.cinza.withValues(alpha: 0.7),
                 fontSize: 14,
               ),
             ),
@@ -197,7 +197,7 @@ class _FixedExpenseTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -206,12 +206,12 @@ class _FixedExpenseTile extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppColors.verdeMedio.withValues(alpha: 0.4),
+              color: AppColors.latao.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
               _categoryIcons[expense.category] ?? Icons.receipt_rounded,
-              color: AppColors.verdeDestaque,
+              color: AppColors.lataoClaro,
               size: 20,
             ),
           ),
@@ -223,7 +223,7 @@ class _FixedExpenseTile extends StatelessWidget {
                 Text(
                   expense.description,
                   style: const TextStyle(
-                    color: AppColors.branco,
+                    color: AppColors.marfim,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
@@ -234,7 +234,7 @@ class _FixedExpenseTile extends StatelessWidget {
                 Text(
                   '${_categoryLabels[expense.category] ?? expense.category} • Dia ${expense.dueDay}',
                   style: TextStyle(
-                    color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                    color: AppColors.cinza.withValues(alpha: 0.7),
                     fontSize: 12,
                   ),
                 ),
@@ -244,7 +244,7 @@ class _FixedExpenseTile extends StatelessWidget {
           Text(
             valueFormatted,
             style: const TextStyle(
-              color: AppColors.verdeDestaque,
+              color: AppColors.lataoClaro,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),

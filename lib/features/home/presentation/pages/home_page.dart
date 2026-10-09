@@ -123,19 +123,26 @@ class _HomePageState extends State<HomePage> with RouteAware {
   }
 
   Future<void> _onDeleteExpense(Expense expense) async {
+    final installments = expense.installments ?? 1;
+    final message = installments > 1
+        ? 'Deseja excluir "${expense.description}"?\n\n'
+            'Esta compra é parcelada em ${installments}x. '
+            'Todas as parcelas serão excluídas.'
+        : 'Deseja excluir "${expense.description}"?';
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.verdeEscuro,
-        title: const Text('Excluir despesa', style: TextStyle(color: AppColors.branco)),
+        backgroundColor: AppColors.superficie,
+        title: const Text('Excluir despesa', style: TextStyle(color: AppColors.marfim)),
         content: Text(
-          'Deseja excluir "${expense.description}"?',
-          style: const TextStyle(color: AppColors.cinzaClaro),
+          message,
+          style: const TextStyle(color: AppColors.cinza),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancelar', style: TextStyle(color: AppColors.cinzaClaro)),
+            child: const Text('Cancelar', style: TextStyle(color: AppColors.cinza)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -184,8 +191,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      AppColors.verdeMedio,
-                      AppColors.verdeEscuro,
+                      AppColors.latao,
+                      AppColors.superficie,
                       AppColors.background,
                     ],
                   ),
@@ -264,7 +271,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
             const SizedBox(height: 16),
             Text(
               _controller.errorMessage ?? 'Erro ao carregar dados',
-              style: const TextStyle(color: AppColors.cinzaClaro),
+              style: const TextStyle(color: AppColors.cinza),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -302,11 +309,12 @@ class _HomePageState extends State<HomePage> with RouteAware {
             ..._filteredExpenses.map(
               (expense) {
                 final isFixed = expense.id.startsWith('fixed_');
+                final isEditable = !isFixed && !expense.isLoanInstallment;
                 return ExpenseTile(
                   expense: expense,
                   isFixed: isFixed,
-                  onEdit: isFixed ? null : () => _onEditExpense(expense),
-                  onDelete: isFixed ? null : () => _onDeleteExpense(expense),
+                  onEdit: isEditable ? () => _onEditExpense(expense) : null,
+                  onDelete: isEditable ? () => _onDeleteExpense(expense) : null,
                 );
               },
             ),
@@ -395,19 +403,19 @@ class _AppDrawerState extends State<_AppDrawer> with SingleTickerProviderStateMi
     final result = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.cinzaEscuro,
+        backgroundColor: AppColors.elevado,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Sair', style: TextStyle(color: AppColors.branco)),
+        title: const Text('Sair', style: TextStyle(color: AppColors.marfim)),
         content: const Text(
           'Tem certeza que deseja sair?',
-          style: TextStyle(color: AppColors.branco),
+          style: TextStyle(color: AppColors.marfim),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: const Text(
               'Cancelar',
-              style: TextStyle(color: AppColors.cinzaClaro),
+              style: TextStyle(color: AppColors.cinza),
             ),
           ),
           TextButton(
@@ -438,8 +446,8 @@ class _AppDrawerState extends State<_AppDrawer> with SingleTickerProviderStateMi
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              AppColors.verdeMedio,
-              AppColors.verdeEscuro,
+              AppColors.latao,
+              AppColors.superficie,
               AppColors.background,
             ],
           ),
@@ -459,8 +467,8 @@ class _AppDrawerState extends State<_AppDrawer> with SingleTickerProviderStateMi
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          AppColors.verdePrincipal,
-                          AppColors.verdeMedio,
+                          AppColors.latao,
+                          AppColors.latao,
                         ],
                       ),
                     ),
@@ -470,10 +478,10 @@ class _AppDrawerState extends State<_AppDrawer> with SingleTickerProviderStateMi
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.branco, width: 2.5),
+                            border: Border.all(color: AppColors.marfim, width: 2.5),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.verdeEscuro.withValues(alpha: 0.4),
+                                color: AppColors.superficie.withValues(alpha: 0.4),
                                 blurRadius: 12,
                                 offset: const Offset(0, 4),
                               ),
@@ -485,7 +493,7 @@ class _AppDrawerState extends State<_AppDrawer> with SingleTickerProviderStateMi
                             child: Text(
                               _initial,
                               style: const TextStyle(
-                                color: AppColors.branco,
+                                color: AppColors.marfim,
                                 fontSize: 28,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -496,7 +504,7 @@ class _AppDrawerState extends State<_AppDrawer> with SingleTickerProviderStateMi
                         Text(
                           _displayName,
                           style: const TextStyle(
-                            color: AppColors.branco,
+                            color: AppColors.marfim,
                             fontSize: 17,
                             fontWeight: FontWeight.w700,
                           ),
@@ -505,7 +513,7 @@ class _AppDrawerState extends State<_AppDrawer> with SingleTickerProviderStateMi
                         Text(
                           _email,
                           style: const TextStyle(
-                            color: AppColors.branco,
+                            color: AppColors.marfim,
                             fontSize: 13,
                           ),
                         ),
@@ -537,7 +545,7 @@ class _AppDrawerState extends State<_AppDrawer> with SingleTickerProviderStateMi
                         Container(
                           height: 1,
                           margin: const EdgeInsets.symmetric(horizontal: 16),
-                          color: AppColors.branco.withValues(alpha: 0.08),
+                          color: AppColors.marfim.withValues(alpha: 0.08),
                         ),
                         _DrawerItem(
                           icon: Icons.settings_rounded,
@@ -589,8 +597,8 @@ class _DrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ic = iconColor ?? AppColors.verdeDestaque;
-    final tc = labelColor ?? AppColors.branco;
+    final ic = iconColor ?? AppColors.lataoClaro;
+    final tc = labelColor ?? AppColors.marfim;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Material(

@@ -112,8 +112,8 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.dark(
-              primary: AppColors.verdeDestaque,
-              surface: AppColors.verdeEscuro,
+              primary: AppColors.lataoClaro,
+              surface: AppColors.superficie,
             ),
           ),
           child: child!,
@@ -185,7 +185,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       decoration: const BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: SingleChildScrollView(
@@ -202,27 +202,27 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                   const Text(
                     'Nova Despesa',
                     style: TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: AppColors.cinzaClaro),
+                    icon: const Icon(Icons.close, color: AppColors.cinza),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                   hintText: 'Ex: Supermercado',
                   prefixIcon: Icon(
                     Icons.description_outlined,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.cinza,
                   ),
                 ),
                 validator: (value) {
@@ -237,14 +237,14 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                 controller: _valueController,
                 keyboardType: TextInputType.number,
                 inputFormatters: [const CurrencyInputFormatter()],
-                style: const TextStyle(color: AppColors.branco),
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Valor',
                   hintText: 'R\$ 0,00',
                   prefixText: 'R\$ ',
                   prefixIcon: Icon(
                     Icons.attach_money_rounded,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.cinza,
                   ),
                 ),
                 validator: (value) {
@@ -257,13 +257,13 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 initialValue: _selectedCategory,
-                dropdownColor: AppColors.verdeEscuro,
-                style: const TextStyle(color: AppColors.branco),
+                dropdownColor: AppColors.superficie,
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Categoria',
                   prefixIcon: Icon(
                     Icons.category_outlined,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.cinza,
                   ),
                 ),
                 items: _categories.map((cat) {
@@ -274,7 +274,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                         Icon(
                           cat['icon'] as IconData,
                           size: 18,
-                          color: AppColors.verdeMedio,
+                          color: AppColors.latao,
                         ),
                         const SizedBox(width: 8),
                         Text(cat['label'] as String),
@@ -291,13 +291,13 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 initialValue: _selectedPaymentMethod,
-                dropdownColor: AppColors.verdeEscuro,
-                style: const TextStyle(color: AppColors.branco),
+                dropdownColor: AppColors.superficie,
+                style: const TextStyle(color: AppColors.marfim),
                 decoration: const InputDecoration(
                   labelText: 'Forma de pagamento',
                   prefixIcon: Icon(
                     Icons.payment_outlined,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.cinza,
                   ),
                 ),
                 items: _paymentMethods.map((method) {
@@ -328,13 +328,13 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(2),
                   ],
-                  style: const TextStyle(color: AppColors.branco),
+                  style: const TextStyle(color: AppColors.marfim),
                   decoration: const InputDecoration(
                     labelText: 'Parcelas',
                     hintText: 'Ex: 3',
                     prefixIcon: Icon(
                       Icons.receipt_long_rounded,
-                      color: AppColors.verdeMedio,
+                      color: AppColors.cinza,
                     ),
                   ),
                   validator: (value) {
@@ -357,12 +357,12 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                     labelText: 'Data',
                     prefixIcon: Icon(
                       Icons.calendar_today_rounded,
-                      color: AppColors.verdeMedio,
+                      color: AppColors.cinza,
                     ),
                   ),
                   child: Text(
                     '${_selectedDate.day.toString().padLeft(2, '0')}/${_selectedDate.month.toString().padLeft(2, '0')}/${_selectedDate.year}',
-                    style: const TextStyle(color: AppColors.branco),
+                    style: const TextStyle(color: AppColors.marfim),
                   ),
                 ),
               ),
@@ -404,7 +404,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
           labelText: 'Cartão de crédito',
           prefixIcon: Icon(
             Icons.credit_card_rounded,
-            color: AppColors.verdeMedio,
+            color: AppColors.cinza,
           ),
         ),
         child: SizedBox(
@@ -412,7 +412,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
           height: 20,
           child: CircularProgressIndicator(
             strokeWidth: 2,
-            color: AppColors.verdeMedio,
+            color: AppColors.latao,
           ),
         ),
       );
@@ -424,12 +424,12 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
           labelText: 'Cartão de crédito',
           prefixIcon: Icon(
             Icons.credit_card_rounded,
-            color: AppColors.verdeMedio,
+            color: AppColors.cinza,
           ),
         ),
         child: Text(
           'Nenhum cartão cadastrado',
-          style: TextStyle(color: AppColors.cinzaClaro.withValues(alpha: 0.7)),
+          style: TextStyle(color: AppColors.cinza.withValues(alpha: 0.7)),
         ),
       );
     }
@@ -440,13 +440,13 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
 
     return DropdownButtonFormField<String>(
       initialValue: validId,
-      dropdownColor: AppColors.verdeEscuro,
-      style: const TextStyle(color: AppColors.branco),
+      dropdownColor: AppColors.superficie,
+      style: const TextStyle(color: AppColors.marfim),
       decoration: const InputDecoration(
         labelText: 'Cartão de crédito',
         prefixIcon: Icon(
           Icons.credit_card_rounded,
-          color: AppColors.verdeMedio,
+          color: AppColors.cinza,
         ),
       ),
       items: _cards.map((card) {
@@ -464,7 +464,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
                 ),
                 child: const Icon(
                   Icons.credit_card,
-                  color: AppColors.branco,
+                  color: AppColors.marfim,
                   size: 14,
                 ),
               ),
@@ -489,7 +489,7 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
   Color _hexToColor(String hex) {
     final normalizedHex = hex.trim().replaceFirst('#', '');
     if (!RegExp(r'^[0-9A-Fa-f]{6}$').hasMatch(normalizedHex)) {
-      return AppColors.verdeMedio;
+      return AppColors.latao;
     }
 
     return Color(int.parse('FF$normalizedHex', radix: 16));

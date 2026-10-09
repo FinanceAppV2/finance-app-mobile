@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_theme.dart';
+
 class ShimmerLoading extends StatefulWidget {
   final Widget child;
 
@@ -46,9 +48,9 @@ class _ShimmerLoadingState extends State<ShimmerLoading>
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
             colors: const [
-              Color(0xFF3A3D3A),
-              Color(0xFF7A7D7A),
-              Color(0xFF3A3D3A),
+              AppColors.linha,
+              AppColors.nevoa,
+              AppColors.linha,
             ],
             stops: [s0, s1, s2],
           ).createShader(bounds);

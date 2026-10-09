@@ -34,7 +34,7 @@ class MonthlyTrendCard extends StatelessWidget {
                   width: 30,
                   child: Text(
                     _monthNames[monthIndex],
-                    style: const TextStyle(color: AppColors.cinzaClaro, fontSize: 11),
+                    style: const TextStyle(color: AppColors.cinza, fontSize: 11),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -44,8 +44,8 @@ class MonthlyTrendCard extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: fraction,
                       minHeight: 8,
-                      backgroundColor: AppColors.cinzaEscuro,
-                      valueColor: const AlwaysStoppedAnimation(AppColors.verdeMedio),
+                      backgroundColor: AppColors.linha,
+                      valueColor: const AlwaysStoppedAnimation(AppColors.latao),
                     ),
                   ),
                 ),
@@ -55,7 +55,7 @@ class MonthlyTrendCard extends StatelessWidget {
                   child: Text(
                     'R\$ $formatted',
                     textAlign: TextAlign.right,
-                    style: const TextStyle(color: AppColors.cinzaClaro, fontSize: 10),
+                    style: const TextStyle(color: AppColors.cinza, fontSize: 10),
                   ),
                 ),
               ],
