@@ -2,6 +2,7 @@ import 'package:fpdart/fpdart.dart';
 
 import '../../domain/entities/expense.dart';
 import '../../domain/entities/monthly_summary.dart';
+import '../../domain/entities/salary_cycle.dart';
 import '../../domain/repositories/home_repository.dart';
 import '../datasources/home_remote_datasource.dart';
 import '../models/expense_model.dart';
@@ -90,5 +91,15 @@ class HomeRepositoryImpl implements HomeRepository {
       paymentMethod: model.paymentMethod,
       date: model.date,
     );
+  }
+
+  @override
+  Future<Either<String, SalaryCycle>> getCurrentSalaryCycle({String? date}) async {
+    try {
+      final model = await _remoteDataSource.getCurrentSalaryCycle(date: date);
+      return Right(model.toEntity());
+    } catch (e) {
+      return Left('Erro ao carregar ciclo salarial: $e');
+    }
   }
 }

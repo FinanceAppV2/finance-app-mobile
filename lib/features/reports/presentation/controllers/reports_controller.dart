@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 
+import '../../../home/domain/entities/salary_cycle.dart';
 import '../../domain/entities/chart_category.dart';
 import '../../domain/entities/chart_fixed_vs_variable.dart';
 import '../../domain/entities/chart_highest_month.dart';
@@ -14,6 +15,7 @@ import '../../domain/usecases/get_chart_highest_month_usecase.dart';
 import '../../domain/usecases/get_chart_monthly_trend_usecase.dart';
 import '../../domain/usecases/get_chart_payment_methods_usecase.dart';
 import '../../domain/usecases/get_chart_top_expenses_usecase.dart';
+import '../../domain/usecases/get_salary_cycle_history_usecase.dart';
 import '../../domain/repositories/reports_repository.dart';
 
 enum ReportsStatus { initial, loading, success, error }
@@ -25,6 +27,7 @@ class ReportsController extends ChangeNotifier {
   final GetChartMonthlyTrendUseCase _getMonthlyTrendUseCase;
   final GetChartFixedVsVariableUseCase _getFixedVsVariableUseCase;
   final GetChartTopExpensesUseCase _getTopExpensesUseCase;
+  final GetSalaryCycleHistoryUseCase _getSalaryCycleHistoryUseCase;
   final GenerateAiUseCase _generateAiUseCase;
   final ReportsRepository _repository;
 
@@ -38,6 +41,7 @@ class ReportsController extends ChangeNotifier {
   List<ChartMonthlyTrend>? _monthlyTrend;
   ChartFixedVsVariable? _fixedVsVariable;
   List<ChartTopExpense>? _topExpenses;
+  List<SalaryCycle>? _salaryCycleHistory;
 
   ReportsController(
     this._getPaymentMethodsUseCase,
@@ -46,6 +50,7 @@ class ReportsController extends ChangeNotifier {
     this._getMonthlyTrendUseCase,
     this._getFixedVsVariableUseCase,
     this._getTopExpensesUseCase,
+    this._getSalaryCycleHistoryUseCase,
     this._generateAiUseCase,
     this._repository,
   );
@@ -59,6 +64,7 @@ class ReportsController extends ChangeNotifier {
   List<ChartMonthlyTrend>? get monthlyTrend => _monthlyTrend;
   ChartFixedVsVariable? get fixedVsVariable => _fixedVsVariable;
   List<ChartTopExpense>? get topExpenses => _topExpenses;
+  List<SalaryCycle>? get salaryCycleHistory => _salaryCycleHistory;
 
   Future<void> loadData({int? year}) async {
     _status = ReportsStatus.loading;
@@ -72,6 +78,7 @@ class ReportsController extends ChangeNotifier {
     final monthlyTrendResult = _getMonthlyTrendUseCase.execute(year: year);
     final fixedVsVariableResult = _getFixedVsVariableUseCase.execute(year: year, month: currentMonth);
     final topExpensesResult = _getTopExpensesUseCase.execute(year: year, month: currentMonth);
+    final salaryCycleHistoryResult = _getSalaryCycleHistoryUseCase.execute(limit: 6);
 
     final results = await Future.wait([
       paymentMethodsResult,
@@ -81,6 +88,9 @@ class ReportsController extends ChangeNotifier {
       fixedVsVariableResult,
       topExpensesResult,
     ]);
+
+    final cycleHistory = await salaryCycleHistoryResult;
+    cycleHistory.fold((_) => null, (history) => _salaryCycleHistory = history);
 
     final errors = results.where((r) => r.isLeft()).toList();
     if (errors.isNotEmpty) {
@@ -138,6 +148,17 @@ class ReportsController extends ChangeNotifier {
     }
     if (_highestMonth != null) {
       buffer.writeln('- Mês com maior gasto: ${_highestMonth!.month}/${_highestMonth!.year} (R\$ ${_highestMonth!.total.toStringAsFixed(2)})');
+    }
+    if (_salaryCycleHistory != null && _salaryCycleHistory!.isNotEmpty) {
+      buffer.writeln('### Ciclos salariais recentes:');
+      for (final cycle in _salaryCycleHistory!) {
+        buffer.writeln(
+          '- ${cycle.label}: Renda R\$ ${cycle.monthlyIncome.toStringAsFixed(2)}, '
+          'Comprometido: R\$ ${cycle.committed.toStringAsFixed(2)}, '
+          'Disponível: R\$ ${cycle.available.toStringAsFixed(2)}, '
+          'Status: ${cycle.status.name.toUpperCase()}',
+        );
+      }
     }
     return buffer.toString();
   }

@@ -26,6 +26,7 @@ import 'package:finance_app_mobile/features/home/data/repositories/home_reposito
 import 'package:finance_app_mobile/features/home/domain/repositories/home_repository.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/get_monthly_summary_usecase.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/get_recent_expenses_usecase.dart';
+import 'package:finance_app_mobile/features/home/domain/usecases/get_current_salary_cycle_usecase.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/delete_expense_usecase.dart';
 import 'package:finance_app_mobile/features/home/domain/usecases/update_expense_usecase.dart';
 import 'package:finance_app_mobile/features/home/presentation/controllers/home_controller.dart';
@@ -67,6 +68,7 @@ import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_hi
 import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_monthly_trend_usecase.dart';
 import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_payment_methods_usecase.dart';
 import 'package:finance_app_mobile/features/reports/domain/usecases/get_chart_top_expenses_usecase.dart';
+import 'package:finance_app_mobile/features/reports/domain/usecases/get_salary_cycle_history_usecase.dart';
 import 'package:finance_app_mobile/features/reports/presentation/controllers/reports_controller.dart';
 import 'package:finance_app_mobile/features/loans/data/datasources/loan_remote_datasource.dart';
 import 'package:finance_app_mobile/features/loans/data/repositories/loan_repository_impl.dart';
@@ -76,6 +78,19 @@ import 'package:finance_app_mobile/features/loans/domain/usecases/delete_loan_us
 import 'package:finance_app_mobile/features/loans/domain/usecases/get_loans_usecase.dart';
 import 'package:finance_app_mobile/features/loans/domain/usecases/update_loan_usecase.dart';
 import 'package:finance_app_mobile/features/loans/presentation/controllers/loans_controller.dart';
+import 'package:finance_app_mobile/features/plans/data/datasources/plan_remote_datasource.dart';
+import 'package:finance_app_mobile/features/plans/data/repositories/plan_repository_impl.dart';
+import 'package:finance_app_mobile/features/plans/domain/repositories/plan_repository.dart';
+import 'package:finance_app_mobile/features/plans/domain/usecases/get_plans_usecase.dart';
+import 'package:finance_app_mobile/features/plans/domain/usecases/get_user_plan_usecase.dart';
+import 'package:finance_app_mobile/features/plans/domain/usecases/subscribe_plan_usecase.dart';
+import 'package:finance_app_mobile/features/plans/presentation/controllers/plans_controller.dart';
+import 'package:finance_app_mobile/features/notifications/data/datasources/notification_remote_datasource.dart';
+import 'package:finance_app_mobile/features/notifications/data/repositories/notification_repository_impl.dart';
+import 'package:finance_app_mobile/features/notifications/domain/repositories/notification_repository.dart';
+import 'package:finance_app_mobile/features/notifications/domain/usecases/notification_usecases.dart';
+import 'package:finance_app_mobile/features/notifications/presentation/controllers/notification_controller.dart';
+import 'package:finance_app_mobile/features/home/domain/controllers/notification_badge_controller.dart';
 
 final injector = GetIt.instance;
 
@@ -169,6 +184,11 @@ Future<void> initializeDependencies() async {
       () => UpdateExpenseUseCase(injector<HomeRepository>()),
     );
   }
+  if (!injector.isRegistered<GetCurrentSalaryCycleUseCase>()) {
+    injector.registerLazySingleton<GetCurrentSalaryCycleUseCase>(
+      () => GetCurrentSalaryCycleUseCase(injector<HomeRepository>()),
+    );
+  }
   if (!injector.isRegistered<HomeController>()) {
     injector.registerLazySingleton<HomeController>(
       () => HomeController(
@@ -177,6 +197,7 @@ Future<void> initializeDependencies() async {
         injector<GetFixedExpensesUseCase>(),
         injector<DeleteExpenseUseCase>(),
         injector<UpdateExpenseUseCase>(),
+        injector<GetCurrentSalaryCycleUseCase>(),
         injector<FlutterSecureStorage>(),
       ),
     );
@@ -420,6 +441,11 @@ Future<void> initializeDependencies() async {
       () => GetChartTopExpensesUseCase(injector<ReportsRepository>()),
     );
   }
+  if (!injector.isRegistered<GetSalaryCycleHistoryUseCase>()) {
+    injector.registerLazySingleton<GetSalaryCycleHistoryUseCase>(
+      () => GetSalaryCycleHistoryUseCase(injector<ReportsRepository>()),
+    );
+  }
   if (!injector.isRegistered<GenerateAiUseCase>()) {
     injector.registerLazySingleton<GenerateAiUseCase>(
       () => GenerateAiUseCase(injector<ReportsRepository>()),
@@ -438,6 +464,7 @@ Future<void> initializeDependencies() async {
       injector<GetChartMonthlyTrendUseCase>(),
       injector<GetChartFixedVsVariableUseCase>(),
       injector<GetChartTopExpensesUseCase>(),
+      injector<GetSalaryCycleHistoryUseCase>(),
       injector<GenerateAiUseCase>(),
       injector<ReportsRepository>(),
     ),
@@ -480,6 +507,108 @@ Future<void> initializeDependencies() async {
         injector<CreateLoanUseCase>(),
         injector<UpdateLoanUseCase>(),
         injector<DeleteLoanUseCase>(),
+      ),
+    );
+  }
+
+  // Plan Dependencies
+  if (!injector.isRegistered<PlanRemoteDataSource>()) {
+    injector.registerLazySingleton<PlanRemoteDataSource>(
+      () => PlanRemoteDataSource(injector<Dio>(), injector<FlutterSecureStorage>()),
+    );
+  }
+  if (!injector.isRegistered<PlanRepository>()) {
+    injector.registerLazySingleton<PlanRepository>(
+      () => PlanRepositoryImpl(injector<PlanRemoteDataSource>()),
+    );
+  }
+  if (!injector.isRegistered<GetPlansUseCase>()) {
+    injector.registerLazySingleton<GetPlansUseCase>(
+      () => GetPlansUseCase(injector<PlanRepository>()),
+    );
+  }
+  if (!injector.isRegistered<GetUserPlanUseCase>()) {
+    injector.registerLazySingleton<GetUserPlanUseCase>(
+      () => GetUserPlanUseCase(injector<PlanRepository>()),
+    );
+  }
+  if (!injector.isRegistered<SubscribePlanUseCase>()) {
+    injector.registerLazySingleton<SubscribePlanUseCase>(
+      () => SubscribePlanUseCase(injector<PlanRepository>()),
+    );
+  }
+  if (!injector.isRegistered<PlansController>()) {
+    injector.registerLazySingleton<PlansController>(
+      () => PlansController(
+        injector<GetPlansUseCase>(),
+        injector<GetUserPlanUseCase>(),
+        injector<SubscribePlanUseCase>(),
+      ),
+    );
+  }
+
+  // Notification Dependencies
+  if (!injector.isRegistered<NotificationRemoteDatasource>()) {
+    injector.registerLazySingleton<NotificationRemoteDatasource>(
+      () => NotificationRemoteDatasource(injector<Dio>(), injector<FlutterSecureStorage>()),
+    );
+  }
+  if (!injector.isRegistered<NotificationRepository>()) {
+    injector.registerLazySingleton<NotificationRepository>(
+      () => NotificationRepositoryImpl(injector<NotificationRemoteDatasource>()),
+    );
+  }
+  if (!injector.isRegistered<GetAllNotificationsUseCase>()) {
+    injector.registerLazySingleton<GetAllNotificationsUseCase>(
+      () => GetAllNotificationsUseCase(injector<NotificationRepository>()),
+    );
+  }
+  if (!injector.isRegistered<GetUnreadNotificationsUseCase>()) {
+    injector.registerLazySingleton<GetUnreadNotificationsUseCase>(
+      () => GetUnreadNotificationsUseCase(injector<NotificationRepository>()),
+    );
+  }
+  if (!injector.isRegistered<CountUnreadNotificationsUseCase>()) {
+    injector.registerLazySingleton<CountUnreadNotificationsUseCase>(
+      () => CountUnreadNotificationsUseCase(injector<NotificationRepository>()),
+    );
+  }
+  if (!injector.isRegistered<MarkAsReadUseCase>()) {
+    injector.registerLazySingleton<MarkAsReadUseCase>(
+      () => MarkAsReadUseCase(injector<NotificationRepository>()),
+    );
+  }
+  if (!injector.isRegistered<MarkAllAsReadUseCase>()) {
+    injector.registerLazySingleton<MarkAllAsReadUseCase>(
+      () => MarkAllAsReadUseCase(injector<NotificationRepository>()),
+    );
+  }
+  if (!injector.isRegistered<CreateNotificationUseCase>()) {
+    injector.registerLazySingleton<CreateNotificationUseCase>(
+      () => CreateNotificationUseCase(injector<NotificationRepository>()),
+    );
+  }
+  if (!injector.isRegistered<DeleteNotificationUseCase>()) {
+    injector.registerLazySingleton<DeleteNotificationUseCase>(
+      () => DeleteNotificationUseCase(injector<NotificationRepository>()),
+    );
+  }
+  if (!injector.isRegistered<NotificationController>()) {
+    injector.registerLazySingleton<NotificationController>(
+      () => NotificationController(
+        injector<GetAllNotificationsUseCase>(),
+        injector<GetUnreadNotificationsUseCase>(),
+        injector<CountUnreadNotificationsUseCase>(),
+        injector<MarkAsReadUseCase>(),
+        injector<MarkAllAsReadUseCase>(),
+        injector<DeleteNotificationUseCase>(),
+      ),
+    );
+  }
+  if (!injector.isRegistered<NotificationBadgeController>()) {
+    injector.registerLazySingleton<NotificationBadgeController>(
+      () => NotificationBadgeController(
+        injector<CountUnreadNotificationsUseCase>(),
       ),
     );
   }

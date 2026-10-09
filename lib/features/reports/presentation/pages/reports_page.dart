@@ -9,6 +9,7 @@ import '../widgets/fixed_vs_variable_card.dart';
 import '../widgets/highest_month_card.dart';
 import '../widgets/monthly_trend_card.dart';
 import '../widgets/payment_methods_card.dart';
+import '../widgets/salary_cycle_history_card.dart';
 import '../widgets/top_expenses_card.dart';
 
 class ReportsPage extends StatefulWidget {
@@ -160,6 +161,11 @@ class _ReportsPageState extends State<ReportsPage> {
         const SizedBox(height: 16),
         if (_controller.highestMonth != null)
           HighestMonthCard(data: _controller.highestMonth!),
+        if (_controller.salaryCycleHistory != null &&
+            _controller.salaryCycleHistory!.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          SalaryCycleHistoryCard(cycles: _controller.salaryCycleHistory!),
+        ],
         const SizedBox(height: 16),
       ],
     );

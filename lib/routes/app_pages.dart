@@ -9,7 +9,9 @@ import '../features/settings/presentation/pages/profile_page.dart';
 import '../features/settings/presentation/pages/change_password_page.dart';
 import '../features/patrimony/presentation/pages/patrimony_page.dart';
 import '../features/loans/presentation/pages/loans_page.dart';
+import '../features/plans/presentation/pages/plans_page.dart';
 import '../features/finance_config/presentation/pages/finance_config_page.dart';
+import '../features/notifications/presentation/pages/notifications_page.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -26,5 +28,7 @@ class AppPages {
         AppRoutes.changePassword: (_) => const ChangePasswordPage(),
         AppRoutes.patrimony: (_) => const PatrimonyPage(),
         AppRoutes.loans: (_) => const LoansPage(),
+        AppRoutes.plans: (_) => const PlansPage(),
+        AppRoutes.notifications: (_) => const NotificationsPage(),
       };
 }

@@ -1,5 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 
+import '../../../home/domain/entities/salary_cycle.dart';
 import '../../domain/entities/chart_category.dart';
 import '../../domain/entities/chart_fixed_vs_variable.dart';
 import '../../domain/entities/chart_highest_month.dart';
@@ -98,6 +99,16 @@ class ReportsRepositoryImpl implements ReportsRepository {
       return Right(response);
     } catch (e) {
       return Left('Erro ao gerar resposta: $e');
+    }
+  }
+
+  @override
+  Future<Either<String, List<SalaryCycle>>> getSalaryCycleHistory({int? limit}) async {
+    try {
+      final models = await _dataSource.getSalaryCycleHistory(limit: limit);
+      return Right(models.map((m) => m.toEntity()).toList());
+    } catch (e) {
+      return Left('Erro ao carregar histórico de ciclos salariais: $e');
     }
   }
 }

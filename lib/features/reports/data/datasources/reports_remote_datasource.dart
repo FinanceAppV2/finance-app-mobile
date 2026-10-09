@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../../home/data/models/salary_cycle_model.dart';
 import '../models/chart_category_model.dart';
 import '../models/chart_fixed_vs_variable_model.dart';
 import '../models/chart_highest_month_model.dart';
@@ -105,5 +106,18 @@ class ReportsRemoteDataSource {
       ),
     );
     return response.data['response'] as String;
+  }
+
+  Future<List<SalaryCycleModel>> getSalaryCycleHistory({int? limit}) async {
+    final userId = await _getUserId();
+    final params = <String, dynamic>{};
+    if (limit != null) params['limit'] = limit;
+    final response = await _dio.get(
+      '/users/$userId/salary-cycle/history',
+      queryParameters: params.isNotEmpty ? params : null,
+    );
+    return (response.data as List)
+        .map((e) => SalaryCycleModel.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }

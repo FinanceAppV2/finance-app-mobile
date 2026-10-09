@@ -35,6 +35,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   onTap: () => Navigator.pushNamed(context, '/profile'),
                 ),
                 _SettingsTile(
+                  icon: Icons.workspace_premium_rounded,
+                  label: 'Plano de Assinatura',
+                  subtitle: 'Gerenciar plano atual e benefícios',
+                  onTap: () => Navigator.pushNamed(context, '/plans'),
+                ),
+                _SettingsTile(
                   icon: Icons.lock_outline_rounded,
                   label: 'Alterar senha',
                   subtitle: 'Atualizar sua senha de acesso',
