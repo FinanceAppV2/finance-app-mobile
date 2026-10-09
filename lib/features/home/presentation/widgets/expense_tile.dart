@@ -176,10 +176,10 @@ class _ExpenseTileState extends State<ExpenseTile>
             padding: const EdgeInsets.only(bottom: 10),
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.verdeEscuro.withValues(alpha: 0.5),
+                color: AppColors.superficie.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
-                  color: AppColors.cinzaEscuro.withValues(alpha: 0.2),
+                  color: AppColors.nevoa.withValues(alpha: 0.2),
                   width: 0.5,
                 ),
               ),
@@ -216,7 +216,7 @@ class _ExpenseTileState extends State<ExpenseTile>
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                      color: AppColors.branco,
+                                      color: AppColors.marfim,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14,
                                     ),
@@ -239,7 +239,7 @@ class _ExpenseTileState extends State<ExpenseTile>
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 6, vertical: 2),
                                         decoration: BoxDecoration(
-                                          color: AppColors.cinzaEscuro.withValues(alpha: 0.5),
+                                          color: AppColors.nevoa.withValues(alpha: 0.5),
                                           borderRadius: BorderRadius.circular(4),
                                         ),
                                         child: Row(
@@ -248,7 +248,7 @@ class _ExpenseTileState extends State<ExpenseTile>
                                             Icon(
                                               _paymentIcon(
                                                   widget.expense.paymentMethod),
-                                              color: AppColors.cinzaClaro,
+                                              color: AppColors.cinza,
                                               size: 9,
                                             ),
                                             const SizedBox(width: 3),
@@ -256,7 +256,7 @@ class _ExpenseTileState extends State<ExpenseTile>
                                               _paymentLabel(
                                                   widget.expense.paymentMethod),
                                               style: const TextStyle(
-                                                color: AppColors.cinzaClaro,
+                                                color: AppColors.cinza,
                                                 fontSize: 9,
                                                 fontWeight: FontWeight.w600,
                                               ),
@@ -269,7 +269,7 @@ class _ExpenseTileState extends State<ExpenseTile>
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 6, vertical: 2),
                                           decoration: BoxDecoration(
-                                            color: AppColors.verdeDestaque
+                                            color: AppColors.lataoClaro
                                                 .withValues(alpha: 0.15),
                                             borderRadius:
                                                 BorderRadius.circular(4),
@@ -277,7 +277,7 @@ class _ExpenseTileState extends State<ExpenseTile>
                                           child: const Text(
                                             'FIXA',
                                             style: TextStyle(
-                                              color: AppColors.verdeDestaque,
+                                              color: AppColors.lataoClaro,
                                               fontSize: 9,
                                               fontWeight: FontWeight.w800,
                                             ),
@@ -296,7 +296,7 @@ class _ExpenseTileState extends State<ExpenseTile>
                                 Text(
                                   '- R\$ ${widget.expense.value.toStringAsFixed(2).replaceAll('.', ',')}',
                                   style: const TextStyle(
-                                    color: AppColors.branco,
+                                    color: AppColors.marfim,
                                     fontWeight: FontWeight.w800,
                                     fontSize: 14,
                                   ),
@@ -307,14 +307,14 @@ class _ExpenseTileState extends State<ExpenseTile>
                                   children: [
                                     Icon(
                                       Icons.calendar_today_rounded,
-                                      color: AppColors.cinzaClaro.withValues(alpha: 0.6),
+                                      color: AppColors.cinza.withValues(alpha: 0.6),
                                       size: 10,
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
                                       _formatDate(widget.expense.date),
                                       style: TextStyle(
-                                        color: AppColors.cinzaClaro.withValues(alpha: 0.6),
+                                        color: AppColors.cinza.withValues(alpha: 0.6),
                                         fontSize: 10,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -345,7 +345,7 @@ class _ExpenseTileState extends State<ExpenseTile>
         margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [AppColors.verdePrincipal, AppColors.verdeMedio],
+            colors: [AppColors.latao, AppColors.latao],
           ),
           borderRadius: BorderRadius.circular(14),
         ),
@@ -354,12 +354,12 @@ class _ExpenseTileState extends State<ExpenseTile>
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.edit_rounded, color: AppColors.branco, size: 20),
+            Icon(Icons.edit_rounded, color: AppColors.marfim, size: 20),
             SizedBox(width: 8),
             Text(
               'Editar',
               style: TextStyle(
-                color: AppColors.branco,
+                color: AppColors.marfim,
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
@@ -370,8 +370,8 @@ class _ExpenseTileState extends State<ExpenseTile>
       secondaryBackground: Container(
         margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [AppColors.error, Color(0xFFC62828)],
+          gradient: LinearGradient(
+            colors: [AppColors.error, AppColors.error.withValues(alpha: 0.7)],
           ),
           borderRadius: BorderRadius.circular(14),
         ),
@@ -380,12 +380,12 @@ class _ExpenseTileState extends State<ExpenseTile>
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.delete_rounded, color: AppColors.branco, size: 20),
+            Icon(Icons.delete_rounded, color: AppColors.marfim, size: 20),
             SizedBox(width: 8),
             Text(
               'Excluir',
               style: TextStyle(
-                color: AppColors.branco,
+                color: AppColors.marfim,
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),

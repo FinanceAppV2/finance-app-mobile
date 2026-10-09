@@ -45,7 +45,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         title: const Text(
           'Notificações',
           style: TextStyle(
-            color: AppColors.branco,
+            color: AppColors.marfim,
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
@@ -74,7 +74,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   child: const Text(
                     'Marcar tudo como lido',
                     style: TextStyle(
-                      color: AppColors.verdeDestaque,
+                      color: AppColors.lataoClaro,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
@@ -113,7 +113,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             const SizedBox(height: 16),
             Text(
               _controller.errorMessage ?? 'Erro ao carregar notificações',
-              style: const TextStyle(color: AppColors.cinzaClaro),
+              style: const TextStyle(color: AppColors.cinza),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -133,14 +133,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
           children: [
             Icon(
               Icons.notifications_none_rounded,
-              color: AppColors.cinzaClaro.withValues(alpha: 0.5),
+              color: AppColors.cinza.withValues(alpha: 0.5),
               size: 64,
             ),
             const SizedBox(height: 16),
             Text(
               'Nenhuma notificação',
               style: TextStyle(
-                color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                color: AppColors.cinza.withValues(alpha: 0.7),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -158,7 +158,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             child: Text(
               'Não lidas (${_controller.unreadCount})',
               style: const TextStyle(
-                color: AppColors.branco,
+                color: AppColors.marfim,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -198,9 +198,9 @@ class _SkeletonNotificationTile extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.verdeEscuro.withValues(alpha: 0.2),
+        color: AppColors.superficie.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.cinzaEscuro.withValues(alpha: 0.3)),
+        border: Border.all(color: AppColors.nevoa.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -208,7 +208,7 @@ class _SkeletonNotificationTile extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppColors.cinzaEscuro.withValues(alpha: 0.2),
+              color: AppColors.nevoa.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
           ),
@@ -219,12 +219,12 @@ class _SkeletonNotificationTile extends StatelessWidget {
               children: [
                 Container(
                   height: 12,
-                  color: AppColors.cinzaEscuro.withValues(alpha: 0.2),
+                  color: AppColors.nevoa.withValues(alpha: 0.2),
                 ),
                 const SizedBox(height: 8),
                 Container(
                   height: 10,
-                  color: AppColors.cinzaEscuro.withValues(alpha: 0.2),
+                  color: AppColors.nevoa.withValues(alpha: 0.2),
                 ),
               ],
             ),

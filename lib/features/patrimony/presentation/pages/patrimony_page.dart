@@ -109,21 +109,21 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppColors.verdeEscuro,
+        backgroundColor: AppColors.superficie,
         title: const Text(
           'Excluir ativo',
-          style: TextStyle(color: AppColors.branco),
+          style: TextStyle(color: AppColors.marfim),
         ),
         content: Text(
           'Deseja excluir o ativo "${asset.name}"?',
-          style: const TextStyle(color: AppColors.cinzaClaro),
+          style: const TextStyle(color: AppColors.cinza),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: const Text(
               'Cancelar',
-              style: TextStyle(color: AppColors.cinzaClaro),
+              style: TextStyle(color: AppColors.cinza),
             ),
           ),
           TextButton(
@@ -165,12 +165,12 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
         actions: [
           IconButton(
             onPressed: _onUpdatePrices,
-            icon: const Icon(Icons.refresh_rounded, color: AppColors.verdeDestaque),
+            icon: const Icon(Icons.refresh_rounded, color: AppColors.lataoClaro),
             tooltip: 'Atualizar preços',
           ),
           IconButton(
             onPressed: _onAddAsset,
-            icon: const Icon(Icons.add_rounded, color: AppColors.verdeDestaque),
+            icon: const Icon(Icons.add_rounded, color: AppColors.lataoClaro),
           ),
         ],
       ),
@@ -191,13 +191,13 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             CircularProgressIndicator(
-              color: AppColors.verdeDestaque,
+              color: AppColors.lataoClaro,
               strokeWidth: 3,
             ),
             SizedBox(height: 12),
             Text(
               'Carregando projeção...',
-              style: TextStyle(color: AppColors.cinzaClaro, fontSize: 14),
+              style: TextStyle(color: AppColors.cinza, fontSize: 14),
             ),
           ],
         ),
@@ -221,7 +221,7 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
             const SizedBox(height: 16),
             Text(
               _controller.errorMessage ?? 'Erro ao carregar ativos',
-              style: const TextStyle(color: AppColors.cinzaClaro),
+              style: const TextStyle(color: AppColors.cinza),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -238,7 +238,7 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
     }
 
     return RefreshIndicator(
-      color: AppColors.verdeDestaque,
+      color: AppColors.lataoClaro,
       onRefresh: () async {
         await _controller.loadAssets();
         await _controller.loadSummary();
@@ -251,7 +251,7 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
           const Text(
             'Meus Ativos',
             style: TextStyle(
-              color: AppColors.branco,
+              color: AppColors.marfim,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -288,14 +288,14 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppColors.verdeEscuro,
-            AppColors.verdeEscuro.withValues(alpha: 0.6),
+            AppColors.superficie,
+            AppColors.superficie.withValues(alpha: 0.6),
           ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isProfit
-              ? AppColors.verdeMedio.withValues(alpha: 0.5)
+              ? AppColors.latao.withValues(alpha: 0.5)
               : AppColors.error.withValues(alpha: 0.3),
         ),
       ),
@@ -360,7 +360,7 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
         Text(
           label,
           style: TextStyle(
-            color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+            color: AppColors.cinza.withValues(alpha: 0.7),
             fontSize: 12,
           ),
         ),
@@ -368,7 +368,7 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
         Text(
           value,
           style: const TextStyle(
-            color: AppColors.branco,
+            color: AppColors.marfim,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -386,13 +386,13 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
             Icon(
               Icons.account_balance_rounded,
               size: 64,
-              color: AppColors.verdeDestaque.withValues(alpha: 0.5),
+              color: AppColors.lataoClaro.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 16),
             Text(
               'Nenhum ativo cadastrado',
               style: TextStyle(
-                color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                color: AppColors.cinza.withValues(alpha: 0.7),
                 fontSize: 16,
               ),
             ),
@@ -400,7 +400,7 @@ class _PatrimonyPageState extends State<PatrimonyPage> {
             Text(
               'Toque em + para adicionar',
               style: TextStyle(
-                color: AppColors.cinzaClaro.withValues(alpha: 0.5),
+                color: AppColors.cinza.withValues(alpha: 0.5),
                 fontSize: 13,
               ),
             ),
@@ -440,7 +440,7 @@ class _ProjectionSheet extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
@@ -454,7 +454,7 @@ class _ProjectionSheet extends StatelessWidget {
                 child: Text(
                   'Projeção - ${asset.name}',
                   style: const TextStyle(
-                    color: AppColors.branco,
+                    color: AppColors.marfim,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -463,7 +463,7 @@ class _ProjectionSheet extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.close, color: AppColors.cinzaClaro),
+                icon: const Icon(Icons.close, color: AppColors.cinza),
               ),
             ],
           ),
@@ -478,7 +478,7 @@ class _ProjectionSheet extends StatelessWidget {
                       padding: EdgeInsets.only(top: 24),
                       child: Center(
                         child: CircularProgressIndicator(
-                          color: AppColors.verdeDestaque,
+                          color: AppColors.lataoClaro,
                         ),
                       ),
                     )
@@ -488,7 +488,7 @@ class _ProjectionSheet extends StatelessWidget {
                     const Text(
                       'Projeção para 12 meses:',
                       style: TextStyle(
-                        color: AppColors.cinzaClaro,
+                        color: AppColors.cinza,
                         fontSize: 13,
                       ),
                     ),
@@ -525,12 +525,12 @@ class _ProjectionSheet extends StatelessWidget {
             children: [
               const Text(
                 'Valor atual',
-                style: TextStyle(color: AppColors.cinzaClaro, fontSize: 12),
+                style: TextStyle(color: AppColors.cinza, fontSize: 12),
               ),
               Text(
                 'R\$ ${projection.currentValue.toStringAsFixed(2).replaceAll('.', ',')}',
                 style: const TextStyle(
-                  color: AppColors.branco,
+                  color: AppColors.marfim,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -543,11 +543,11 @@ class _ProjectionSheet extends StatelessWidget {
               children: [
                 const Text(
                   'Taxa',
-                  style: TextStyle(color: AppColors.cinzaClaro, fontSize: 12),
+                  style: TextStyle(color: AppColors.cinza, fontSize: 12),
                 ),
                 Text(
                   '${projection.rate!.toStringAsFixed(2)}% ${projection.rateType ?? ''}',
-                  style: const TextStyle(color: AppColors.verdeDestaque),
+                  style: const TextStyle(color: AppColors.lataoClaro),
                 ),
               ],
             ),
@@ -591,13 +591,13 @@ class _ProjectionBarItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 3),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.verdeMedio.withValues(alpha: 0.35),
+                  color: AppColors.latao.withValues(alpha: 0.35),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
                   monthName,
                   style: const TextStyle(
-                    color: AppColors.branco,
+                    color: AppColors.marfim,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                   ),
@@ -606,7 +606,7 @@ class _ProjectionBarItem extends StatelessWidget {
               Text(
                 'R\$ ${value.toStringAsFixed(2).replaceAll('.', ',')}',
                 style: const TextStyle(
-                  color: AppColors.branco,
+                  color: AppColors.marfim,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),
@@ -626,7 +626,7 @@ class _ProjectionBarItem extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [AppColors.verdeMedio, AppColors.verdeDestaque],
+                    colors: [AppColors.latao, AppColors.lataoClaro],
                   ),
                   borderRadius: BorderRadius.circular(4),
                 ),

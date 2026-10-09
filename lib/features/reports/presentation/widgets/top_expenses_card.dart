@@ -25,7 +25,7 @@ class TopExpensesCard extends StatelessWidget {
                     e.description,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: AppColors.branco, fontSize: 13),
+                    style: const TextStyle(color: AppColors.marfim, fontSize: 13),
                   ),
                 ),
                 const SizedBox(width: 8),

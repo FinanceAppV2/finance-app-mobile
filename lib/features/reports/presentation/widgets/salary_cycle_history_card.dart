@@ -12,7 +12,7 @@ class SalaryCycleHistoryCard extends StatelessWidget {
   Color _getStatusColor(SalaryCycleStatus status) {
     switch (status) {
       case SalaryCycleStatus.green:
-        return AppColors.verdeDestaque;
+        return AppColors.lataoClaro;
       case SalaryCycleStatus.yellow:
         return AppColors.warning;
       case SalaryCycleStatus.red:
@@ -56,7 +56,7 @@ class SalaryCycleHistoryCard extends StatelessWidget {
               color: AppColors.background.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: AppColors.verdeMedio.withValues(alpha: 0.3),
+                color: AppColors.latao.withValues(alpha: 0.3),
               ),
             ),
             child: Column(
@@ -68,7 +68,7 @@ class SalaryCycleHistoryCard extends StatelessWidget {
                     Text(
                       cycle.label,
                       style: const TextStyle(
-                        color: AppColors.branco,
+                        color: AppColors.marfim,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),
@@ -103,7 +103,7 @@ class SalaryCycleHistoryCard extends StatelessWidget {
                     Text(
                       'Comprometido: R\$ $committedFormatted',
                       style: TextStyle(
-                        color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+                        color: AppColors.cinza.withValues(alpha: 0.8),
                         fontSize: 11,
                       ),
                     ),
@@ -111,7 +111,7 @@ class SalaryCycleHistoryCard extends StatelessWidget {
                       'Disponível: R\$ $availableFormatted',
                       style: TextStyle(
                         color: cycle.available >= 0
-                            ? AppColors.verdeDestaque
+                            ? AppColors.lataoClaro
                             : AppColors.error,
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
@@ -125,7 +125,7 @@ class SalaryCycleHistoryCard extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: progress,
                     minHeight: 4,
-                    backgroundColor: AppColors.cinzaEscuro,
+                    backgroundColor: AppColors.linha,
                     valueColor: AlwaysStoppedAnimation(statusColor),
                   ),
                 ),

@@ -96,20 +96,20 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   const Icon(
                     Icons.lock_outline_rounded,
                     size: 64,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.latao,
                   ),
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _currentController,
                     obscureText: _obscureCurrent,
-                    style: const TextStyle(color: AppColors.branco),
+                    style: const TextStyle(color: AppColors.marfim),
                     decoration: InputDecoration(
                       labelText: 'Senha atual',
-                      prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.verdeMedio),
+                      prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.cinza),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscureCurrent ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                          color: AppColors.verdeMedio,
+                          color: AppColors.latao,
                         ),
                         onPressed: () => setState(() => _obscureCurrent = !_obscureCurrent),
                       ),
@@ -120,14 +120,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   TextFormField(
                     controller: _newController,
                     obscureText: _obscureNew,
-                    style: const TextStyle(color: AppColors.branco),
+                    style: const TextStyle(color: AppColors.marfim),
                     decoration: InputDecoration(
                       labelText: 'Nova senha',
-                      prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.verdeMedio),
+                      prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.cinza),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscureNew ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                          color: AppColors.verdeMedio,
+                          color: AppColors.latao,
                         ),
                         onPressed: () => setState(() => _obscureNew = !_obscureNew),
                       ),
@@ -142,14 +142,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   TextFormField(
                     controller: _confirmController,
                     obscureText: _obscureConfirm,
-                    style: const TextStyle(color: AppColors.branco),
+                    style: const TextStyle(color: AppColors.marfim),
                     decoration: InputDecoration(
                       labelText: 'Confirmar nova senha',
-                      prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.verdeMedio),
+                      prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.cinza),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscureConfirm ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                          color: AppColors.verdeMedio,
+                          color: AppColors.latao,
                         ),
                         onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
                       ),

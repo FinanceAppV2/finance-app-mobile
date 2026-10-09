@@ -66,21 +66,21 @@ class _CardsPageState extends State<CardsPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppColors.verdeEscuro,
+        backgroundColor: AppColors.superficie,
         title: const Text(
           'Excluir cartão',
-          style: TextStyle(color: AppColors.branco),
+          style: TextStyle(color: AppColors.marfim),
         ),
         content: Text(
           'Deseja excluir o cartão "${card.nome}"?',
-          style: const TextStyle(color: AppColors.cinzaClaro),
+          style: const TextStyle(color: AppColors.cinza),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: const Text(
               'Cancelar',
-              style: TextStyle(color: AppColors.cinzaClaro),
+              style: TextStyle(color: AppColors.cinza),
             ),
           ),
           TextButton(
@@ -123,7 +123,7 @@ class _CardsPageState extends State<CardsPage> {
               const Text(
                 'Meus Cartões',
                 style: TextStyle(
-                  color: AppColors.branco,
+                  color: AppColors.marfim,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -133,7 +133,7 @@ class _CardsPageState extends State<CardsPage> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: AppColors.verdeDestaque,
+                    color: AppColors.lataoClaro,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Row(
@@ -177,7 +177,7 @@ class _CardsPageState extends State<CardsPage> {
             const SizedBox(height: 16),
             Text(
               _controller.errorMessage ?? 'Erro ao carregar cartões',
-              style: const TextStyle(color: AppColors.cinzaClaro),
+              style: const TextStyle(color: AppColors.cinza),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -198,13 +198,13 @@ class _CardsPageState extends State<CardsPage> {
             Icon(
               Icons.credit_card_rounded,
               size: 64,
-              color: AppColors.verdeDestaque.withValues(alpha: 0.5),
+              color: AppColors.lataoClaro.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 16),
             Text(
               'Nenhum cartão cadastrado',
               style: TextStyle(
-                color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                color: AppColors.cinza.withValues(alpha: 0.7),
                 fontSize: 16,
               ),
             ),
@@ -212,7 +212,7 @@ class _CardsPageState extends State<CardsPage> {
             Text(
               'Toque em "Adicionar" para cadastrar',
               style: TextStyle(
-                color: AppColors.cinzaClaro.withValues(alpha: 0.5),
+                color: AppColors.cinza.withValues(alpha: 0.5),
                 fontSize: 13,
               ),
             ),
@@ -299,12 +299,12 @@ class _CardWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(_getIconData(card.icone), color: AppColors.branco, size: 24),
+                  Icon(_getIconData(card.icone), color: AppColors.marfim, size: 24),
                   const SizedBox(width: 8),
                   Text(
                     card.nome,
                     style: const TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -312,10 +312,10 @@ class _CardWidget extends StatelessWidget {
                 ],
               ),
               PopupMenuButton<String>(
-                color: AppColors.verdeEscuro,
+                color: AppColors.superficie,
                 icon: Icon(
                   Icons.more_vert,
-                  color: AppColors.branco.withValues(alpha: 0.7),
+                  color: AppColors.marfim.withValues(alpha: 0.7),
                   size: 20,
                 ),
                 onSelected: (value) {
@@ -327,9 +327,9 @@ class _CardWidget extends StatelessWidget {
                     value: 'edit',
                     child: Row(
                       children: [
-                        Icon(Icons.edit_rounded, size: 18, color: AppColors.branco),
+                        Icon(Icons.edit_rounded, size: 18, color: AppColors.marfim),
                         SizedBox(width: 8),
-                        Text('Editar', style: TextStyle(color: AppColors.branco)),
+                        Text('Editar', style: TextStyle(color: AppColors.marfim)),
                       ],
                     ),
                   ),
@@ -351,7 +351,7 @@ class _CardWidget extends StatelessWidget {
           Text(
             '•••• •••• •••• ${card.finalNumero}',
             style: const TextStyle(
-              color: AppColors.branco,
+              color: AppColors.marfim,
               fontSize: 18,
               fontWeight: FontWeight.w600,
               letterSpacing: 2,
@@ -367,14 +367,14 @@ class _CardWidget extends StatelessWidget {
                   Text(
                     'Titular',
                     style: TextStyle(
-                      color: AppColors.branco.withValues(alpha: 0.7),
+                      color: AppColors.marfim.withValues(alpha: 0.7),
                       fontSize: 10,
                     ),
                   ),
                   Text(
                     card.nomeTitular,
                     style: const TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -387,14 +387,14 @@ class _CardWidget extends StatelessWidget {
                   Text(
                     'Limite disponível',
                     style: TextStyle(
-                      color: AppColors.branco.withValues(alpha: 0.7),
+                      color: AppColors.marfim.withValues(alpha: 0.7),
                       fontSize: 10,
                     ),
                   ),
                   Text(
                     'R\$ ${card.limiteDisponivel.toStringAsFixed(2).replaceAll('.', ',')}',
                     style: const TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
@@ -410,21 +410,21 @@ class _CardWidget extends StatelessWidget {
               Text(
                 'Vence dia ${card.diaVencimento}',
                 style: TextStyle(
-                  color: AppColors.branco.withValues(alpha: 0.7),
+                  color: AppColors.marfim.withValues(alpha: 0.7),
                   fontSize: 10,
                 ),
               ),
               Text(
                 'Fecha dia ${card.diaFechamento}',
                 style: TextStyle(
-                  color: AppColors.branco.withValues(alpha: 0.7),
+                  color: AppColors.marfim.withValues(alpha: 0.7),
                   fontSize: 10,
                 ),
               ),
               Text(
                 _formatEmissora(card.emissora),
                 style: TextStyle(
-                  color: AppColors.branco.withValues(alpha: 0.7),
+                  color: AppColors.marfim.withValues(alpha: 0.7),
                   fontSize: 10,
                 ),
               ),

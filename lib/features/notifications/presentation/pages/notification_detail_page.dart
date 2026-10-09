@@ -55,7 +55,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
       case notification_entity.NotificationType.alert:
         return AppColors.warning;
       case notification_entity.NotificationType.info:
-        return AppColors.verdeDestaque;
+        return AppColors.lataoClaro;
       case notification_entity.NotificationType.success:
         return AppColors.success;
       case notification_entity.NotificationType.warning:
@@ -107,13 +107,13 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.branco),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.marfim),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
           'Notificação',
           style: TextStyle(
-            color: AppColors.branco,
+            color: AppColors.marfim,
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
@@ -122,7 +122,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
       ),
       body: _isLoading
           ? const Center(
-              child: CircularProgressIndicator(color: AppColors.verdeDestaque),
+              child: CircularProgressIndicator(color: AppColors.lataoClaro),
             )
           : SingleChildScrollView(
               child: Padding(
@@ -133,7 +133,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.verdeEscuro.withValues(alpha: 0.2),
+                        color: AppColors.superficie.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: typeColor.withValues(alpha: 0.3),
@@ -174,7 +174,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                                 Text(
                                   _notification.read ? 'Lida' : 'Não lida',
                                   style: TextStyle(
-                                    color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                                    color: AppColors.cinza.withValues(alpha: 0.7),
                                     fontSize: 12,
                                   ),
                                 ),
@@ -188,7 +188,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                     Text(
                       'Título',
                       style: TextStyle(
-                        color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                        color: AppColors.cinza.withValues(alpha: 0.7),
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.5,
@@ -198,7 +198,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                     Text(
                       _notification.title,
                       style: const TextStyle(
-                        color: AppColors.branco,
+                        color: AppColors.marfim,
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                       ),
@@ -207,7 +207,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                     Text(
                       'Mensagem',
                       style: TextStyle(
-                        color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                        color: AppColors.cinza.withValues(alpha: 0.7),
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.5,
@@ -217,7 +217,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                     Text(
                       _notification.message,
                       style: const TextStyle(
-                        color: AppColors.branco,
+                        color: AppColors.marfim,
                         fontSize: 16,
                         height: 1.6,
                       ),
@@ -226,7 +226,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppColors.cinzaEscuro.withValues(alpha: 0.3),
+                        color: AppColors.nevoa.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -238,14 +238,14 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                               Text(
                                 'Recebida',
                                 style: TextStyle(
-                                  color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                                  color: AppColors.cinza.withValues(alpha: 0.7),
                                   fontSize: 12,
                                 ),
                               ),
                               Text(
                                 _formatDateTime(_notification.createdAt),
                                 style: const TextStyle(
-                                  color: AppColors.branco,
+                                  color: AppColors.marfim,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -260,7 +260,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
                                 Text(
                                   'Lida em',
                                   style: TextStyle(
-                                    color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                                    color: AppColors.cinza.withValues(alpha: 0.7),
                                     fontSize: 12,
                                   ),
                                 ),

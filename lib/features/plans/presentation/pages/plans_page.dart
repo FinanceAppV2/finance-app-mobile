@@ -37,7 +37,7 @@ class _PlansPageState extends State<PlansPage> {
           if (_controller.isLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                color: AppColors.verdeDestaque,
+                color: AppColors.lataoClaro,
               ),
             );
           }
@@ -58,7 +58,7 @@ class _PlansPageState extends State<PlansPage> {
                     Text(
                       _controller.errorMessage!,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: AppColors.branco),
+                      style: const TextStyle(color: AppColors.marfim),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
@@ -74,8 +74,8 @@ class _PlansPageState extends State<PlansPage> {
           final plans = _controller.plans;
 
           return RefreshIndicator(
-            color: AppColors.verdeDestaque,
-            backgroundColor: AppColors.verdeEscuro,
+            color: AppColors.lataoClaro,
+            backgroundColor: AppColors.superficie,
             onRefresh: () => _controller.loadPlans(),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -87,7 +87,7 @@ class _PlansPageState extends State<PlansPage> {
                     'Escolha o melhor plano para sua jornada financeira',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: AppColors.cinzaClaro,
+                      color: AppColors.cinza,
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                     ),
@@ -122,27 +122,27 @@ class _PlansPageState extends State<PlansPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.verdeEscuro,
+        backgroundColor: AppColors.superficie,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           'Mudar para ${plan.name}?',
-          style: const TextStyle(color: AppColors.branco, fontWeight: FontWeight.bold),
+          style: const TextStyle(color: AppColors.marfim, fontWeight: FontWeight.bold),
         ),
         content: Text(
           'Deseja alterar seu plano para ${plan.name} (${plan.formattedPrice})?',
-          style: const TextStyle(color: AppColors.cinzaClaro),
+          style: const TextStyle(color: AppColors.cinza),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: const Text(
               'Cancelar',
-              style: TextStyle(color: AppColors.cinzaClaro),
+              style: TextStyle(color: AppColors.cinza),
             ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.verdeDestaque,
+              backgroundColor: AppColors.lataoClaro,
               foregroundColor: AppColors.background,
             ),
             onPressed: () async {
@@ -152,12 +152,12 @@ class _PlansPageState extends State<PlansPage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     backgroundColor:
-                        success ? AppColors.verdePrincipal : AppColors.error,
+                        success ? AppColors.latao : AppColors.error,
                     content: Text(
                       success
                           ? 'Plano ${plan.name} ativado com sucesso!'
                           : (_controller.errorMessage ?? 'Erro ao alterar plano'),
-                      style: const TextStyle(color: AppColors.branco),
+                      style: const TextStyle(color: AppColors.marfim),
                     ),
                   ),
                 );
@@ -185,9 +185,9 @@ class _PlanCard extends StatelessWidget {
   });
 
   Color get _accentColor {
-    if (plan.isFree) return const Color(0xFF4CAF50);
-    if (plan.isPlus) return const Color(0xFF2196F3);
-    return const Color(0xFFAB47BC);
+    if (plan.isFree) return AppColors.cinza;
+    if (plan.isPlus) return AppColors.lataoClaro;
+    return AppColors.marfim;
   }
 
   String get _iconEmoji {
@@ -200,10 +200,10 @@ class _PlanCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isCurrentPlan ? _accentColor : AppColors.cinzaEscuro.withValues(alpha: 0.3),
+          color: isCurrentPlan ? _accentColor : AppColors.nevoa.withValues(alpha: 0.3),
           width: isCurrentPlan ? 2 : 1,
         ),
       ),
@@ -233,7 +233,7 @@ class _PlanCard extends StatelessWidget {
                   Text(
                     plan.name,
                     style: const TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -273,7 +273,7 @@ class _PlanCard extends StatelessWidget {
             Text(
               plan.description!,
               style: TextStyle(
-                color: AppColors.branco.withValues(alpha: 0.8),
+                color: AppColors.marfim.withValues(alpha: 0.8),
                 fontSize: 14,
               ),
             ),
@@ -281,7 +281,7 @@ class _PlanCard extends StatelessWidget {
           if (plan.features.isNotEmpty) ...[
             const SizedBox(height: 16),
             Divider(
-              color: AppColors.cinzaEscuro.withValues(alpha: 0.3),
+              color: AppColors.linha.withValues(alpha: 0.3),
               height: 1,
             ),
             const SizedBox(height: 12),
@@ -298,7 +298,7 @@ class _PlanCard extends StatelessWidget {
                       size: 18,
                       color: feature.included
                           ? _accentColor
-                          : AppColors.cinzaClaro.withValues(alpha: 0.4),
+                          : AppColors.cinza.withValues(alpha: 0.4),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
@@ -307,8 +307,8 @@ class _PlanCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 13,
                           color: feature.included
-                              ? AppColors.branco
-                              : AppColors.cinzaClaro.withValues(alpha: 0.5),
+                              ? AppColors.marfim
+                              : AppColors.cinza.withValues(alpha: 0.5),
                           decoration: feature.included
                               ? null
                               : TextDecoration.lineThrough,
@@ -326,11 +326,11 @@ class _PlanCard extends StatelessWidget {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: isCurrentPlan
-                    ? AppColors.cinzaEscuro.withValues(alpha: 0.4)
+                    ? AppColors.nevoa.withValues(alpha: 0.4)
                     : _accentColor,
                 foregroundColor: isCurrentPlan
-                    ? AppColors.cinzaClaro
-                    : (plan.isPro || plan.isPlus ? Colors.white : AppColors.background),
+                    ? AppColors.cinza
+                    : AppColors.background,
                 elevation: isCurrentPlan ? 0 : 2,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

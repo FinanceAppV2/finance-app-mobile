@@ -27,13 +27,13 @@ class _DailyBudgetCardState extends State<DailyBudgetCard> {
     final isDaily = _period == _BudgetPeriod.daily;
     final budgetValue = isDaily ? cycle.dailyBudget : cycle.weeklyBudget;
     final hasBudget = cycle.budgetRemaining > 0 && budgetValue > 0;
-    final valueColor = hasBudget ? AppColors.verdeDestaque : AppColors.error;
+    final valueColor = hasBudget ? AppColors.lataoClaro : AppColors.error;
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: AppColors.verdeEscuro.withValues(alpha: 0.5),
-        border: Border.all(color: AppColors.verdeMedio),
+        color: AppColors.superficie.withValues(alpha: 0.5),
+        border: Border.all(color: AppColors.latao),
       ),
       padding: const EdgeInsets.all(14),
       child: Column(
@@ -46,14 +46,14 @@ class _DailyBudgetCardState extends State<DailyBudgetCard> {
                 children: [
                   Icon(
                     Icons.wallet_rounded,
-                    color: AppColors.verdeDestaque,
+                    color: AppColors.lataoClaro,
                     size: 18,
                   ),
                   SizedBox(width: 8),
                   Text(
                     'Posso gastar',
                     style: TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
@@ -82,7 +82,7 @@ class _DailyBudgetCardState extends State<DailyBudgetCard> {
                 Text(
                   isDaily ? 'por dia até o fim do ciclo' : 'por semana até o fim do ciclo',
                   style: TextStyle(
-                    color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+                    color: AppColors.cinza.withValues(alpha: 0.8),
                     fontSize: 12,
                   ),
                 ),
@@ -96,14 +96,14 @@ class _DailyBudgetCardState extends State<DailyBudgetCard> {
               Text(
                 'Restam ${cycle.daysRemainingInCycle} dia(s) no ciclo',
                 style: TextStyle(
-                  color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                  color: AppColors.cinza.withValues(alpha: 0.7),
                   fontSize: 11,
                 ),
               ),
               Text(
                 'Meta de economia: R\$ ${_formatMoney(cycle.savingsGoalMonthly)}',
                 style: TextStyle(
-                  color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                  color: AppColors.cinza.withValues(alpha: 0.7),
                   fontSize: 11,
                 ),
               ),
@@ -139,7 +139,7 @@ class _PeriodToggle extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.background.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.verdeMedio.withValues(alpha: 0.4)),
+        border: Border.all(color: AppColors.latao.withValues(alpha: 0.4)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -159,13 +159,13 @@ class _PeriodToggle extends StatelessWidget {
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.verdeDestaque : Colors.transparent,
+          color: isSelected ? AppColors.lataoClaro : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? AppColors.background : AppColors.cinzaClaro,
+            color: isSelected ? AppColors.background : AppColors.cinza,
             fontSize: 12,
             fontWeight: FontWeight.w700,
           ),

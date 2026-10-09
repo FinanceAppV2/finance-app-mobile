@@ -86,14 +86,14 @@ class _AiChatSheetState extends State<AiChatSheet> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
       decoration: const BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
         children: [
           _buildHeader(),
           _buildToggleRow(),
-          const Divider(color: AppColors.cinzaEscuro, height: 1),
+          const Divider(color: AppColors.linha, height: 1),
           Expanded(child: _buildMessages()),
           _buildInputBar(),
         ],
@@ -113,12 +113,12 @@ class _AiChatSheetState extends State<AiChatSheet> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: AppColors.verdeDestaque.withValues(alpha: 0.2),
+                  color: AppColors.lataoClaro.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
                   Icons.auto_awesome_rounded,
-                  color: AppColors.verdeDestaque,
+                  color: AppColors.lataoClaro,
                   size: 20,
                 ),
               ),
@@ -126,7 +126,7 @@ class _AiChatSheetState extends State<AiChatSheet> {
               const Text(
                 'Assistente IA',
                 style: TextStyle(
-                  color: AppColors.branco,
+                  color: AppColors.marfim,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -135,7 +135,7 @@ class _AiChatSheetState extends State<AiChatSheet> {
           ),
           IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.close, color: AppColors.cinzaClaro),
+            icon: const Icon(Icons.close, color: AppColors.cinza),
           ),
         ],
       ),
@@ -150,14 +150,14 @@ class _AiChatSheetState extends State<AiChatSheet> {
           Icon(
             Icons.info_outline,
             size: 16,
-            color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+            color: AppColors.cinza.withValues(alpha: 0.7),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               'Enviar dados dos relatórios',
               style: TextStyle(
-                color: AppColors.cinzaClaro.withValues(alpha: 0.9),
+                color: AppColors.cinza.withValues(alpha: 0.9),
                 fontSize: 13,
               ),
             ),
@@ -166,7 +166,7 @@ class _AiChatSheetState extends State<AiChatSheet> {
             height: 24,
             child: Switch.adaptive(
               value: _includeReportsData,
-              activeTrackColor: AppColors.verdeDestaque,
+              activeTrackColor: AppColors.lataoClaro,
               onChanged: (v) => setState(() => _includeReportsData = v),
             ),
           ),
@@ -192,13 +192,13 @@ class _AiChatSheetState extends State<AiChatSheet> {
                   height: 16,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: AppColors.verdeDestaque,
+                    color: AppColors.lataoClaro,
                   ),
                 ),
                 SizedBox(width: 8),
                 Text(
                   'Pensando...',
-                  style: TextStyle(color: AppColors.cinzaClaro, fontSize: 13),
+                  style: TextStyle(color: AppColors.cinza, fontSize: 13),
                 ),
               ],
             ),
@@ -228,11 +228,11 @@ class _AiChatSheetState extends State<AiChatSheet> {
           Expanded(
             child: TextField(
               controller: _messageController,
-              style: const TextStyle(color: AppColors.branco, fontSize: 14),
+              style: const TextStyle(color: AppColors.marfim, fontSize: 14),
               decoration: InputDecoration(
                 hintText: 'Digite sua pergunta...',
                 hintStyle: TextStyle(
-                  color: AppColors.cinzaClaro.withValues(alpha: 0.5),
+                  color: AppColors.cinza.withValues(alpha: 0.5),
                   fontSize: 14,
                 ),
                 border: InputBorder.none,
@@ -247,8 +247,8 @@ class _AiChatSheetState extends State<AiChatSheet> {
             icon: Icon(
               Icons.send_rounded,
               color: _isLoading
-                  ? AppColors.cinzaEscuro
-                  : AppColors.verdeDestaque,
+                  ? AppColors.nevoa
+                  : AppColors.lataoClaro,
             ),
           ),
         ],
@@ -288,7 +288,7 @@ class _ChatBubble extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: message.isUser
-              ? AppColors.verdeMedio
+              ? AppColors.latao
               : AppColors.background,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
@@ -305,7 +305,7 @@ class _ChatBubble extends StatelessWidget {
             ? Text(
                 message.text,
                 style: const TextStyle(
-                  color: AppColors.branco,
+                  color: AppColors.marfim,
                   fontSize: 14,
                   height: 1.4,
                 ),
@@ -316,56 +316,56 @@ class _ChatBubble extends StatelessWidget {
                 styleSheet: MarkdownStyleSheet(
                   textAlign: WrapAlignment.start,
                   p: const TextStyle(
-                    color: AppColors.branco,
+                    color: AppColors.marfim,
                     fontSize: 14,
                     height: 1.5,
                   ),
                   h1: const TextStyle(
-                    color: AppColors.verdeDestaque,
+                    color: AppColors.lataoClaro,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     height: 1.4,
                   ),
                   h2: const TextStyle(
-                    color: AppColors.verdeDestaque,
+                    color: AppColors.lataoClaro,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     height: 1.4,
                   ),
                   h3: const TextStyle(
-                    color: AppColors.verdeDestaque,
+                    color: AppColors.lataoClaro,
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                     height: 1.4,
                   ),
                   strong: const TextStyle(
-                    color: AppColors.verdeDestaque,
+                    color: AppColors.lataoClaro,
                     fontWeight: FontWeight.bold,
                   ),
                   em: const TextStyle(
                     fontStyle: FontStyle.italic,
                   ),
                   code: const TextStyle(
-                    color: AppColors.verdeMedio,
+                    color: AppColors.latao,
                     fontSize: 13,
                     fontFamily: 'monospace',
-                    backgroundColor: Color(0x33FFFFFF),
+                    backgroundColor: AppColors.elevado,
                   ),
                   codeblockDecoration: BoxDecoration(
-                    color: AppColors.verdeEscuro,
+                    color: AppColors.superficie,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   blockquoteDecoration: BoxDecoration(
-                    color: AppColors.verdeMedio.withValues(alpha: 0.2),
+                    color: AppColors.latao.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   listBullet: const TextStyle(
-                    color: AppColors.verdeDestaque,
+                    color: AppColors.lataoClaro,
                   ),
                   horizontalRuleDecoration: BoxDecoration(
                     border: Border(
                       top: BorderSide(
-                        color: AppColors.cinzaEscuro.withValues(alpha: 0.5),
+                        color: AppColors.nevoa.withValues(alpha: 0.5),
                         width: 1,
                       ),
                     ),

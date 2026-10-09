@@ -67,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void _showAvatarOptions() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.cinzaEscuro,
+      backgroundColor: AppColors.elevado,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -78,16 +78,16 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(Icons.camera_alt_outlined, color: AppColors.verdeMedio),
-                title: const Text('Câmera', style: TextStyle(color: AppColors.branco)),
+                leading: const Icon(Icons.camera_alt_outlined, color: AppColors.latao),
+                title: const Text('Câmera', style: TextStyle(color: AppColors.marfim)),
                 onTap: () {
                   Navigator.pop(context);
                   _pickImage(ImageSource.camera);
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.photo_library_outlined, color: AppColors.verdeMedio),
-                title: const Text('Galeria', style: TextStyle(color: AppColors.branco)),
+                leading: const Icon(Icons.photo_library_outlined, color: AppColors.latao),
+                title: const Text('Galeria', style: TextStyle(color: AppColors.marfim)),
                 onTap: () {
                   Navigator.pop(context);
                   _pickImage(ImageSource.gallery);
@@ -183,14 +183,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         CircleAvatar(
                           radius: 48,
-                          backgroundColor: AppColors.verdeMedio,
+                          backgroundColor: AppColors.latao,
                           backgroundImage:
                               _avatarFile != null ? FileImage(_avatarFile!) : null,
                           child: _avatarFile == null
                               ? Text(
                                   _initial,
                                   style: const TextStyle(
-                                    color: AppColors.branco,
+                                    color: AppColors.marfim,
                                     fontSize: 40,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -203,13 +203,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Container(
                             padding: const EdgeInsets.all(4),
                             decoration: const BoxDecoration(
-                              color: AppColors.verdeMedio,
+                              color: AppColors.latao,
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
                               Icons.camera_alt_rounded,
                               size: 20,
-                              color: AppColors.branco,
+                              color: AppColors.marfim,
                             ),
                           ),
                         ),
@@ -219,41 +219,41 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _nameController,
-                    style: const TextStyle(color: AppColors.branco),
+                    style: const TextStyle(color: AppColors.marfim),
                     decoration: const InputDecoration(
                       labelText: 'Nome',
-                      prefixIcon: Icon(Icons.person_outline_rounded, color: AppColors.verdeMedio),
+                      prefixIcon: Icon(Icons.person_outline_rounded, color: AppColors.cinza),
                     ),
                     validator: (v) => _validateRequired(v, 'Nome'),
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _lastNameController,
-                    style: const TextStyle(color: AppColors.branco),
+                    style: const TextStyle(color: AppColors.marfim),
                     decoration: const InputDecoration(
                       labelText: 'Sobrenome',
-                      prefixIcon: Icon(Icons.person_outline_rounded, color: AppColors.verdeMedio),
+                      prefixIcon: Icon(Icons.person_outline_rounded, color: AppColors.cinza),
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _emailController,
-                    style: const TextStyle(color: AppColors.branco),
+                    style: const TextStyle(color: AppColors.marfim),
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: 'E-mail',
-                      prefixIcon: Icon(Icons.email_outlined, color: AppColors.verdeMedio),
+                      prefixIcon: Icon(Icons.email_outlined, color: AppColors.cinza),
                     ),
                     validator: _validateEmail,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _phoneController,
-                    style: const TextStyle(color: AppColors.branco),
+                    style: const TextStyle(color: AppColors.marfim),
                     keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(
                       labelText: 'Celular',
-                      prefixIcon: Icon(Icons.phone_outlined, color: AppColors.verdeMedio),
+                      prefixIcon: Icon(Icons.phone_outlined, color: AppColors.cinza),
                     ),
                   ),
                   const SizedBox(height: 32),

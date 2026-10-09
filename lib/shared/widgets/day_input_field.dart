@@ -24,7 +24,7 @@ class DayInputField extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
-            color: AppColors.branco,
+            color: AppColors.marfim,
             fontSize: 13,
             fontWeight: FontWeight.w500,
           ),
@@ -34,7 +34,7 @@ class DayInputField extends StatelessWidget {
           controller: controller,
           autofocus: false,
           keyboardType: TextInputType.number,
-          style: const TextStyle(color: AppColors.branco, fontSize: 15),
+          style: const TextStyle(color: AppColors.marfim, fontSize: 15),
           decoration: InputDecoration(
             hintText: 'Dia do mês (1-31)',
             filled: true,
@@ -42,19 +42,19 @@ class DayInputField extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                color: AppColors.verdeDestaque.withValues(alpha: 0.3),
+                color: AppColors.lataoClaro.withValues(alpha: 0.3),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                color: AppColors.verdeDestaque.withValues(alpha: 0.3),
+                color: AppColors.lataoClaro.withValues(alpha: 0.3),
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                color: AppColors.verdeDestaque,
+                color: AppColors.lataoClaro,
               ),
             ),
           ),

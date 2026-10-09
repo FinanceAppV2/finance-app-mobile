@@ -11,7 +11,7 @@ class SalaryCycleCard extends StatelessWidget {
   Color _getStatusColor(SalaryCycleStatus status) {
     switch (status) {
       case SalaryCycleStatus.green:
-        return AppColors.verdeDestaque;
+        return AppColors.lataoClaro;
       case SalaryCycleStatus.yellow:
         return AppColors.warning;
       case SalaryCycleStatus.red:
@@ -46,9 +46,9 @@ class SalaryCycleCard extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [AppColors.verdeEscuro, AppColors.background],
+          colors: [AppColors.superficie, AppColors.background],
         ),
-        border: Border.all(color: AppColors.verdeMedio),
+        border: Border.all(color: AppColors.latao),
       ),
       padding: const EdgeInsets.all(14),
       child: Column(
@@ -61,14 +61,14 @@ class SalaryCycleCard extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.event_repeat_rounded,
-                    color: AppColors.verdeDestaque,
+                    color: AppColors.lataoClaro,
                     size: 18,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     'Ciclo: ${cycle.label}',
                     style: const TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
@@ -117,7 +117,7 @@ class SalaryCycleCard extends StatelessWidget {
                     color: AppColors.background.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: AppColors.verdeMedio.withValues(alpha: 0.4),
+                      color: AppColors.latao.withValues(alpha: 0.4),
                     ),
                   ),
                   child: Column(
@@ -126,7 +126,7 @@ class SalaryCycleCard extends StatelessWidget {
                       Text(
                         'Comprometido',
                         style: TextStyle(
-                          color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+                          color: AppColors.cinza.withValues(alpha: 0.8),
                           fontSize: 11,
                         ),
                       ),
@@ -151,7 +151,7 @@ class SalaryCycleCard extends StatelessWidget {
                     color: AppColors.background.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: AppColors.verdeMedio.withValues(alpha: 0.4),
+                      color: AppColors.latao.withValues(alpha: 0.4),
                     ),
                   ),
                   child: Column(
@@ -160,7 +160,7 @@ class SalaryCycleCard extends StatelessWidget {
                       Text(
                         'Disponível',
                         style: TextStyle(
-                          color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+                          color: AppColors.cinza.withValues(alpha: 0.8),
                           fontSize: 11,
                         ),
                       ),
@@ -169,7 +169,7 @@ class SalaryCycleCard extends StatelessWidget {
                         'R\$ $availableFormatted',
                         style: TextStyle(
                           color: cycle.available >= 0
-                              ? AppColors.verdeDestaque
+                              ? AppColors.lataoClaro
                               : AppColors.error,
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -187,7 +187,7 @@ class SalaryCycleCard extends StatelessWidget {
             child: LinearProgressIndicator(
               value: progress,
               minHeight: 5,
-              backgroundColor: AppColors.cinzaEscuro,
+              backgroundColor: AppColors.linha,
               valueColor: AlwaysStoppedAnimation(statusColor),
             ),
           ),
@@ -198,14 +198,14 @@ class SalaryCycleCard extends StatelessWidget {
               Text(
                 'Uso do teto: $percentage%',
                 style: TextStyle(
-                  color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                  color: AppColors.cinza.withValues(alpha: 0.7),
                   fontSize: 11,
                 ),
               ),
               Text(
                 'Renda base: R\$ $incomeFormatted',
                 style: TextStyle(
-                  color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                  color: AppColors.cinza.withValues(alpha: 0.7),
                   fontSize: 11,
                 ),
               ),

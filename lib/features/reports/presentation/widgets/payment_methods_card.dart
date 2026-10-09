@@ -24,12 +24,12 @@ class PaymentMethodsCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     p.paymentMethod,
-                    style: const TextStyle(color: AppColors.branco, fontSize: 13),
+                    style: const TextStyle(color: AppColors.marfim, fontSize: 13),
                   ),
                 ),
                 Text(
                   'R\$ $formatted',
-                  style: const TextStyle(color: AppColors.cinzaClaro, fontSize: 12),
+                  style: const TextStyle(color: AppColors.cinza, fontSize: 12),
                 ),
                 const SizedBox(width: 6),
                 SizedBox(
@@ -38,7 +38,7 @@ class PaymentMethodsCard extends StatelessWidget {
                     '$pct%',
                     textAlign: TextAlign.right,
                     style: const TextStyle(
-                      color: AppColors.verdeDestaque,
+                      color: AppColors.lataoClaro,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),

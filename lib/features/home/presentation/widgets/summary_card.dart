@@ -21,9 +21,9 @@ class SummaryCard extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [AppColors.verdeEscuro, AppColors.background],
+          colors: [AppColors.superficie, AppColors.background],
         ),
-        border: Border.all(color: AppColors.verdeMedio),
+        border: Border.all(color: AppColors.latao),
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -35,7 +35,7 @@ class SummaryCard extends StatelessWidget {
                   child: _MainInfo(
                     label: 'Renda',
                     value: summary.monthlyIncome,
-                    color: AppColors.verdeDestaque,
+                    color: AppColors.lataoClaro,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -47,7 +47,7 @@ class SummaryCard extends StatelessWidget {
                       label: 'Balanço',
                       value: summary.remaining,
                       color: summary.remaining >= 0
-                          ? AppColors.verdeDestaque
+                          ? AppColors.lataoClaro
                           : AppColors.error,
                     ),
                   ),
@@ -98,7 +98,7 @@ class _MainInfo extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+              color: AppColors.cinza.withValues(alpha: 0.8),
               fontSize: 12,
             ),
           ),
@@ -153,14 +153,14 @@ class _SavingsProgress extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.receipt_long_rounded,
-                    color: AppColors.verdeMedio,
+                    color: AppColors.latao,
                     size: 16,
                   ),
                   const SizedBox(width: 6),
                   Text(
                     'Limite de gastos',
                     style: TextStyle(
-                      color: AppColors.cinzaClaro.withValues(alpha: 0.8),
+                      color: AppColors.cinza.withValues(alpha: 0.8),
                       fontSize: 12,
                     ),
                   ),
@@ -169,7 +169,7 @@ class _SavingsProgress extends StatelessWidget {
               Text(
                 '$percentage%',
                 style: TextStyle(
-                  color: progress >= 0.8 ? AppColors.warning : AppColors.verdeDestaque,
+                  color: progress >= 0.8 ? AppColors.warning : AppColors.lataoClaro,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
@@ -182,9 +182,9 @@ class _SavingsProgress extends StatelessWidget {
             child: LinearProgressIndicator(
               value: progress,
               minHeight: 6,
-              backgroundColor: AppColors.cinzaEscuro,
+              backgroundColor: AppColors.linha,
               valueColor: AlwaysStoppedAnimation(
-                progress >= 0.8 ? AppColors.warning : AppColors.verdeDestaque,
+                progress >= 0.8 ? AppColors.warning : AppColors.lataoClaro,
               ),
             ),
           ),
@@ -197,7 +197,7 @@ class _SavingsProgress extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
-                    color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                    color: AppColors.cinza.withValues(alpha: 0.7),
                     fontSize: 11,
                   ),
                 ),
@@ -212,7 +212,7 @@ class _SavingsProgress extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: TextStyle(
-                      color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                      color: AppColors.cinza.withValues(alpha: 0.7),
                       fontSize: 11,
                     ),
                   ),
@@ -225,7 +225,7 @@ class _SavingsProgress extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
-                    color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                    color: AppColors.cinza.withValues(alpha: 0.7),
                     fontSize: 11,
                   ),
                 ),
@@ -242,13 +242,13 @@ void _showInfoPopup(BuildContext context, String title, String message) {
   showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
-      backgroundColor: AppColors.verdeEscuro,
-      title: Text(title, style: const TextStyle(color: AppColors.branco)),
-      content: Text(message, style: const TextStyle(color: AppColors.cinzaClaro)),
+      backgroundColor: AppColors.superficie,
+      title: Text(title, style: const TextStyle(color: AppColors.marfim)),
+      content: Text(message, style: const TextStyle(color: AppColors.cinza)),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx),
-          child: const Text('OK', style: TextStyle(color: AppColors.verdeDestaque)),
+          child: const Text('OK', style: TextStyle(color: AppColors.lataoClaro)),
         ),
       ],
     ),

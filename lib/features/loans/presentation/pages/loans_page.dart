@@ -77,18 +77,18 @@ class _LoansPageState extends State<LoansPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.verdeEscuro,
+        backgroundColor: AppColors.superficie,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Excluir empréstimo',
-            style: TextStyle(color: AppColors.branco)),
+            style: TextStyle(color: AppColors.marfim)),
         content: Text(
           'Deseja excluir "${loan.description}"?',
-          style: const TextStyle(color: AppColors.cinzaClaro),
+          style: const TextStyle(color: AppColors.cinza),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancelar', style: TextStyle(color: AppColors.cinzaClaro)),
+            child: const Text('Cancelar', style: TextStyle(color: AppColors.cinza)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -122,7 +122,7 @@ class _LoansPageState extends State<LoansPage> {
         actions: [
           IconButton(
             onPressed: _onAdd,
-            icon: const Icon(Icons.add_rounded, color: AppColors.verdeDestaque),
+            icon: const Icon(Icons.add_rounded, color: AppColors.lataoClaro),
           ),
         ],
       ),
@@ -133,7 +133,7 @@ class _LoansPageState extends State<LoansPage> {
   Widget _buildBody() {
     if (_controller.status == LoansStatus.loading) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.verdeDestaque),
+        child: CircularProgressIndicator(color: AppColors.lataoClaro),
       );
     }
 
@@ -146,7 +146,7 @@ class _LoansPageState extends State<LoansPage> {
             const SizedBox(height: 16),
             Text(
               _controller.errorMessage ?? 'Erro ao carregar dados',
-              style: const TextStyle(color: AppColors.cinzaClaro),
+              style: const TextStyle(color: AppColors.cinza),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -166,12 +166,12 @@ class _LoansPageState extends State<LoansPage> {
           children: [
             Icon(Icons.account_balance_rounded,
                 size: 64,
-                color: AppColors.verdeDestaque.withValues(alpha: 0.5)),
+                color: AppColors.lataoClaro.withValues(alpha: 0.5)),
             const SizedBox(height: 16),
             Text(
               'Nenhum empréstimo cadastrado',
               style: TextStyle(
-                color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                color: AppColors.cinza.withValues(alpha: 0.7),
                 fontSize: 14,
               ),
             ),
@@ -201,7 +201,7 @@ class _LoansPageState extends State<LoansPage> {
           Text(
             'Finalizados',
             style: TextStyle(
-              color: AppColors.cinzaClaro.withValues(alpha: 0.5),
+              color: AppColors.cinza.withValues(alpha: 0.5),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -232,7 +232,7 @@ class _SummaryCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.verdeMedio, AppColors.verdeEscuro],
+          colors: [AppColors.latao, AppColors.superficie],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -244,11 +244,11 @@ class _SummaryCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: AppColors.verdeDestaque.withValues(alpha: 0.15),
+              color: AppColors.lataoClaro.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(Icons.account_balance_rounded,
-                color: AppColors.verdeDestaque, size: 22),
+                color: AppColors.lataoClaro, size: 22),
           ),
           const SizedBox(width: 14),
           Column(
@@ -257,7 +257,7 @@ class _SummaryCard extends StatelessWidget {
               Text(
                 'Total pendente',
                 style: TextStyle(
-                  color: AppColors.branco.withValues(alpha: 0.7),
+                  color: AppColors.marfim.withValues(alpha: 0.7),
                   fontSize: 12,
                 ),
               ),
@@ -265,7 +265,7 @@ class _SummaryCard extends StatelessWidget {
               Text(
                 formatted,
                 style: const TextStyle(
-                  color: AppColors.verdeDestaque,
+                  color: AppColors.lataoClaro,
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                 ),
@@ -300,7 +300,7 @@ class _LoanTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.verdeEscuro,
+        color: AppColors.superficie,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -313,13 +313,13 @@ class _LoanTile extends StatelessWidget {
                 height: 40,
                 decoration: BoxDecoration(
                   color: loan.active
-                      ? AppColors.verdeMedio.withValues(alpha: 0.4)
-                      : AppColors.cinzaEscuro.withValues(alpha: 0.4),
+                      ? AppColors.latao.withValues(alpha: 0.4)
+                      : AppColors.nevoa.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
                   Icons.account_balance_rounded,
-                  color: loan.active ? AppColors.verdeDestaque : AppColors.cinzaClaro,
+                  color: loan.active ? AppColors.lataoClaro : AppColors.cinza,
                   size: 20,
                 ),
               ),
@@ -331,7 +331,7 @@ class _LoanTile extends StatelessWidget {
                     Text(
                       loan.description,
                       style: const TextStyle(
-                        color: AppColors.branco,
+                        color: AppColors.marfim,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
@@ -342,7 +342,7 @@ class _LoanTile extends StatelessWidget {
                     Text(
                       '${loan.monthlyInterestRate.toStringAsFixed(1)}% a.m. \u2022 ${loan.totalInstallments}x',
                       style: TextStyle(
-                        color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                        color: AppColors.cinza.withValues(alpha: 0.7),
                         fontSize: 12,
                       ),
                     ),
@@ -355,7 +355,7 @@ class _LoanTile extends StatelessWidget {
                   Text(
                     _fmt(loan.installmentValue),
                     style: const TextStyle(
-                      color: AppColors.verdeDestaque,
+                      color: AppColors.lataoClaro,
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                     ),
@@ -364,7 +364,7 @@ class _LoanTile extends StatelessWidget {
                   Text(
                     '/parcela',
                     style: TextStyle(
-                      color: AppColors.cinzaClaro.withValues(alpha: 0.5),
+                      color: AppColors.cinza.withValues(alpha: 0.5),
                       fontSize: 10,
                     ),
                   ),
@@ -385,14 +385,14 @@ class _LoanTile extends StatelessWidget {
                         Text(
                           '${_fmt(loan.paidAmount)} de ${_fmt(loan.totalWithInterest)}',
                           style: TextStyle(
-                            color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                            color: AppColors.cinza.withValues(alpha: 0.7),
                             fontSize: 11,
                           ),
                         ),
                         Text(
                           '${loan.paidInstallments}/${loan.totalInstallments}',
                           style: TextStyle(
-                            color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                            color: AppColors.cinza.withValues(alpha: 0.7),
                             fontSize: 11,
                           ),
                         ),
@@ -403,9 +403,9 @@ class _LoanTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                       child: LinearProgressIndicator(
                         value: loan.progress,
-                        backgroundColor: AppColors.verdeMedio.withValues(alpha: 0.3),
+                        backgroundColor: AppColors.latao.withValues(alpha: 0.3),
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          loan.active ? AppColors.verdeDestaque : AppColors.success,
+                          loan.active ? AppColors.lataoClaro : AppColors.success,
                         ),
                         minHeight: 6,
                       ),
@@ -418,7 +418,7 @@ class _LoanTile extends StatelessWidget {
                           Text(
                             'Pendente',
                             style: TextStyle(
-                              color: AppColors.cinzaClaro.withValues(alpha: 0.7),
+                              color: AppColors.cinza.withValues(alpha: 0.7),
                               fontSize: 11,
                             ),
                           ),
@@ -439,7 +439,7 @@ class _LoanTile extends StatelessWidget {
               const SizedBox(width: 8),
               _ActionBtn(
                 icon: Icons.edit_rounded,
-                color: AppColors.verdeDestaque,
+                color: AppColors.lataoClaro,
                 onTap: onEdit,
               ),
               const SizedBox(width: 4),

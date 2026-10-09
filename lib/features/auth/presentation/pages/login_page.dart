@@ -97,13 +97,13 @@ class _LoginPageState extends State<LoginPage> {
           width: 88,
           height: 88,
           decoration: BoxDecoration(
-            color: AppColors.verdeEscuro,
+            color: AppColors.superficie,
             shape: BoxShape.circle,
           ),
           child: const Icon(
             Icons.monetization_on_outlined,
             size: 44,
-            color: AppColors.verdeDestaque,
+            color: AppColors.lataoClaro,
           ),
         ),
         const SizedBox(height: 28),
@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
         Text(
           'Faça login para continuar',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.cinzaClaro,
+                color: AppColors.cinza,
               ),
         ),
       ],
@@ -128,11 +128,11 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       controller: _emailController,
       keyboardType: TextInputType.text,
-      style: const TextStyle(color: AppColors.branco),
+      style: const TextStyle(color: AppColors.marfim),
       decoration: const InputDecoration(
         labelText: 'E-mail, CPF ou telefone',
         hintText: 'Digite seu e-mail, CPF ou telefone',
-        prefixIcon: Icon(Icons.person_outline, color: AppColors.verdeMedio),
+        prefixIcon: Icon(Icons.person_outline, color: AppColors.cinza),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) return 'Campo é obrigatório';
@@ -145,15 +145,15 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       controller: _passwordController,
       obscureText: _obscurePassword,
-      style: const TextStyle(color: AppColors.branco),
+      style: const TextStyle(color: AppColors.marfim),
       decoration: InputDecoration(
         labelText: 'Senha',
         hintText: 'Digite sua senha',
-        prefixIcon: const Icon(Icons.lock_outline, color: AppColors.verdeMedio),
+        prefixIcon: const Icon(Icons.lock_outline, color: AppColors.cinza),
         suffixIcon: IconButton(
           icon: Icon(
             _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-            color: AppColors.verdeMedio,
+            color: AppColors.latao,
           ),
           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
         ),
@@ -178,10 +178,10 @@ class _LoginPageState extends State<LoginPage> {
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: _rememberMe ? AppColors.verdeDestaque : Colors.transparent,
+                  color: _rememberMe ? AppColors.lataoClaro : Colors.transparent,
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(
-                    color: _rememberMe ? AppColors.verdeDestaque : AppColors.cinzaEscuro,
+                    color: _rememberMe ? AppColors.lataoClaro : AppColors.nevoa,
                     width: 2,
                   ),
                 ),
@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 'Lembrar-me',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.cinzaClaro,
+                      color: AppColors.cinza,
                     ),
               ),
             ],
@@ -204,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Text(
             'Esqueceu a senha?',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.verdeDestaque,
+                  color: AppColors.lataoClaro,
                   fontWeight: FontWeight.w600,
                 ),
           ),
@@ -253,7 +253,7 @@ class _LoginPageState extends State<LoginPage> {
         Text(
           'Não tem uma conta? ',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.cinzaEscuro,
+                color: AppColors.cinza,
               ),
         ),
         GestureDetector(
@@ -261,7 +261,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Text(
             'Cadastre-se',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.verdeDestaque,
+                  color: AppColors.lataoClaro,
                   fontWeight: FontWeight.bold,
                 ),
           ),

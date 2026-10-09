@@ -57,7 +57,7 @@ class _HomeHeaderState extends State<HomeHeader> {
             width: 42,
             height: 42,
             decoration: const BoxDecoration(
-              color: AppColors.verdeDestaque,
+              color: AppColors.lataoClaro,
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -74,7 +74,7 @@ class _HomeHeaderState extends State<HomeHeader> {
               Text(
                 widget.greeting,
                 style: const TextStyle(
-                  color: AppColors.cinzaClaro,
+                  color: AppColors.cinza,
                   fontSize: 13,
                 ),
               ),
@@ -82,7 +82,7 @@ class _HomeHeaderState extends State<HomeHeader> {
               Text(
                 widget.userName,
                 style: const TextStyle(
-                  color: AppColors.branco,
+                  color: AppColors.marfim,
                   fontSize: 21,
                   fontWeight: FontWeight.w700,
                 ),
@@ -99,7 +99,7 @@ class _HomeHeaderState extends State<HomeHeader> {
               },
               icon: const Icon(
                 Icons.notifications_none_rounded,
-                color: AppColors.branco,
+                color: AppColors.marfim,
               ),
             ),
             if (_badgeController.unreadCount > 0)
@@ -117,7 +117,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                         ? '99+'
                         : '${_badgeController.unreadCount}',
                     style: const TextStyle(
-                      color: AppColors.branco,
+                      color: AppColors.marfim,
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
                     ),
@@ -134,12 +134,12 @@ class _HomeHeaderState extends State<HomeHeader> {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppColors.verdeDestaque.withValues(alpha: 0.15),
+              color: AppColors.lataoClaro.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(
               Icons.refresh_rounded,
-              color: AppColors.verdeDestaque,
+              color: AppColors.lataoClaro,
               size: 20,
             ),
           ),

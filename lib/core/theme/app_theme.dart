@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 
+/// Paleta Leme — tema escuro (design "Leme — Marca e telas").
 class AppColors {
   AppColors._();
 
-  static const background = Color(0xFF0D0E0D);
-  static const cinzaEscuro = Color(0xFF585B56);
-  static const verdeEscuro = Color(0xFF314A08);
-  static const verdeMedio = Color(0xFF4C6C13);
-  static const verdePrincipal = Color(0xFF5F9213);
-  static const verdeDestaque = Color(0xFFA5F620);
-  static const branco = Color(0xFFF0F1F0);
-  static const cinzaClaro = Color(0xFF7B8767);
+  // Fundos e superfícies
+  static const background = Color(0xFF0D0E0D); // Carvão — fundo das telas
+  static const superficie = Color(0xFF171917); // Cards, campos
+  static const elevado = Color(0xFF202320); // Sheets, menus, diálogos
+  static const linha = Color(0xFF2C2F2C); // Bordas, divisores, trilhas
 
-  static const success = Color(0xFF4CAF50);
-  static const error = Color(0xFFE53935);
-  static const warning = Color(0xFFFFA726);
+  // Marca
+  static const latao = Color(0xFFB8893E); // Marca, destaques gráficos
+  static const lataoClaro = Color(0xFFD6AE62); // Destaque, links, foco
+
+  // Texto
+  static const marfim = Color(0xFFEEEDE7); // Texto principal, botão primário
+  static const textoSuave = Color(0xFFC9C8C1); // Rótulos de campos
+  static const cinza = Color(0xFF9A9C95); // Texto secundário, ícones
+  static const nevoa = Color(0xFF5B5F5A); // Estados inativos
+
+  // Semânticas
+  static const success = Color(0xFF4CB97F); // Receita — entradas, positivo
+  static const error = Color(0xFFE5705F); // Despesa — saídas, alerta
+  static const warning = Color(0xFFE3A548);
 }
 
 class AppTheme {
@@ -24,38 +33,50 @@ class AppTheme {
     return ThemeData(
       brightness: Brightness.dark,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.verdePrincipal,
+        seedColor: AppColors.latao,
         brightness: Brightness.dark,
-        primary: AppColors.verdePrincipal,
-        secondary: AppColors.verdeDestaque,
-        surface: AppColors.verdeEscuro,
+        primary: AppColors.lataoClaro,
+        onPrimary: AppColors.background,
+        secondary: AppColors.latao,
+        surface: AppColors.superficie,
+        onSurface: AppColors.marfim,
+        outline: AppColors.linha,
         error: AppColors.error,
       ),
       scaffoldBackgroundColor: AppColors.background,
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.background,
-        foregroundColor: AppColors.branco,
+        foregroundColor: AppColors.marfim,
         elevation: 0,
         centerTitle: true,
       ),
       cardTheme: const CardThemeData(
-        color: AppColors.verdeEscuro,
-        elevation: 4,
+        color: AppColors.superficie,
+        elevation: 0,
+      ),
+      dialogTheme: const DialogThemeData(
+        backgroundColor: AppColors.elevado,
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: AppColors.elevado,
+      ),
+      dividerTheme: const DividerThemeData(
+        color: AppColors.linha,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.verdeEscuro,
+        fillColor: AppColors.superficie,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.verdeMedio, width: 1),
+          borderSide: const BorderSide(color: AppColors.linha, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.verdeEscuro, width: 1),
+          borderSide: const BorderSide(color: AppColors.linha, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.verdeDestaque, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.lataoClaro, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -65,23 +86,31 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
-        labelStyle: TextStyle(color: AppColors.cinzaClaro),
-        hintStyle: TextStyle(color: AppColors.branco.withValues(alpha: 0.5)),
+        labelStyle: const TextStyle(color: AppColors.textoSuave),
+        hintStyle: const TextStyle(color: AppColors.cinza),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.verdeDestaque,
+          backgroundColor: AppColors.marfim,
           foregroundColor: AppColors.background,
+          minimumSize: const Size(0, 52),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          shape: StadiumBorder(),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(foregroundColor: AppColors.lataoClaro),
+      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: AppColors.lataoClaro,
+        linearTrackColor: AppColors.linha,
+      ),
       textTheme: const TextTheme(
-        headlineLarge: TextStyle(color: AppColors.branco, fontWeight: FontWeight.bold),
-        headlineMedium: TextStyle(color: AppColors.branco, fontWeight: FontWeight.w600),
-        bodyLarge: TextStyle(color: AppColors.branco),
-        bodyMedium: TextStyle(color: AppColors.cinzaEscuro),
-        labelLarge: TextStyle(color: AppColors.branco),
+        headlineLarge: TextStyle(color: AppColors.marfim, fontWeight: FontWeight.bold),
+        headlineMedium: TextStyle(color: AppColors.marfim, fontWeight: FontWeight.w600),
+        bodyLarge: TextStyle(color: AppColors.marfim),
+        bodyMedium: TextStyle(color: AppColors.cinza),
+        labelLarge: TextStyle(color: AppColors.marfim),
       ),
     );
   }
